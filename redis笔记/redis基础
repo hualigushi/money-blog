@@ -1,1 +1,3 @@
-11
+1.连接redis   redis-cli -h 127.0.0.1 -p 6379 -a "mypass"
+
+2.FLUSHDB  # 删除当前数据库所有 key
