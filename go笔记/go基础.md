@@ -663,3 +663,100 @@ func main() {
 
 }
 ```
+
+# 接口
+1. 基本语法
+type 接口名 interface {
+    method1(参数列表) 返回值列表
+    method2(参数列表) 返回值列表
+    .......
+}
+
+实现接口所有方法
+func (t 自定义类型) method1(参数列表) 返回值列表 {
+    // 方法实现
+}
+func (t 自定义类型) method2(参数列表) 返回值列表 {
+    // 方法实现
+}
+// ......
+
+2. 说明
+  1)接口中的所有方法都没有方法提，即接口的方法都是没有实现的方法
+  2)接口不需要显示的实现。只要一个变量，含有接口类型中的所有方法，那么这个变量就实现了这个接口
+
+```
+package main
+import (
+	"fmt"
+)
+
+//声明/定义一个接口
+type Usb interface {
+	//声明了两个没有实现的方法
+	Start() 
+	Stop()
+}
+
+
+//声明/定义一个接口
+type Usb2 interface {
+	//声明了两个没有实现的方法
+	Start() 
+	Stop()
+	Test()
+}
+
+
+
+type Phone struct {
+
+}  
+
+//让Phone 实现 Usb接口的方法
+func (p Phone) Start() {
+	fmt.Println("手机开始工作。。。")
+}
+func (p Phone) Stop() {
+	fmt.Println("手机停止工作。。。")
+}
+
+type Camera struct {
+
+}
+//让Camera 实现   Usb接口的方法
+func (c Camera) Start() {
+	fmt.Println("相机开始工作~~~。。。")
+}
+func (c Camera) Stop() {
+	fmt.Println("相机停止工作。。。")
+}
+
+
+//计算机
+type Computer struct {
+
+}
+
+//编写一个方法Working 方法，接收一个Usb接口类型变量
+//只要是实现了 Usb接口 （所谓实现Usb接口，就是指实现了 Usb接口声明所有方法）
+func (c Computer) Working(usb Usb) {
+
+	//通过usb接口变量来调用Start和Stop方法
+	usb.Start()
+	usb.Stop()
+}
+
+func main() {
+
+	//测试
+	//先创建结构体变量
+	computer := Computer{}
+	phone := Phone{}
+	camera := Camera{}
+
+	//关键点
+	computer.Working(phone)
+	computer.Working(camera) //
+}
+```
