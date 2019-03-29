@@ -683,7 +683,26 @@ func (t 自定义类型) method2(参数列表) 返回值列表 {
 
 2. 说明
   1)接口中的所有方法都没有方法提，即接口的方法都是没有实现的方法
+  
   2)接口不需要显示的实现。只要一个变量，含有接口类型中的所有方法，那么这个变量就实现了这个接口.go中没有implement关键字
+  
+  3)接口本身不能创建实例，但是可以指向一个实现额该接口的自定义变量类型的变量
+  
+  4)在go中，一个自定义类型需要将某个接口的所有方法都实现，才说这个自定义类型实现了该接口
+  
+  5)一个自定义类型只有实现了某个接口，才能将该自定义类型的实例（变量）赋给接口类型
+  
+  6)只要是自定义数据类型，就可以实现接口，不仅仅是结构体类型
+  
+  7)一个自定义类型可以实现多个接口
+  
+  8)接口中不能有任何变量
+  
+  9)一个接口（比如A接口）可以继承多个别的接口（比如B，C接口），这是如果要实现A接口，也必须将B，C接口的方法也全部实现
+  
+  10)interface类型默认是一个指针（引用类型），如果没有对interface初始化就使用，那么会输出nil
+  
+  10)空接口interface{}没有任何方法，所以所有类型都实现了空接口，即可以把任何一个变量赋给空接口
 
 ```
 package main
@@ -760,3 +779,194 @@ func main() {
 	computer.Working(camera) //
 }
 ```
+
+```
+package main
+import (
+	"fmt"
+)
+
+type Stu struct {
+	Name string
+}
+
+func (stu Stu) Say() {
+	fmt.Println("Stu Say()")
+}
+
+type integer int
+
+func (i integer) Say() {
+	fmt.Println("integer Say i =" ,i )
+}
+
+
+type AInterface interface {
+	Say()
+}
+
+type BInterface interface {
+	Hello()
+}
+type Monster struct {
+
+}
+func (m Monster) Hello() {
+	fmt.Println("Monster Hello()~~")
+}
+
+func (m Monster) Say() {
+	fmt.Println("Monster Say()~~")
+}
+
+func main() {
+	var stu Stu //结构体变量，实现了 Say() 实现了 AInterface
+ 	var a AInterface = stu
+	a.Say()
+
+
+	var i integer = 10
+	var b AInterface = i
+	b.Say() // integer Say i = 10
+
+
+	//Monster实现了AInterface 和 BInterface
+	var monster Monster
+	var a2 AInterface = monster
+	var b2 BInterface = monster
+	a2.Say()
+	b2.Hello()
+}
+```
+
+```
+package main
+import "fmt"
+type Usb interface {
+	Say()
+}
+type Stu struct {
+}
+func (this *Stu) Say() {
+	fmt.Println("Say()")
+}
+func main() {
+	var stu Stu = Stu{}
+	// 错误！ 会报 Stu类型没有实现Usb接口 , 
+	// 如果希望通过编译,  var u Usb = &stu
+	var u Usb = stu  
+	u.Say()
+	fmt.Println("here", u)
+}
+```
+
+# 类型断言
+
+```
+package main
+import (
+	"fmt"
+)
+type Point struct {
+	x int
+	y int
+}
+func main() {
+	var a interface{}
+	var point Point = Point{1, 2}
+	a = point  //oK
+	// 如何将 a 赋给一个Point变量?
+	var b Point
+	// b = a 不可以
+	// b = a.(Point) // 可以
+	b = a.(Point) 
+	fmt.Println(b) // 
+
+
+	//类型断言的其它案例
+	// var x interface{}
+	// var b2 float32 = 1.1
+	// x = b2  //空接口，可以接收任意类型
+	// // x=>float32 [使用类型断言]
+	// y := x.(float32)
+	// fmt.Printf("y 的类型是 %T 值是=%v", y, y)
+
+
+	//类型断言(带检测的)
+	var x interface{}
+	var b2 float32 = 2.1
+	x = b2  //空接口，可以接收任意类型
+	// x=>float32 [使用类型断言]
+
+	//类型断言(带检测的)
+	//在类型断言时，如果类型不匹配，就会报panic，因此进行类型断言时，要确保原来的空接口指向的就是断言的类型
+	//在进行类型断言时，带上检测机制，如果成功就ok，否则也不要报panic
+	if y, ok := x.(float32); ok {
+		fmt.Println("convert success")
+		fmt.Printf("y 的类型是 %T 值是=%v", y, y)
+	} else {
+		fmt.Println("convert fail")
+	}
+	fmt.Println("继续执行...")
+
+}
+```
+
+```
+package main
+import (
+	"fmt"
+)
+
+
+//定义Student类型
+type Student struct {
+
+}
+
+//编写一个函数，可以判断输入的参数是什么类型
+func TypeJudge(items... interface{}) {
+	for index, x := range items {
+		switch x.(type) {
+			case bool :
+				fmt.Printf("第%v个参数是 bool 类型，值是%v\n", index, x)
+			case float32 :
+				fmt.Printf("第%v个参数是 float32 类型，值是%v\n", index, x)
+			case float64 :
+				fmt.Printf("第%v个参数是 float64 类型，值是%v\n", index, x)
+			case int, int32, int64 :
+				fmt.Printf("第%v个参数是 整数 类型，值是%v\n", index, x)
+			case string :
+				fmt.Printf("第%v个参数是 string 类型，值是%v\n", index, x)
+			case Student :
+				fmt.Printf("第%v个参数是 Student 类型，值是%v\n", index, x)
+			case *Student :
+				fmt.Printf("第%v个参数是 *Student 类型，值是%v\n", index, x)
+			default :
+				fmt.Printf("第%v个参数是  类型 不确定，值是%v\n", index, x)
+		}
+	}
+}
+
+
+
+
+func main() {
+
+	var n1 float32 = 1.1
+	var n2 float64 = 2.3
+	var n3 int32 = 30
+	var name string = "tom"
+	address := "北京"
+	n4 := 300
+
+	stu1 := Student{}
+	stu2 := &Student{}
+
+	TypeJudge(n1, n2, n3, name, address, n4, stu1, stu2)
+}
+```
+	
+	
+
+
