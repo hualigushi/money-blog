@@ -307,3 +307,186 @@ func main() {
 ```
 
 结构体的所有字段在内存中是连续的
+
+2. 结构体方法
+```
+package main
+
+import (
+	"fmt"	
+)
+
+type Person struct {
+	Name string
+} 
+
+//函数
+//对于普通函数，接收者为值类型时，不能将指针类型的数据直接传递，反之亦然
+
+func test01(p Person) {
+	fmt.Println(p.Name)
+}
+
+func test02(p *Person) {
+	fmt.Println(p.Name)
+}
+
+//对于方法（如struct的方法），
+//接收者为值类型时，可以直接用指针类型的变量调用方法，反过来同样也可以
+
+func (p Person) test03() {
+	p.Name = "jack"
+	fmt.Println("test03() =", p.Name) // jack
+}
+
+func (p *Person) test04() {
+	p.Name = "mary"
+	fmt.Println("test03() =", p.Name) // mary
+}
+
+func main() {
+	p := Person{"tom"}
+	test01(p)
+	test02(&p)
+
+	p.test03()
+	fmt.Println("main() p.name=", p.Name) // tom
+	
+	(&p).test03() // 从形式上是传入地址，但是本质仍然是值拷贝
+
+	fmt.Println("main() p.name=", p.Name) // tom
+
+	(&p).test04()
+	fmt.Println("main() p.name=", p.Name) // mary
+	p.test04() // 等价 (&p).test04 , 从形式上是传入值类型，但是本质仍然是地址拷贝
+}
+```
+
+3.工厂模式
+```
+package model
+
+//定义一个结构体
+type student struct{
+	Name string
+	score float64
+}
+
+//因为student结构体首字母是小写，因此是只能在model使用
+//我们通过工厂模式来解决
+
+func NewStudent(n string, s float64) *student {
+	return &student{
+		Name : n,
+		score : s,
+	}
+}
+
+//如果score字段首字母小写，则，在其它包不可以直接方法，我们可以提供一个方法
+func (s *student) GetScore() float64{
+	return s.score //ok
+}
+
+
+package main
+import (
+	"fmt"
+	"go_code/chapter10/factory/model"
+)
+
+func main() {
+	//创建要给Student实例
+	// var stu = model.Student{
+	// 	Name :"tom",
+	// 	Score : 78.9,
+	// }
+
+	//定student结构体是首字母小写，我们可以通过工厂模式来解决
+	var stu = model.NewStudent("tom~", 98.8)
+
+	fmt.Println(*stu) //&{....}
+	fmt.Println("name=", stu.Name, " score=", stu.GetScore())
+}
+```
+
+# 面向对象继承
+
+```
+package main
+
+import (
+	"fmt"
+)
+
+
+//编写一个学生考试系统
+
+type Student struct {
+	Name string
+	Age int
+	Score int
+}
+
+//将Pupil 和 Graduate 共有的方法也绑定到 *Student
+func (stu *Student) ShowInfo() {
+	fmt.Printf("学生名=%v 年龄=%v 成绩=%v\n", stu.Name, stu.Age, stu.Score)
+}
+func (stu *Student) SetScore(score int) {
+	//业务判断
+	stu.Score = score
+}
+
+//给 *Student 增加一个方法，那么 Pupil 和 Graduate都可以使用该方法
+func (stu *Student) GetSum(n1 int, n2 int) int {
+	return n1 + n2
+}
+
+//小学生
+type Pupil struct { 
+	Student //嵌入了Student匿名结构体
+}
+
+//显示他的成绩
+
+//这时Pupil结构体特有的方法，保留
+func (p *Pupil) testing() {
+	fmt.Println("小学生正在考试中.....")
+}
+
+//大学生, 研究生。。
+
+
+//大学生
+type Graduate struct {
+	Student //嵌入了Student匿名结构体
+}
+
+//显示他的成绩
+//这时Graduate结构体特有的方法，保留
+func (p *Graduate) testing() {
+	fmt.Println("大学生正在考试中.....")
+}
+
+//代码冗余.. 高中生....
+
+func main() {
+
+	//当我们对结构体嵌入了匿名结构体使用方法会发生变化
+	pupil := &Pupil{}
+	pupil.Student.Name = "tom~"
+	pupil.Student.Age = 8
+	pupil.testing() 
+	pupil.Student.SetScore(70)
+	pupil.Student.ShowInfo()
+	fmt.Println("res=", pupil.Student.GetSum(1, 2))
+
+
+	graduate := &Graduate{}
+	graduate.Student.Name = "mary~"
+	graduate.Student.Age = 28
+	graduate.testing() 
+	graduate.Student.SetScore(90)
+	graduate.Student.ShowInfo()
+	fmt.Println("res=", graduate.Student.GetSum(10, 20))
+}
+```
