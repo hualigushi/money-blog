@@ -222,7 +222,7 @@ func main(){
 ```
 
 # 错误处理
-
+1. defer+recover处理错误
 ```
 func test() {
 	//使用defer + recover 来捕获和处理异常
@@ -238,5 +238,19 @@ func test() {
 	num2 := 0
 	res := num1 / num2
 	fmt.Println("res=", res)
+}
+```
+
+2. 自定义错误
+```
+//如果文件名传入不正确，我们就返回一个自定义的错误
+func readConf(name string) (err error) {
+	if name == "config.ini" {
+		//读取...
+		return nil
+	} else {
+		//返回一个自定义错误
+		return errors.New("读取文件错误..")
+	}
 }
 ```
