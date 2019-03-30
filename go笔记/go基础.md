@@ -1191,3 +1191,252 @@ func main() {
 2. 在没有使用协程的情况下，如果channel数据取完了，再取，就会报dead lock
 3. 使用内置函数close可以关闭channel，当channel关闭后，就不能再向channel写数据了，但是仍然可以从该channel读取数据
 4. channel支持for-range的方式进行遍历，在遍历是，如果channel没有关闭，则会出现dead lock错误
+
+
+```
+package main
+import (
+	"fmt"
+	"time"
+)
+
+
+//write Data
+func writeData(intChan chan int) {
+	for i := 1; i <= 50; i++ {
+		//放入数据
+		intChan<- i //
+		fmt.Println("writeData ", i)
+		//time.Sleep(time.Second)
+	}
+	close(intChan) //关闭
+}
+
+//read data
+func readData(intChan chan int, exitChan chan bool) {
+
+	for {
+		v, ok := <-intChan
+		if !ok {
+			break
+		}
+		time.Sleep(time.Second)
+		fmt.Printf("readData 读到数据=%v\n", v) 
+	}
+	//readData 读取完数据后，即任务完成
+	exitChan<- true
+	close(exitChan)
+
+}
+
+func main() {
+
+	//创建两个管道
+	intChan := make(chan int, 10)
+	exitChan := make(chan bool, 1)
+	
+	go writeData(intChan)
+	go readData(intChan, exitChan)
+
+	//time.Sleep(time.Second * 10)
+	for {
+		_, ok := <-exitChan
+		if !ok {
+			break
+		}
+	}
+
+}
+```
+
+```
+package main
+import (
+	"fmt"
+	"time"
+)
+
+
+
+//向 intChan放入 1-8000个数
+func putNum(intChan chan int) {
+
+	for i := 1; i <= 80000; i++ {    
+		intChan<- i
+	}
+
+	//关闭intChan
+	close(intChan)
+}
+
+// 从 intChan取出数据，并判断是否为素数,如果是，就
+// 	//放入到primeChan
+func primeNum(intChan chan int, primeChan chan int, exitChan chan bool) {
+
+	//使用for 循环
+	// var num int
+	var flag bool // 
+	for {
+		//time.Sleep(time.Millisecond * 10)
+		num, ok := <-intChan //intChan 取不到..
+		
+		if !ok { 
+			break
+		}
+		flag = true //假设是素数
+		//判断num是不是素数
+		for i := 2; i < num; i++ {
+			if num % i == 0 {//说明该num不是素数
+				flag = false
+				break
+			}
+		}
+
+		if flag {
+			//将这个数就放入到primeChan
+			primeChan<- num
+		}
+	}
+
+	fmt.Println("有一个primeNum 协程因为取不到数据，退出")
+	//这里我们还不能关闭 primeChan
+	//向 exitChan 写入true
+	exitChan<- true	
+
+}
+
+func main() {
+
+	intChan := make(chan int , 1000)
+	primeChan := make(chan int, 20000)//放入结果
+	//标识退出的管道
+	exitChan := make(chan bool, 8) // 4个
+
+	start := time.Now().Unix()
+	
+	//开启一个协程，向 intChan放入 1-8000个数
+	go putNum(intChan)
+	//开启4个协程，从 intChan取出数据，并判断是否为素数,如果是，就
+	//放入到primeChan
+	for i := 0; i < 8; i++ {
+		go primeNum(intChan, primeChan, exitChan)
+	}
+
+	//这里我们主线程，进行处理
+	//直接
+	go func(){
+		for i := 0; i < 8; i++ {
+			<-exitChan
+		}
+
+		end := time.Now().Unix()
+		fmt.Println("使用协程耗时=", end - start)
+
+		//当我们从exitChan 取出了4个结果，就可以放心的关闭 prprimeChan
+		close(primeChan)
+	}()
+
+
+	//遍历我们的 primeChan ,把结果取出
+	for {
+		res, ok := <-primeChan
+		if !ok{
+			break
+		}
+		//将结果输出
+		fmt.Printf("素数=%d\n", res)
+	}
+
+	fmt.Println("main线程退出")
+	
+}
+```
+
+```package main
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+
+	//使用select可以解决从管道取数据的阻塞问题
+
+	//1.定义一个管道 10个数据int
+	intChan := make(chan int, 10)
+	for i := 0; i < 10; i++ {
+		intChan<- i
+	}
+	//2.定义一个管道 5个数据string
+	stringChan := make(chan string, 5)
+	for i := 0; i < 5; i++ {
+		stringChan <- "hello" + fmt.Sprintf("%d", i)
+	}
+
+	//传统的方法在遍历管道时，如果不关闭会阻塞而导致 deadlock
+
+	//问题，在实际开发中，可能我们不好确定什么关闭该管道.
+	//可以使用select 方式可以解决
+	//label:
+	for {
+		select {
+			//注意: 这里，如果intChan一直没有关闭，不会一直阻塞而deadlock
+			//，会自动到下一个case匹配
+			case v := <-intChan : 
+				fmt.Printf("从intChan读取的数据%d\n", v)
+				time.Sleep(time.Second)
+			case v := <-stringChan :
+				fmt.Printf("从stringChan读取的数据%s\n", v)
+				time.Sleep(time.Second)
+			default :
+				fmt.Printf("都取不到了，不玩了, 程序员可以加入逻辑\n")
+				time.Sleep(time.Second)
+				return 
+				//break label
+		}
+	}
+}
+```
+
+```package main
+import (
+	"fmt"
+	"time"
+)
+
+//函数
+func sayHello() {
+	for i := 0; i < 10; i++ {
+		time.Sleep(time.Second)
+		fmt.Println("hello,world")
+	}
+}
+//函数
+func test() {
+	//这里我们可以使用defer + recover
+	defer func() {
+		//捕获test抛出的panic
+		if err := recover(); err != nil {
+			fmt.Println("test() 发生错误", err)
+		}
+	}()
+	//定义了一个map
+	var myMap map[int]string
+	myMap[0] = "golang" //error
+}
+
+func main() {
+
+	go sayHello()
+	go test()
+
+
+	for i := 0; i < 10; i++ {
+		fmt.Println("main() ok=", i)
+		time.Sleep(time.Second)
+	}
+
+}
+```
+
+# 反射
