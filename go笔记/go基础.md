@@ -1184,3 +1184,10 @@ func main() {
 
 }
 ```
+
+# goroutine 和 channel
+
+1. channel的数据放满后，就不能再放入了
+2. 在没有使用协程的情况下，如果channel数据取完了，再取，就会报dead lock
+3. 使用内置函数close可以关闭channel，当channel关闭后，就不能再向channel写数据了，但是仍然可以从该channel读取数据
+4. channel支持for-range的方式进行遍历，在遍历是，如果channel没有关闭，则会出现dead lock错误
