@@ -1072,3 +1072,115 @@ func main() {
 	writer.Flush()
 }
 ```
+
+```
+package main
+import (
+	"fmt"
+	"io/ioutil" 
+)
+func main() {
+	//将d:/abc.txt 文件内容导入到  e:/kkk.txt
+	//1. 首先将  d:/abc.txt 内容读取到内存
+	//2. 将读取到的内容写入 e:/kkk.txt
+	file1Path := "d:/abc.txt" 
+	file2Path := "e:/kkk.txt" 
+	data, err := ioutil.ReadFile(file1Path)
+	if err != nil {
+		//说明读取文件有错误
+		fmt.Printf("read file err=%v\n", err)
+		return
+	}
+	err = ioutil.WriteFile(file2Path, data, 0666)
+	if err != nil {
+		fmt.Printf("write file error=%v\n", err)
+	}
+}
+```
+
+```
+package main
+import (
+	"fmt"
+	"os"
+	"io"
+	"bufio" 
+)
+
+//自己编写一个函数，接收两个文件路径 srcFileName dstFileName
+func CopyFile(dstFileName string, srcFileName string) (written int64, err error) {
+
+	srcFile, err := os.Open(srcFileName)
+	if err != nil {
+		fmt.Printf("open file err=%v\n", err)
+	}
+	defer srcFile.Close()
+	//通过srcfile ,获取到 Reader
+	reader := bufio.NewReader(srcFile)
+
+	//打开dstFileName
+	dstFile, err := os.OpenFile(dstFileName, os.O_WRONLY | os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Printf("open file err=%v\n", err)
+		return 
+	}
+
+	//通过dstFile, 获取到 Writer
+	writer := bufio.NewWriter(dstFile)
+	defer dstFile.Close()
+
+	return io.Copy(writer, reader)
+
+}
+
+func main() {
+
+	//将d:/flower.jpg 文件拷贝到 e:/abc.jpg
+
+	//调用CopyFile 完成文件拷贝
+	srcFile := "d:/flower.jpg"
+	dstFile := "e:/abc.jpg"
+	_, err := CopyFile(dstFile, srcFile)
+	if err == nil {
+		fmt.Printf("拷贝完成\n")
+	} else {
+		fmt.Printf("拷贝错误 err=%v\n", err)
+	}
+	
+}
+```
+
+# 命令行参数
+
+```
+package main
+import (
+	"fmt"
+	"flag"
+)
+
+func main() {
+
+	//定义几个变量，用于接收命令行的参数值
+	var user string
+	var pwd string
+	var host string
+	var port int
+
+	//&user 就是接收用户命令行中输入的 -u 后面的参数值
+	//"u" ,就是 -u 指定参数
+	//"" , 默认值
+	//"用户名,默认为空" 说明
+	flag.StringVar(&user, "u", "", "用户名,默认为空")
+	flag.StringVar(&pwd, "pwd", "", "密码,默认为空")
+	flag.StringVar(&host, "h", "localhost", "主机名,默认为localhost")
+	flag.IntVar(&port, "port", 3306, "端口号，默认为3306")
+	//这里有一个非常重要的操作,转换， 必须调用该方法
+	flag.Parse()
+
+	//输出结果
+	fmt.Printf("user=%v pwd=%v host=%v port=%v", 
+		user, pwd, host, port)
+
+}
+```
