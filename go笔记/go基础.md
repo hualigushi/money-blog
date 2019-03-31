@@ -1440,3 +1440,338 @@ func main() {
 ```
 
 # 反射
+
+```
+package main
+import (
+	"reflect"
+	"fmt"
+)
+
+
+//专门演示反射
+func reflectTest01(b interface{}) {
+
+	//通过反射获取的传入的变量的 type , kind, 值
+	//1. 先获取到 reflect.Type
+	rTyp := reflect.TypeOf(b)
+	fmt.Println("rType=", rTyp)
+
+	//2. 获取到 reflect.Value
+	rVal := reflect.ValueOf(b)
+	
+	n2 := 2 + rVal.Int()
+	//n3 := rVal.Float()
+	fmt.Println("n2=", n2)
+	//fmt.Println("n3=", n3)
+	
+	fmt.Printf("rVal=%v rVal type=%T\n", rVal, rVal)
+
+	//下面我们将 rVal 转成 interface{}
+	iV := rVal.Interface()
+	//将 interface{} 通过断言转成需要的类型
+	num2 := iV.(int)
+	fmt.Println("num2=", num2)
+
+
+}
+
+//专门演示反射[对结构体的反射]
+func reflectTest02(b interface{}) {
+
+	//通过反射获取的传入的变量的 type , kind, 值
+	//1. 先获取到 reflect.Type
+	rTyp := reflect.TypeOf(b)
+	fmt.Println("rType=", rTyp)
+
+	//2. 获取到 reflect.Value
+	rVal := reflect.ValueOf(b)
+
+	//3. 获取 变量对应的Kind
+	//(1) rVal.Kind() ==> 
+	kind1 := rVal.Kind()
+	//(2) rTyp.Kind() ==>
+	kind2 := rTyp.Kind()
+	fmt.Printf("kind =%v kind=%v\n", kind1, kind2)
+	
+
+
+	//下面我们将 rVal 转成 interface{}
+	iV := rVal.Interface()
+	fmt.Printf("iv=%v iv type=%T \n", iV, iV)
+	//将 interface{} 通过断言转成需要的类型
+	//这里，我们就简单使用了一带检测的类型断言.
+	//同学们可以使用 swtich 的断言形式来做的更加的灵活
+	stu, ok := iV.(Student)
+	if ok {
+		fmt.Printf("stu.Name=%v\n", stu.Name)
+	}
+
+}
+
+type Student struct {
+	Name string
+	Age int
+}
+
+type Monster struct {
+	Name string
+	Age int
+}
+
+func main() {
+
+	//请编写一个案例，
+	//演示对(基本数据类型、interface{}、reflect.Value)进行反射的基本操作
+
+	//1. 先定义一个int
+	var num int = 100
+	reflectTest01(num)
+
+	//2. 定义一个Student的实例
+	stu := Student{
+		Name : "tom",
+		Age : 20,
+	}
+	reflectTest02(stu)
+
+
+}
+```
+
+```
+
+package main
+import (
+	"reflect"
+	"fmt"
+)
+
+//通过反射，修改,
+// num int 的值
+// 修改 student的值
+
+func reflect01(b interface{}) {
+	//2. 获取到 reflect.Value
+	rVal := reflect.ValueOf(b)
+	// 看看 rVal的Kind是 
+	fmt.Printf("rVal kind=%v\n", rVal.Kind())
+	//3. rVal
+	//Elem返回v持有的接口保管的值的Value封装，或者v持有的指针指向的值的Value封装
+	rVal.Elem().SetInt(20)
+}
+
+func main() {
+
+	var num int = 10
+	reflect01(&num)
+	fmt.Println("num=", num) // 20
+
+
+	//你可以这样理解rVal.Elem()
+	// num := 9
+	// ptr *int = &num
+	// num2 := *ptr  //=== 类似 rVal.Elem()
+}
+```
+
+```
+package main
+import (
+	"fmt"
+	"reflect"
+)
+//定义了一个Monster结构体
+type Monster struct {
+	Name  string `json:"name"`
+	Age   int `json:"monster_age"`
+	Score float32 `json:"成绩"`
+	Sex   string
+	
+}
+
+//方法，返回两个数的和
+func (s Monster) GetSum(n1, n2 int) int {
+	return n1 + n2
+}
+//方法， 接收四个值，给s赋值
+func (s Monster) Set(name string, age int, score float32, sex string) {
+	s.Name = name
+	s.Age = age
+	s.Score = score
+	s.Sex = sex
+}
+
+//方法，显示s的值
+func (s Monster) Print() {
+	fmt.Println("---start~----")
+	fmt.Println(s)
+	fmt.Println("---end~----")
+}
+func TestStruct(a interface{}) {
+	//获取reflect.Type 类型
+	typ := reflect.TypeOf(a)
+	//获取reflect.Value 类型
+	val := reflect.ValueOf(a)
+	//获取到a对应的类别
+	kd := val.Kind()
+	//如果传入的不是struct，就退出
+	if kd !=  reflect.Struct {
+		fmt.Println("expect struct")
+		return
+	}
+
+	//获取到该结构体有几个字段
+	num := val.NumField()
+
+	fmt.Printf("struct has %d fields\n", num) //4
+	//变量结构体的所有字段
+	for i := 0; i < num; i++ {
+		fmt.Printf("Field %d: 值为=%v\n", i, val.Field(i))
+		//获取到struct标签, 注意需要通过reflect.Type来获取tag标签的值
+		tagVal := typ.Field(i).Tag.Get("json")
+		//如果该字段于tag标签就显示，否则就不显示
+		if tagVal != "" {
+			fmt.Printf("Field %d: tag为=%v\n", i, tagVal)
+		}
+	}
+	
+	//获取到该结构体有多少个方法
+	numOfMethod := val.NumMethod()
+	fmt.Printf("struct has %d methods\n", numOfMethod)
+	
+	//var params []reflect.Value
+	//方法的排序默认是按照 函数名的排序（ASCII码）
+	val.Method(1).Call(nil) //获取到第二个方法。调用它
+
+	
+	//调用结构体的第1个方法Method(0)
+	var params []reflect.Value  //声明了 []reflect.Value
+	params = append(params, reflect.ValueOf(10))
+	params = append(params, reflect.ValueOf(40))
+	res := val.Method(0).Call(params) //传入的参数是 []reflect.Value, 返回[]reflect.Value
+	fmt.Println("res=", res[0].Int()) //返回结果, 返回的结果是 []reflect.Value*/
+
+}
+func main() {
+	//创建了一个Monster实例
+	var a Monster = Monster{
+		Name:  "黄鼠狼精",
+		Age:   400,
+		Score: 30.8,
+	}
+	//将Monster实例传递给TestStruct函数
+	TestStruct(a)	
+}
+```
+
+# 网络编程
+```
+server.go
+package main
+import (
+	"fmt"
+	"net" //做网络socket开发时,net包含有我们需要所有的方法和函数
+	_"io"
+)
+
+func process(conn net.Conn) {
+
+	//这里我们循环的接收客户端发送的数据
+	defer conn.Close() //关闭conn
+
+	for {
+		//创建一个新的切片
+		buf := make([]byte, 1024)
+		//conn.Read(buf)
+		//1. 等待客户端通过conn发送信息
+		//2. 如果客户端没有wrtie[发送]，那么协程就阻塞在这里
+		//fmt.Printf("服务器在等待客户端%s 发送信息\n", conn.RemoteAddr().String())
+		n , err := conn.Read(buf) //从conn读取
+		if err != nil {
+			
+			fmt.Printf("客户端退出 err=%v", err)
+			return //!!!
+		}
+		//3. 显示客户端发送的内容到服务器的终端
+		fmt.Print(string(buf[:n])) 
+	}
+
+}
+
+func main() {
+
+	fmt.Println("服务器开始监听....")
+	//net.Listen("tcp", "0.0.0.0:8888")
+	//1. tcp 表示使用网络协议是tcp
+	//2. 0.0.0.0:8888 表示在本地监听 8888端口
+	listen, err := net.Listen("tcp", "0.0.0.0:8888")
+	if err != nil {
+		fmt.Println("listen err=", err)
+		return 
+	}
+	defer listen.Close() //延时关闭listen
+
+	//循环等待客户端来链接我
+	for {
+		//等待客户端链接
+		fmt.Println("等待客户端来链接....")
+		conn, err := listen.Accept()
+		if err != nil {
+			fmt.Println("Accept() err=", err)
+			
+		} else {
+			fmt.Printf("Accept() suc con=%v 客户端ip=%v\n", conn, conn.RemoteAddr().String())
+		}
+		//这里准备其一个协程，为客户端服务
+		go process(conn)
+	}
+	
+	//fmt.Printf("listen suc=%v\n", listen)
+}
+
+client.go
+package main
+import (
+	"fmt"
+	"net"
+	"bufio"
+	"os"
+	"strings"
+)
+
+func main() {
+
+	conn, err := net.Dial("tcp", "127.0.0.1:8888")
+	if err != nil {
+		fmt.Println("client dial err=", err)
+		return 
+	}
+	//功能一：客户端可以发送单行数据，然后就退出
+	reader := bufio.NewReader(os.Stdin) //os.Stdin 代表标准输入[终端]
+
+	for {
+
+		//从终端读取一行用户输入，并准备发送给服务器
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("readString err=", err)
+		}
+		//如果用户输入的是 exit就退出
+		line = strings.Trim(line, " \r\n")
+		if line == "exit" {
+			fmt.Println("客户端退出..")
+			break
+		}
+
+		//再将line 发送给 服务器
+		_, err = conn.Write([]byte(line + "\n"))
+		if err != nil {
+			fmt.Println("conn.Write err=", err)	
+		}
+	}
+	
+
+}
+```
+
