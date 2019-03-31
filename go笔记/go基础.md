@@ -1775,3 +1775,6 @@ func main() {
 }
 ```
 
+# go 操作 redis
+
+安装第三方Redis库，在GOPATH路径下执行安装指令： go get github.com/garyburd/redigo/redis
