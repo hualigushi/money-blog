@@ -1197,6 +1197,9 @@ func main() {
 3. 使用内置函数close可以关闭channel，当channel关闭后，就不能再向channel写数据了，但是仍然可以从该channel读取数据
 4. channel支持for-range的方式进行遍历，在遍历是，如果channel没有关闭，则会出现dead lock错误
 
+![goroutine1](https://github.com/hualigushi/money-blog/blob/master/go%E7%AC%94%E8%AE%B0/goroutine1.JPG)
+
+![goroutine2](https://github.com/hualigushi/money-blog/blob/master/go%E7%AC%94%E8%AE%B0/goroutine2.JPG)
 
 ```
 package main
@@ -1294,7 +1297,7 @@ func main() {
 }
 ```
 
-
+![goroutine3](https://github.com/hualigushi/money-blog/blob/master/go%E7%AC%94%E8%AE%B0/goroutine3.JPG)
 
 ```
 package main
