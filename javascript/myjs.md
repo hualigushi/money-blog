@@ -69,7 +69,7 @@ if (keyword) {
     return this.list[key].length > 0
     })
 }
-``
+```
 
 7. 数组添加不重复的数据
 ```
@@ -82,3 +82,101 @@ Array.prototype.pushWithoutDuplicate = function () {
   }
 }
 ```
+
+8. axios 下载进度
+```
+axios.create({
+    baseURL: '',
+    method: 'get',
+    responseType: 'blob',
+    timeout: 180 * 1000,
+    onDownloadProgress: progressEvent => {
+      if (onProgress) onProgress(progressEvent)
+    }
+  })
+
+  progressEvent => {
+    const progress = Math.floor(progressEvent.loaded / progressEvent.total * 100) + '%'
+}
+```
+
+9. 类型判断
+```
+const toString = Object.prototype.toString // 方法缓存, 不需要反复地从Object开始一层层地访问
+
+export function isDate(val: any): val is Date { // val is Date 类型保护
+    return toString.call(val) === '[object Date]'
+}
+
+export function isPlainObject(val: any): val is Object {
+    return toString.call(val) === '[object Object]'
+}
+```
+
+10. extend
+
+```
+// extend 方法的实现用到了交叉类型，并且用到了类型断言。extend 的最终目的是把 from 里的属性都扩展到 to 中，包括原型上的属性
+export function extend<T, U>(to: T, from: U): T & U {
+    for (const key in from) {
+        ; (to as T & U)[key] = from[key] as any
+    }
+    return to as T & U
+}
+```
+
+11. 普通对象的深拷贝
+
+```
+export function deepMerge(...objs: any[]): any {
+    const result = Object.create(null)
+
+    objs.forEach(obj => {
+        if (obj) {
+            Object.keys(obj).forEach(key => {
+                const val = obj[key]
+                if (isPlainObject(val)) {
+                    if (isPlainObject(result[key])) {
+                        result[key] = deepMerge(result[key], val)
+                    } else {
+                        result[key] = deepMerge(val)
+                    }
+                } else {
+                    result[key] = val
+                }
+            })
+        }
+    })
+    return result
+}
+```
+
+12. 同域请求判断
+```
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
+  )
+}
+
+const urlParsingNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+
+function resolveURL(url: string): URLOrigin {
+  urlParsingNode.setAttribute('href', url)
+  const { protocol, host } = urlParsingNode
+
+  return {
+    protocol,
+    host
+  }
+}
+```
+同域名的判断主要利用了一个技巧，创建一个 a 标签的 DOM，然后设置 href 属性为我们传入的 url，然后可以获取该 DOM 的 protocol、host。当前页面的 url 和请求的 url 都通过这种方式获取，然后对比它们的 protocol 和 host 是否相同即可。
