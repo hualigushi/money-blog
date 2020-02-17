@@ -180,3 +180,16 @@ function resolveURL(url: string): URLOrigin {
 }
 ```
 同域名的判断主要利用了一个技巧，创建一个 a 标签的 DOM，然后设置 href 属性为我们传入的 url，然后可以获取该 DOM 的 protocol、host。当前页面的 url 和请求的 url 都通过这种方式获取，然后对比它们的 protocol 和 host 是否相同即可。
+
+13. img srcset sizes
+
+```
+<img src="lighthouse-200.jpg" sizes="50vw"
+    srcset="lighthouse-100.jpg 100w, lighthouse-200.jpg 200w,
+            lighthouse-400.jpg 400w, lighthouse-800.jpg 800w,
+            lighthouse-1000.jpg 1000w, lighthouse-1400.jpg 1400w,
+            lighthouse-1800.jpg 1800w" alt="a lighthouse">
+```
+如果没有设置srcset属性，或者没值，那么sizes属性也将不起作用
+
+渲染了一张宽度为视窗宽度一半（sizes="50vw"）的图像，根据浏览器的宽度及其设备像素比，允许浏览器选择正确的图像，而不考虑浏览器窗口有多大。

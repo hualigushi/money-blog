@@ -167,3 +167,12 @@ box-align:center;
 <p>我是居中对齐的。</p>
 </div>
 ```
+
+## 14.图片引入 `image-set()`
+```
+.logo {
+    background-image: image-set(url(logo@1x.png);
+    background-image: image-set(url(logo@1x.png) 1x,url(logo@2x.png) 2x);
+}
+```
+根据不同的dpr显示不同的图像
