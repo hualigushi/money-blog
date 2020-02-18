@@ -203,3 +203,36 @@ function resolveURL(url: string): URLOrigin {
 window.devicePixelRatio = 物理像素 / dips
 
 16. html5 新属性 data-dpr
+
+17. Promise值穿透
+
+解释：.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透
+
+```
+ Promise.resolve('foo')
+    .then(Promise.resolve('bar'))
+    .then(function(result){
+      console.log(result)
+    })
+
+
+foo
+
+
+```
+Promise.resolve(1)
+  .then(function(){return 2})
+  .then(Promise.resolve(3))
+  .then(console.log)
+  
+  2
+```
+
+```
+Promise.resolve(1)
+  .then(function(){return 2})
+  .then(function(){return Promise.resolve(3)})
+  .then(console.log)
+  
+3
+```
