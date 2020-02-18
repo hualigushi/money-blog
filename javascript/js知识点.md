@@ -20,4 +20,6 @@
 [浅析 HTML5 中的 download 属性](https://zhuanlan.zhihu.com/p/58888918)
 
 
+[浏览器输入 URL 后发生了什么？](https://zhuanlan.zhihu.com/p/43369093)
+
 
