@@ -13,3 +13,5 @@ vue 魔方 [魔方](https://github.com/caolinjian/rubik-cube)
 开源监控系统 [Sentry](https://sentry.io/welcome/)
 
 [Vue路由自动注入实践](https://zhuanlan.zhihu.com/p/63079674)  [https://zhuanlan.zhihu.com/p/63079674](https://github.com/Qymh/vue-router-invoke-webpack-plugin)
+
+快速构建多端应用 [Rax](https://rax.js.org/)
