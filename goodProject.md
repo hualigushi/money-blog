@@ -4,6 +4,8 @@
 
 前端数据校验 schema-typed
 
-memory-fs
+内存文件系统 memory-fs
+
+vue 图片延迟加载  [vue-img](https://github.com/ElemeFE/vue-img)
 
 
