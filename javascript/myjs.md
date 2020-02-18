@@ -193,3 +193,13 @@ function resolveURL(url: string): URLOrigin {
 如果没有设置srcset属性，或者没值，那么sizes属性也将不起作用
 
 渲染了一张宽度为视窗宽度一半（sizes="50vw"）的图像，根据浏览器的宽度及其设备像素比，允许浏览器选择正确的图像，而不考虑浏览器窗口有多大。
+
+14. 在 HTTP/1.0 和 HTTP/1.1 协议下，由于 Chrome 只支持同域同时发送 6 个并发请求，可以进行域名切分，来提升并发的请求数量，或者使用 HTTP/2 协议
+
+15. window属性：devicePixelRatio
+
+该属性能够返回当前显示设备的物理像素分辨率与 CSS 像素分辨率的比率。此值也可以解释为像素大小的比率：一个 CSS 像素的大小与一个物理像素的大小的比值。简单地说，这告诉浏览器应该使用多少个屏幕的实际像素来绘制单个 CSS 像素。
+
+window.devicePixelRatio = 物理像素 / dips
+
+16. html5 新属性 data-dpr
