@@ -27,6 +27,8 @@ mix-blend-mode: inherit;         //继承
 mix-blend-mode: unset;           //复原
 ```
 
+[理解CSS3 isolation: isolate的表现和作用](https://www.zhangxinxu.com/wordpress/2016/01/understand-css3-isolation-isolate/)
+
 2. CSS3 background-blend-mode
 
 背景的混合模式。可以是背景图片见的混合，也可以是背景图片和背景色的混合
