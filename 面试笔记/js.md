@@ -173,3 +173,19 @@ console.log(isInt(4)); // true
 console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
+
+# 箭头函数
+
+普通函数和箭头函数的区别：
+
+1. 箭头函数没有prototype(原型)，所以箭头函数本身没有this
+2. 箭头函数的this在定义的时候继承自外层第一个普通函数的this。
+3. 如果箭头函数外层没有普通函数，严格模式和非严格模式下它的this都会指向window(全局对象)
+4. 箭头函数本身的this指向不能改变，但可以修改它要继承的对象的this。
+5. 箭头函数的this指向全局，使用arguments会报未声明的错误。
+6. 箭头函数的this指向普通函数时,它的argumens继承于该普通函数
+7. 使用new调用箭头函数会报错，因为箭头函数没有constructor
+8. 箭头函数不支持new.target
+9. 箭头函数不支持重命名函数参数,普通函数的函数参数支持重命名
+
+[箭头函数](https://juejin.im/post/5c76972af265da2dc4538b64)
