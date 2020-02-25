@@ -91,3 +91,7 @@ Pragma：no-cache 兼容HTTP/1.0
 
 
 [前端工程师必懂知识点之HTTP缓存](https://segmentfault.com/a/1190000021669953)
+
+# HTTPS
+
+[HTTP和HTTPS的区别和常见的面试题](https://blog.csdn.net/zhttly/article/details/82895713)
