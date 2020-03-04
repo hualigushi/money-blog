@@ -592,4 +592,111 @@ plugins: [
 
 采用这种方法优化后， Webpack 消耗的内存和 CPU 将会大大减少。
 
+# 独立css 文件
 
+- 需要将css代码独立开来，为什么呢？最主要的一点是我们希望更好的利用浏览器的缓存，当单独修改了样式时，独立的css文件可以不需要应用去加载整个的脚本文件，提高效率。并且，当遇到多页面的应用时，可以单独将一些公共部分的样式抽离开来，加载一个页面后，接下来的页面同样可以利用缓存来减少请求。
+
+- webpack4.0 中提供了抽离css文件的插件，mini-css-extract-plugin,只需要简单的配置便可以将css文件分离开来
+
+```
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+module.exports = {
+    ···
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "[name].[contenthash].css",
+            chunkFilename: "[name].[contenthash].css"
+        })
+    ],
+    module: {
+        rules: {
+            test: /\.(css|scss)$/,
+            use: [process.env.NODE_ENV == 'production' ? MiniCssExtractPlugin.loader : 'style-loader', {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              },
+            }, "sass-loader"]
+        }
+    }
+    ···
+}
+```
+
+# 压缩js, html, css 文件
+- 要想优化构建后的体积，不断减少静态资源文件的大小，我们希望webpack帮助我们尽可能压缩文件的体积。对于js 脚本文件而言，webpack4.0 在mode 为‘production’时，默认会启动代码的压缩。除此之外，我们需要手动对html和css 进行压缩。
+```
+// webpack.base.js 
+
+module.exports = {
+    plugins: [
+        new HtmlWebpackPlugin({
+          title: 'minHTML',
+          filename: 'index.html',
+          template: path.resolve(__dirname, '../index.html'),
+          minify: { // 压缩 HTML 的配置
+            collapseWhitespace: true,
+            removeComments: true,
+            useShortDoctype: true
+          }
+        }),
+    ]
+}
+```
+- 针对css 的压缩， webpack4.0 使用`optimize-css-assets-webpack-plugin`来压缩单独的css 文件。
+
+```
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+
+module.exports = {
+    plugins: [
+        new OptimizeCSSAssetsPlugin()
+    ],
+}
+```
+
+# 压缩图片
+- 处理完雪碧图和小图片的base64转换后，对于大图片来说，webpack还可以做到对图片进行压缩，推荐使用image-webpack-loader,插件提供了多种形式的压缩
+```
+// webpack.base.js
+module.exports = {
+    module: {
+        rules: [
+            {
+              loader: 'image-webpack-loader',
+              options: {
+                optipng: { // 使用 imagemin-optipng 压缩 png，enable: false 为关闭
+                  enabled: true,
+                },
+                pngquant: { // 使用 imagemin-pngquant 压缩 png
+                  quality: '65-90',
+                  speed: 4
+                },
+              }
+            }
+        ]
+    }
+}
+```
+
+# 依赖库分离
+- 一个中大型应用中，第三方的依赖，庞大得可怕，占据了打包后文件的一半以上。然而，这些依赖模块又是很少变更的资源，和css 代码分离的逻辑相似，分离第三方依赖库，可以更好的利用浏览器缓存，提升应用性能。因此，将依赖模块从业务代码中分离是性能优化重要的一环。
+- webpack4.0 中，依赖库的分离只需要通过 optimization.splitChunks 进行配置即可。
+```
+// webpack.pro.js
+module.exports = {
+    optimization: {
+       splitChunks: {
+          cacheGroups: {
+            vendor: {
+              chunks: "initial",
+              test: path.resolve(__dirname, "../node_modules"),
+              name: "vendor", // 使用 vendor 入口作为公共部分
+              enforce: true,
+            },
+          },
+        },
+      },
+}
+```
