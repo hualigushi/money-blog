@@ -249,6 +249,10 @@ plugins: [new webpack.IgnorePlugin(/\.\/local/, /moment/)];
 
 # DllPlugin
 - DllPlugin 是基于 Windows 动态链接库（dll）的思想被创作出来的。这个插件会把第三方库单独打包到一个文件中，这个文件就是一个单纯的依赖库。这个依赖库不会跟着你的业务代码一起被重新打包，只有当依赖自身发生版本变化时才会重新打包。
+
+- DllPlugin可以将特定的类库提前打包然后引入。这种方式可以极大的减少打包类库的次数，只有当类库更新版本才有需要重新打包，并且也实现了将公共代码抽离成单独文件的优化方案
+
+
 ### 用 DllPlugin 处理文件，要分两步走：
 - 基于 dll 专属的配置文件，打包 dll 库
 ```
@@ -502,12 +506,76 @@ module.exports = {
             }
         }
 ```
+# 压缩JS：Webpack内置UglifyJS插件
+- 会分析JS代码语法树，理解代码的含义，从而做到去掉无效代码、去掉日志输入代码、缩短变量名等优化。
+```
+const UglifyJSPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+//...
+plugins: [
+    new UglifyJSPlugin({
+        compress: {
+            warnings: false,  //删除无用代码时不输出警告
+            drop_console: true,  //删除所有console语句，可以兼容IE
+            collapse_vars: true,  //内嵌已定义但只使用一次的变量
+            reduce_vars: true,  //提取使用多次但没定义的静态值到变量
+        },
+        output: {
+            beautify: false, //最紧凑的输出，不保留空格和制表符
+            comments: false, //删除所有注释
+        }
+    })
+]
+```
+使用webpack --optimize-minimize 启动webpack，可以注入默认配置的UglifyJSPlugin
+
+# 压缩ES6：第三方UglifyJS插件
+- 随着越来越多的浏览器支持直接执行ES6代码，应尽可能的运行原生ES6，这样比起转换后的ES5代码，代码量更少，且ES6代码性能更好。直接运行ES6代码时，也需要代码压缩，第三方的uglify-webpack-plugin提供了压缩ES6代码的功能
+
+```
+npm i -D uglify-webpack-plugin@beta //要使用最新版本的插件
+//webpack.config.json
+const UglifyESPlugin = require('uglify-webpack-plugin');
+//...
+plugins:[
+    new UglifyESPlugin({
+        uglifyOptions: {  //比UglifyJS多嵌套一层
+            compress: {
+                warnings: false,
+                drop_console: true,
+                collapse_vars: true,
+                reduce_vars: true
+            },
+            output: {
+                beautify: false,
+                comments: false
+            }
+        }
+    })
+]
+```
+另外要防止babel-loader转换ES6代码，要在.babelrc中去掉babel-preset-env，因为正是babel-preset-env负责把ES6转换为ES5。
 
 # 使用 ParallelUglifyPlugin
 
 webpack默认提供了UglifyJS插件来压缩JS代码，但是它使用的是单线程压缩代码，也就是说多个js文件需要被压缩，它需要一个个文件进行压缩。所以说在正式环境打包压缩代码速度非常慢(因为压缩JS代码需要先把代码解析成用Object抽象表示的AST语法树，再去应用各种规则分析和处理AST，导致这个过程耗时非常大)。
 
 当webpack有多个JS文件需要输出和压缩时候，原来会使用UglifyJS去一个个压缩并且输出，但是ParallelUglifyPlugin插件则会开启多个子进程，把对多个文件压缩的工作分别给多个子进程去完成，但是每个子进程还是通过UglifyJS去压缩代码。无非就是变成了并行处理该压缩了，并行处理多个子任务，效率会更加的提高。
+
+```
+npm i -D webpack-parallel-uglify-plugin
+
+// webpack.config.json
+const ParallelUglifyPlugin = require('wbepack-parallel-uglify-plugin');
+//...
+plugins: [
+    new ParallelUglifyPlugin({
+        uglifyJS:{
+            //...这里放uglifyJS的参数
+        },
+        //...其他ParallelUglifyPlugin的参数，设置cacheDir可以开启缓存，加快构建速度
+    })
+]
+```
 
 # 优化文件监听的性能
 
@@ -523,3 +591,5 @@ webpack默认提供了UglifyJS插件来压缩JS代码，但是它使用的是单
 ```
 
 采用这种方法优化后， Webpack 消耗的内存和 CPU 将会大大减少。
+
+
