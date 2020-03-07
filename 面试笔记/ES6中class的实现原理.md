@@ -238,3 +238,5 @@ subClass.__proto__ = superClass
 首先 `subClass.prototype.__proto__ = superClass.prototype`保证了子类的实例instanceof父类是true，子类的实例可以访问到父类的属性，包括内部属性，以及原型属性。
 
 其次，`subClass.__proto__ = superClass`，保证了静态属性也能访问到，也就是这个例子中的Child.height。
+
+[es6类和继承的实现原理](https://segmentfault.com/a/1190000017816134)
