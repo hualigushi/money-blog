@@ -240,3 +240,5 @@ subClass.__proto__ = superClass
 其次，`subClass.__proto__ = superClass`，保证了静态属性也能访问到，也就是这个例子中的Child.height。
 
 [es6类和继承的实现原理](https://segmentfault.com/a/1190000017816134)
+
+[在使用es6语法class的时候，babel到底做了什么？](https://segmentfault.com/a/1190000015125847)
