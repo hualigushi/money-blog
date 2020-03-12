@@ -70,9 +70,84 @@ function mountComponent (){
       }
     }
   }, true /* isRenderWatcher */)
+  
+  if (vm.$vnode == null) {
+    vm._isMounted = true
+    callHook(vm, 'mounted')
+  }
+  return vm
 }
 ```
 
-mountComponent 核心就是先实例化一个渲染Watcher，在它的回调函数中会调用 updateComponent 方法，在此方法中调用 vm._render 方法先生成虚拟 Node，最终调用 vm._update 更新 DOM。
+mountComponent 核心就是先实例化一个渲染Watcher，在它的回调函数中会调用 `updateComponent` 方法，在此方法中调用 `vm._render` 方法先生成虚拟 Node，最终调用 `vm._update` 更新 DOM。
 
-## 整个 vnode 树节点的插入顺序是先子后父
+Watcher 在这里起到两个作用，一个是初始化的时候会执行回调函数，另一个是当 vm 实例中的监测的数据发生变化的时候执行回调函数
+
+最后判断为根节点的时候设置 `vm._isMounted` 为 true， 表示这个实例已经挂载了，同时执行 mounted 钩子函数。 这里注意 `vm.$vnode` 表示 Vue 实例的父虚拟 Node，所以它为 Null 则表示当前是根 Vue 的实例。
+
+## render 
+
+`vm._render` 最终是通过执行 `createElement` 方法并返回的是 vnode，它是一个虚拟 Node。
+
+```
+Vue.prototype._render = function () {
+  vnode = render.call(vm._renderProxy, vm.$createElement)
+}
+```
+```
+export function initRender (vm: Component) {
+  vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
+  vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
+}
+```
+## createElement
+```
+function createElement (){
+  return _createElement(context, tag, data, children, normalizationType)
+}
+```
+```
+function _createElement (){
+  vnode = new VNode(
+    config.parsePlatformTagName(tag), data, children,
+    undefined, undefined, context
+  )
+    
+  vnode = createComponent(tag, data, context, children)
+}
+```
+每个 VNode 有 children，children 每个元素也是一个 VNode，这样就形成了一个 VNode Tree，它很好的描述了我们的 DOM Tree。
+
+## update
+
+```
+Vue.prototype._update = function () {
+  vm.$el = vm.__patch__(prevVnode, vnode)
+}
+```
+`Vue.prototype.__patch__ = inBrowser ? patch : noop`
+
+```
+const modules = platformModules.concat(baseModules)
+
+export const patch: Function = createPatchFunction({ nodeOps, modules })
+```
+```
+function createPatchFunction () {
+  return function patch (oldVnode, vnode, hydrating, removeOnly) {
+    // create new node
+     createElm(
+        vnode,
+        insertedVnodeQueue,
+        oldElm._leaveCb ? null : parentElm,
+        nodeOps.nextSibling(oldElm)
+      )
+   invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
+   return vnode.elm
+  }
+}
+```
+
+createPatchFunction 内部定义了一系列的辅助方法，最终返回了一个 patch 方法，这个方法就赋值给了 `vm._update` 函数里调用的 `vm.__patch__`
+
+整个 vnode 树节点的插入顺序是先子后父
