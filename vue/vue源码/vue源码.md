@@ -220,3 +220,7 @@ let vm = new Vue({
 通过例子调试源码
 
 createElm -> createComponet -> init钩子 -> createComponentInstanceForVnode -> 子组件构造函数 Vue.protetype._init -> initInternalComponent -> vm_render -> vm._update -> patch 
+
+activeInstance为当前激活的vm实例， vm.$vnode为组件的占位vnode， vm._vnode为组件的渲染vnode
+
+嵌套组件的插入顺序是先子后父，destroy 钩子函数执行顺序是先子后父，和 mounted 过程一样
