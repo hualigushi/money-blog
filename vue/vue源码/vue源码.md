@@ -150,4 +150,73 @@ function createPatchFunction () {
 
 createPatchFunction 内部定义了一系列的辅助方法，最终返回了一个 patch 方法，这个方法就赋值给了 `vm._update` 函数里调用的 `vm.__patch__`
 
+```
+<div>{{message}}</div>
+
+var app = new Vue({
+  el: '#app',
+  render: function (createElement) {
+    return createElement('div', {
+      attrs: {
+        id: 'app'
+      },
+    }, this.message)
+  },
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+```
+通过例子调试源码
+
 整个 vnode 树节点的插入顺序是先子后父
+
+## createComponent
+```
+if (typeof tag === 'string') {}else {
+   vnode = createComponent(tag, data, context, children)
+}
+
+
+function createComponent (){
+  const baseCtor = context.$options._base // baseCtor 指向 Vue 
+  
+  if (isObject(Ctor)) {
+    Ctor = baseCtor.extend(Ctor) // 构造子类构造函数
+  }
+  
+  installComponentHooks(data)
+  
+  // return a placeholder vnode
+  const name = Ctor.options.name || tag
+  const vnode = new VNode(
+    `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
+    data, undefined, undefined, undefined, context,
+    { Ctor, propsData, listeners, tag, children },
+    asyncFactory
+  )
+  
+  return vnode
+}
+```
+组件渲染3 个关键步骤：
+
+构造子类构造函数，安装组件钩子函数和实例化 vnode
+
+## patch 
+```
+<div></div>
+
+let App = {
+  template: '<div>Hello World</div>
+}
+
+
+let vm = new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+```
+通过例子调试源码
+
+createElm -> createComponet -> init钩子 -> createComponentInstanceForVnode -> 子组件构造函数 Vue.protetype._init -> initInternalComponent -> vm_render -> vm._update -> patch 
