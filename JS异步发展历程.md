@@ -17,13 +17,16 @@
 
 promise的状态只能从pending变成fulfilled，和pending变成rejected，状态一旦改变，就不会再改变，且只有异步操作的结果才能改变promise的状态。
 
+promise是一个容器，里面保存着某个未来才会结束的事件 (比如 异步操作的结果)
+
 优点：解决了回调地狱的问题，将异步操作以同步操作的流程表达出来
 
 缺点：
   - 无法取消promise。如果不设置回调函数
   - Promise内部抛出的错误，不会反应到外部。错误不能被 try catch
   - 当处于Pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。当执行多个Promise时，一堆then看起来也很不友好。
-
+  - promise一旦新建，就会立即执行，无法取消
+  
 # 3. Generator
 
 Generator是es6提出的另一种异步编程解决方案，需要在函数名之前加一个*号，函数内部使用yield语句。
