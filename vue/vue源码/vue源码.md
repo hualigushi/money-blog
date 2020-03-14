@@ -232,3 +232,5 @@ activeInstance为当前激活的vm实例， vm.$vnode为组件的占位vnode， 
 
 ## 异步组件
 异步组件实现的 实质是2次渲染，先渲染成注释节点，当组件加载成功后，再通过forceRender重新渲染
+
+## 响应式原理
