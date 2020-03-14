@@ -230,6 +230,8 @@ activeInstance为当前激活的vm实例， vm.$vnode为组件的占位vnode， 
 
 嵌套组件的插入顺序是先子后父，destroy 钩子函数执行顺序是先子后父，和 mounted 过程一样
 
+[Vue 视图更新patch过程源码解析](https://segmentfault.com/a/1190000021057420)
+
 ## 异步组件
 异步组件实现的 实质是2次渲染，先渲染成注释节点，当组件加载成功后，再通过forceRender重新渲染
 
