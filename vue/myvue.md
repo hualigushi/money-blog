@@ -70,3 +70,34 @@ export default {
     <component :is="tab === 1 ? content : bookmark"></component>
 </keep-alive>
 ```
+
+5. vue 动态参数 2.6 新增
+```
+<a v-on:[eventName]="doSomething"> ... </a>
+
+<!-- 动态参数的缩写 (2.6.0+) -->
+<a :[key]="url"> ... </a>
+
+<!-- 动态参数的缩写 (2.6.0+) -->
+<a @[event]="doSomething"> ... </a>
+```
+
+6. computed 缓存
+```
+computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  }
+  
+  methods: {
+  reversedMessage: function () {
+    return this.message.split('').reverse().join('')
+  }
+}
+计算属性是基于它们的响应式依赖进行缓存的。只在相关响应式依赖发生改变时它们才会重新求值。这就意味着只要 message 还没有发生改变，多次访问 reversedMessage 计算属性会立即返回之前的计算结果，而不必再次执行函数。
+```
+
+7. watch 当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。
