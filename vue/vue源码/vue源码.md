@@ -1,3 +1,5 @@
+[Vue.js 技术揭秘](https://ustbhuangyi.github.io/vue-analysis/)
+
 ## Vue 的定义
 ```
 function Vue (options) {
@@ -245,3 +247,44 @@ activeInstance为当前激活的vm实例， vm.$vnode为组件的占位vnode， 
 watcher 之前创建的。
 3. 如果⼀个组件在⽗组件的 watcher 执⾏期间被销毁，那么它对应的 watcher 执⾏都可以被跳
 过，所以⽗组件的 watcher 应该先执⾏。
+
+![](https://github.com/hualigushi/money-blog/blob/master/vue/vue%E6%BA%90%E7%A0%81/watcher.JPG)
+
+## 编译
+
+![](https://github.com/hualigushi/money-blog/blob/master/vue/vue%E6%BA%90%E7%A0%81parser.JPG)
+
+## event
+```
+let Child = {
+      template: '<button @click="clickHandler($event)">' +
+        'click me' +
+        '</button>',
+      methods: {
+        clickHandler(e) {
+          console.log('Button clicked!', e)
+          this.$emit('select')
+        }
+      }
+    }
+    let vm = new Vue({
+      el: '#app',
+      template: '<div>' +
+        '<child @select="selectHandler" @click.native.prevent="clickHandler"></child>' +
+        '</div>',
+      methods: {
+        clickHandler() {
+          console.log('Child clicked!')
+        },
+        selectHandler() {
+          console.log('Child select!')
+        }
+      },
+      components: {
+        Child
+      }
+    })
+```
+`vm.$emit` 是给当前的 vm 上派发的实例，之所以我们常⽤它做⽗⼦组件通讯，是因为它的回调函数的定义是在⽗组件中，
+对于我们这个例⼦⽽⾔，当⼦组件的 button 被点击了，它通过`this.$emit('select')` 派发事件，
+那么⼦组件的实例就监听到了这个 select 事件，并执⾏它的回调函数——定义在⽗组件中的 selectHandler ⽅法，这样就相当于完成了⼀次⽗⼦组件的通讯。

@@ -218,7 +218,7 @@ window.devicePixelRatio = 物理像素 / dips
 
 foo
 
-
+```
 ```
 Promise.resolve(1)
   .then(function(){return 2})
