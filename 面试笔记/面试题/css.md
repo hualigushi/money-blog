@@ -4,3 +4,6 @@
 4. 浏览器渲染过程
 5. link import 区别
 6. rem px
+7. position属性
+8. 伪类 伪元素区别
+9. 选择器
