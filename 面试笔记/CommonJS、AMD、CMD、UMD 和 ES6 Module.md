@@ -312,3 +312,68 @@ import math from './math';
 - CommonJS 模块就是一个对象，在导入时先加载整个模块，生成一个对象( 这个对象只有在脚本运行完才会生成 )，然后再从这个对象上读取方法，这种加载称为“运行时加载”。
 - ES6 模块不是对象，它的对外接口只是一种静态定义，在代码运行之前( 即编译时 )的静态解析阶段就完成了模块加载，比 CommonJS 模块的加载方式更高效。
 
+
+## CommonJS和ES6模块化的区别
+
+ES6 模块化
+- import只会导入一次，无论你引入多少次
+- 有提升效果，import会自动提升到顶部，首先执行
+- import命令输入的变量都是只读的，因为它的本质是输入接口。也就是说，不允许在加载模块的脚本里面，改写接口。如果脚本加载了变量，对其重新赋值就会报错，因为变量是一个只读的接口。但是，如果是一个对象，改写对象的属性是允许的。（对象只能改变值但不能改变引用）
+- 由于import是静态执行，所以不能使用表达式和变量，这些只有在运行时才能得到结果的语法结构。
+- import后面的from指定模块文件的位置，可以是相对路径，也可以是绝对路径，.js后缀可以省略。如果只是模块名，不带有路径，那么必须有配置文件，告诉
+JavaScript 引擎该模块的位置。
+- 循环加载时，ES6模块是动态引用。只要两个模块之间存在某个引用，代码就能够执行。
+
+CommonJs
+- 所有代码都运行在模块作用域，不会污染全局作用域。
+- 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。
+- 模块加载的顺序，按照其在代码中出现的顺序。
+- CommonJs规范加载模块是同步的，即只有加载完成，才能执行后面的操作
+- CommonJs模块的加载机制是，输入的是被输出的值的拷贝，即，一旦输出一个值，模块内部的变化影响不到这个值
+- 对于基本数据类型，属于复制。即会被模块缓存。同时，在另一个模块可以对该模块输出的变量重新赋值。对于复杂数据类型，属于浅拷贝。由于两个模块引用的对象指向同一个内存空间，因此对该模块的值做修改时会影响另一个模块。
+- 当使用require命令加载某个模块时，就会运行整个模块的代码。
+- 循环加载时，属于加载时执行。即脚本代码在require的时候，就会全部执行。一旦出现某个模块被"循环加载"，就只输出已经执行的部分，还未执行的部分不会输出。
+```
+// lib.js
+var counter = 3;
+function incCounter() {
+  counter++;
+}
+module.exports = {
+  counter: counter,
+  incCounter: incCounter,
+};
+// main.js
+var mod = require('./lib');
+ 
+console.log(mod.counter);  // 3
+mod.incCounter();
+console.log(mod.counter); // 3
+```
+lib.js模块加载以后，它的内部变化就影响不到输出的mod.counter了。这是因为mod.counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值
+```
+var counter = 3;
+function incCounter() {
+    counter++;
+}
+module.exports = {
+    get counter() {
+        return counter
+    },
+    incCounter: incCounter,
+};
+```
+```
+// lib.js
+export let counter = 3;
+export function incCounter() {
+  counter++;
+}
+ 
+// main.js
+import { counter, incCounter } from './lib';
+console.log(counter); // 3
+incCounter();
+console.log(counter); // 4
+```
+CommonJS 模块输出的是值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。而ES6 模块是动态地去被加载的模块取值，并且变量总是绑定其所在的模块。
