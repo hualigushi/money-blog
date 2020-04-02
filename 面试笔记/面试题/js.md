@@ -5,3 +5,8 @@
 5. 数组去重
 6. 数组打平
 7. 深拷贝，循环引用如何处理
+8. let var const 区别
+9. 作用域
+10. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
+11. promise原理 优缺点 如何中断promise
+12. forEach for of 区别
