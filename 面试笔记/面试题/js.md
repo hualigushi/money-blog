@@ -10,3 +10,4 @@
 10. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
 11. promise原理 优缺点 如何中断promise
 12. forEach for of 区别
+13.JS 异步解决方案的发展历程以及优缺点
