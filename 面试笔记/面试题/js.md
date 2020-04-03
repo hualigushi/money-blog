@@ -30,3 +30,4 @@
 28. Event对象中，target和currentTarget的区别
 30. 移动端的点击穿透，原理及解决方法？
 31. 事件委托
+32. nodejs的eventEmitter的实现
