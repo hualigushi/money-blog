@@ -18,9 +18,9 @@ BFC就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
 # 如何创建BFC
 
-1、 float的值不是none。
-2、 position的值不是static或者relative。
-3、 display的值是inline-block、table-cell、flex、table-caption或者inline-flex
-4、 overflow的值不是visible
+1. float的值不是none。
+2. position的值不是static或者relative。
+3. display的值是inline-block、table-cell、flex、table-caption或者inline-flex
+4. overflow的值不是visible
 
 [什么是BFC？看这一篇就够了](https://blog.csdn.net/sinat_36422236/article/details/88763187)
