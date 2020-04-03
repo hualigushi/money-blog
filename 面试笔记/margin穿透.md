@@ -14,6 +14,12 @@
 2. 给父元素设置overflow:auto
 3. 父级或子元素使用浮动或者绝对定位absolute
 4. 父级设置padding（破坏非空白的折叠条件）
+5. 利用伪元素给子元素的前面添加一个空元素
+```
+.son:before{ content:"";
+             overflow:hidden; 
+            }
+```             
 
 ## 注意：
 如果子元素不是div,p,h1等块级标签，而是a,span等行内标签的话，则不会出现margin击穿问题。
