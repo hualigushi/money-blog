@@ -18,3 +18,12 @@
 2. 受攻击站点的会话失效时间比较长。而且失效时间越长受攻击机率越高。
 3. 受攻击站点的特殊敏感操作没有严谨的用户身份标识验证。
 4. 受害者主动访问含有伪造请求的页面。电子邮件、论坛、博客等常见的互联网应用都是攻击者可利用的社会工程学的范围。
+
+### CSRF的防御
+
+1. 尽量使用POST，限制GET
+2. 将cookie设置为HttpOnly
+通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。  
+在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
+3. 增加token
+4. Samesite Cookie属性
