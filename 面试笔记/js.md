@@ -189,3 +189,18 @@ console.log(isInt(0.3)); // false
 9. 箭头函数不支持重命名函数参数,普通函数的函数参数支持重命名
 
 [箭头函数](https://juejin.im/post/5c76972af265da2dc4538b64)
+
+## promise resolve 只能接受并处理一个参数，多余的参数会被忽略掉
+使用对象传递多个参数
+```
+promise2 = new Promise((resolve,reject)=>{
+    let a = 1
+    let b = 2
+    let c = 3
+    resolve({a,b,c}) 
+})
+
+promise2.then(obj=>{
+    console.log(obj.a,obj.b,obj.c)
+})
+```
