@@ -11,6 +11,8 @@
 11. vue的设计架构
 12. vue-lazyloader的原理
 13. vue-router的原理
+14. 对vuex的理解，单向数据流
+
 
 #### 既然Vue通过数据劫持可以精准探测数据变化,为什么还需要虚拟DOM进行diff检测差异?
 
