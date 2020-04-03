@@ -10,6 +10,7 @@
 10. 像vue-router，vuex他们都是作为vue插件，请说一下他们分别都是如何在vue中生效的？
 11. vue的设计架构
 12. vue-lazyloader的原理
+13. vue-router的原理
 
 #### 既然Vue通过数据劫持可以精准探测数据变化,为什么还需要虚拟DOM进行diff检测差异?
 
