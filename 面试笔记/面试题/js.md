@@ -16,3 +16,8 @@
 14. forEach for of 区别
 15. event loop
 16. 事件流
+17. es6 class 的new实例和es5的new实例有什么区别
+18. 为什么canvas的图片为什么有跨域问题
+19. 从输入URL到看到页面发生的全过程
+20. JS继承的方式，优缺点
+21. this
