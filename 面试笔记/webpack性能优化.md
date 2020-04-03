@@ -702,3 +702,7 @@ module.exports = {
 ```
 
 [探索webpack构建速度提升方法和优化策略](https://juejin.im/post/5e6502fa51882549052f531b#heading-5)
+
+构建优化 1、减少编译体积 ContextReplacementPugin、IgnorePlugin、babel-plugin-import、babel-plugin-transform-runtime。 2、并行编译 happypack、thread-loader、uglifyjsWebpackPlugin开启并行 3、缓存 cache-loader、hard-source-webpack-plugin、uglifyjsWebpackPlugin开启缓存、babel-loader开启缓存 4、预编译 dllWebpackPlugin && DllReferencePlugin、auto-dll-webapck-plugin
+
+性能优化 1、减少编译体积 Tree-shaking、Scope Hositing。 2、hash缓存 webpack-md5-plugin 3、拆包 splitChunksPlugin、import()、require.ensure
