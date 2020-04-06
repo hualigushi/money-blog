@@ -210,3 +210,204 @@ obj.method(fn, 1)
 
 那么如果我们想让method方法里的fn()打印obj的属性length那么就要改变this的指向；可以写fn.call(obj);这样打印出来的结果就是5了；
 ```
+
+```
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person1 = {
+    name: 'YvetteLau',
+    sayHi: function(){
+        setTimeout(function(){
+            console.log('Hello,',this.name);
+        })
+    }
+}
+var person2 = {
+    name: 'Christina',
+    sayHi: sayHi
+}
+var name='Wiliam';
+person1.sayHi();
+setTimeout(person2.sayHi,100);
+setTimeout(function(){
+    person2.sayHi();
+},200);
+
+Hello, Wiliam
+Hello, Wiliam
+Hello, Christina
+
+setTimeout(fn,delay){ fn(); }, 相当于是将 person2.sayHi 赋值给了一个变量，最后执行了变量，这个时候，sayHi 中的 this 显然和 person2 就没有关系了。
+
+第三条虽然也是在 setTimeout 的回调中，但是我们可以看出，这是执行的是 person2.sayHi() 使用的是隐式绑定，因此这是 this 指向的是 person2，跟当前的作用域没有任何关系。
+```
+
+```
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person = {
+    name: 'YvetteLau',
+    sayHi: sayHi
+}
+var name = 'Wiliam';
+var Hi = function(fn) {
+    fn();
+}
+Hi.call(person, person.sayHi); 
+
+结果是 Hello, Wiliam. 
+
+原因很简单，Hi.call(person, person.sayHi) 的确是将 this 绑定到 Hi 中的 this 了。但是在执行 fn 的时候，相当于直接调用了 sayHi 方法 (记住: person.sayHi 已经被赋值给 fn 了，隐式绑定也丢了)，没有指定 this 的值，对应的是默认绑定。
+```
+
+```
+function sayHi(){
+    console.log('Hello,', this.name);
+}
+var person = {
+    name: 'YvetteLau',
+    sayHi: sayHi
+}
+var name = 'Wiliam';
+var Hi = function(fn) {
+    fn.call(this);
+}
+Hi.call(person, person.sayHi);
+
+结果为: Hello, YvetteLau
+
+因为 person 被绑定到 Hi 函数中的 this 上，fn 又将这个对象绑定给了 sayHi 的函数。这时，sayHi 中的 this 指向的就是 person 对象。
+```
+
+```
+var obj = {
+    hi: function(){
+        console.log(this);
+        return ()=>{
+            console.log(this);
+        }
+    },
+    sayHi: function(){
+        return function() {
+            console.log(this);
+            return ()=>{
+                console.log(this);
+            }
+        }
+    },
+    say: ()=>{
+        console.log(this);
+    }
+}
+let hi = obj.hi();  // 输出 obj 对象
+hi();               // 输出 obj 对象
+let sayHi = obj.sayHi();
+let fun1 = sayHi(); // 输出 window
+fun1();             // 输出 window
+obj.say();          // 输出 window
+```
+
+```
+var obj = {
+    hi: function(){
+        console.log(this);
+        return ()=>{
+            console.log(this);
+        }
+    },
+    sayHi: function(){
+        return function() {
+            console.log(this);
+            return ()=>{
+                console.log(this);
+            }
+        }
+    },
+    say: ()=>{
+        console.log(this);
+    }
+}
+let sayHi = obj.sayHi();
+let fun1 = sayHi(); // 输出 window
+fun1();             // 输出 window
+
+let fun2 = sayHi.bind(obj)();// 输出 obj
+fun2();                      // 输出 obj
+```
+
+```
+var number = 5;
+var obj = {
+    number: 3,
+    fn: (function () {
+        var number;
+        this.number *= 2;
+        number = number * 2;
+        number = 3;
+        return function () {
+            var num = this.number;
+            this.number *= 2;
+            console.log(num);
+            number *= 3;
+            console.log(number);
+        }
+    })()
+}
+var myFun = obj.fn;
+myFun.call(null);
+obj.fn();
+console.log(window.number);
+
+
+10
+9
+3
+27
+20
+```
+
+1 . 在定义 obj 的时候，fn 对应的闭包就执行了，返回其中的函数，执行闭包中代码时，显然应用不了 new 绑定 (没有出现 new 关键字)，硬绑定也没有 (没有出现 call,apply,bind 关键字), 隐式绑定有没有？很显然没有，如果没有 XX.fn()，那么可以肯定没有应用隐式绑定，所以这里应用的就是默认绑定了，非严格模式下 this 绑定到了 window 上 (浏览器执行环境)。【这里很容易被迷惑的就是以为 this 指向的是 obj，一定要注意，除非是箭头函数，否则 this 跟词法作用域是两回事，一定要牢记在心】
+
+```
+window.number * = 2; //window.number 的值是 10(var number 定义的全局变量是挂在 window 上的)
+
+number = number * 2; //number 的值是 NaN; 注意我们这边定义了一个 number，但是没有赋值，number 的值是 undefined;Number(undefined)->NaN
+
+number = 3;  //number 的值为 3
+```
+
+2 .myFun.call(null); 我们前面说了，call 的第一个参数传 null，调用的是默认绑定；
+
+```
+fn: function(){    
+       var num = this.number;    
+       this.number *= 2;    
+       console.log(num);    
+       number *= 3;    
+       console.log(number);
+}
+```
+
+执行时:
+
+```
+var num = this.number; //num=10; 此时 this 指向的是 window
+this.number * = 2;  //window.number = 20
+console.log(num);  // 输出结果为 10
+number *= 3;  //number=9; 这个 number 对应的闭包中的 number; 闭包中的 number 的是3
+console.log(number);  // 输出的结果是 9
+```
+
+3 .obj.fn(); 应用了隐式绑定，fn 中的 this 对应的是 obj。
+
+```
+var num = this.number;//num = 3; 此时 this 指向的是 obj
+this.number *= 2; //obj.number = 6;
+console.log(num); // 输出结果为 3;
+number *= 3; //number=27; 这个 number 对应的闭包中的 number; 闭包中的 number 的此时是 9
+console.log(number);// 输出的结果是 27
+```
+
+4 . 最后一步 `console.log(window.number)`; 输出的结果是 20；
