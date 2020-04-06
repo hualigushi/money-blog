@@ -67,4 +67,12 @@ BFC(块级格式化上下文：block formatting context)规定了内部的Block 
 4. 父级div定义zoom
 
 
+# 经常li之间有看不见的间隔，造成的原因
+回车和空格会被应用样式,解决方法：把字符大小设置成font-size:0
 
+# 元素浮动后,display变成了什么 display: inline-block
+
+# 如果需要手动写动画，你认为最小时间间隔是多久，为什么？
+多数显示屏默认频率是60hz，所以理论上最小间隔1/60*1000ms = 16.7ms
+
+# 在css中，padding-top或padding-bottom的百分比值是根据容器的width来计算的。

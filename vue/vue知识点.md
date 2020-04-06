@@ -3,3 +3,5 @@
 [Vue的打包优化之路](https://zhuanlan.zhihu.com/p/48461259)
 
 [使用 vue-virtual-collection 优化滚动性能](https://zhuanlan.zhihu.com/p/34380557)
+
+[Vue 3.0前的 TypeScript 最佳入门实践](https://mp.weixin.qq.com/s/-OVbvrFVGvekzRC_fd2ZGA)

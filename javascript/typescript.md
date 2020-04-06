@@ -14,6 +14,8 @@
 
 [深入typescript类型系统(二): 泛型和类型元编程](https://zhuanlan.zhihu.com/p/96046788)
 
+[TypeScript 强大的类型别名](https://juejin.im/post/5c2f87ce5188252593122c98)
+
 1. TypeScript 类型推导
 ```
 function add (a:number, b: number) {

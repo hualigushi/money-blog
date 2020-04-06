@@ -204,3 +204,21 @@ promise2.then(obj=>{
     console.log(obj.a,obj.b,obj.c)
 })
 ```
+
+## Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
+Oject.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
+
+## Object.is()
+Object.is在处理-0和+0是返回false,但是Object.is(NaN, NaN)返回true
+
+## 如何检查一个数字是否为整数
+检查一个数字是小数还是整数，可以使用一种非常简单的方法，就是将它对 1 进行取模，看看是否有余数
+```
+function isInt(num) {
+  return num % 1 === 0;
+}
+
+console.log(isInt(4)); // true
+console.log(isInt(12.2)); // false
+console.log(isInt(0.3)); // false
+```

@@ -1,9 +1,22 @@
-| Tables        | Are           | Cool  |
-| ---------------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+# 导航守卫
 
+## 1.全局守卫
+vue-router全局有三个守卫：
+1. router.beforeEach 全局前置守卫 进入路由之前
+2. router.beforeResolve 全局解析守卫(2.5.0+) 在beforeRouteEnter调用之后调用
+3. router.afterEach 全局后置钩子 进入路由之后
+
+## 2.路由独享守卫
+beforeEnter
+
+## 3.路由组件内的守卫
+1. beforeRouteEnter 进入路由前, 在路由独享守卫后调用 不能 获取组件实例 this，组件实例还没被创建
+
+2. beforeRouteUpdate (2.2) 路由复用同一个组件时, 在当前路由改变，但是该组件被复用时调用 可以访问组件实例 this
+
+3. beforeRouteLeave 离开当前路由时, 导航离开该组件的对应路由时调用，可以访问组件实例 this
+
+# 原理
 
 ```
 //                               获取新的组件 ------->  Render新组件

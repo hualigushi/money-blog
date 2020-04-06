@@ -6,13 +6,19 @@
 6. Vue的响应式系统
 7. 虚拟DOM实现原理
 8. Vue中的key
-9. Vue3与Vue2d的不同
+9. Vue3与Vue2的不同,做了哪些优化
 10. 像vue-router，vuex他们都是作为vue插件，请说一下他们分别都是如何在vue中生效的？
 11. vue的设计架构
 12. vue-lazyloader的原理
 13. vue-router的原理
 14. 对vuex的理解，单向数据流
-
+15. keep-alive实现原理
+16. v-show元素的显示和隐藏算是重排吗?
+17. v-model原理
+18. vue的初始化，发生了什么？
+19. vue的模板解析，是如何进行的？如何形成AST？render函数的生成？什么是依赖收集？什么是patch？
+20. 在这个过程中，混入mixins、$options，vuex、router他们各自如何通过这些api，实现各自的功能？
+21. 开发时，改变数组或者对象的数据，但是页面没有更新如何解决？
 
 #### 既然Vue通过数据劫持可以精准探测数据变化,为什么还需要虚拟DOM进行diff检测差异?
 

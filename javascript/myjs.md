@@ -244,3 +244,77 @@ Promise.resolve(1)
 由于unshift触发了所有元素内存后移，导致性能远比push要差。
 
 20. JavaScript的数组是否分配连续内存取决于数组成员的类型，如果统一是单一类型的数组那么会分配连续内存，如果数组内包括了各种各样的不同类型，那么则是非连续内存。非连续内存的数组用的是类似哈希映射的方式存在，当我们查询某元素的时候其实是需要遍历这个线性链表结构的，这十分消耗性能。线性储存的数组只需要遵循这个寻址公式,进行数学上的计算就可以找到对应元素的内存地址
+
+21. 将对象数组合并成一个对象
+```
+const cities = [
+    { name: 'Paris', visited: 'no' },
+    { name: 'Lyon', visited: 'no' },
+    { name: 'Marseille', visited: 'yes' },
+    { name: 'Rome', visited: 'yes' },
+    { name: 'Milan', visited: 'no' },
+    { name: 'Palermo', visited: 'yes' },
+    { name: 'Genoa', visited: 'yes' },
+    { name: 'Berlin', visited: 'no' },
+    { name: 'Hamburg', visited: 'yes' },
+    { name: 'New York', visited: 'yes' }
+];
+
+const result = cities.reduce((accumulator, item) => {
+  return {
+    ...accumulator,
+    [item.name]: item.visited
+  }
+}, {});
+
+console.log(result);
+/* 输出
+Berlin: "no"
+Genoa: "yes"
+Hamburg: "yes"
+Lyon: "no"
+Marseille: "yes"
+Milan: "no"
+New York: "yes"
+Palermo: "yes"
+Paris: "no"
+Rome: "yes"
+*/
+```
+
+22. 数组映射（不使用 Array.map）
+```
+const cities = [
+    { name: 'Paris', visited: 'no' },
+    { name: 'Lyon', visited: 'no' },
+    { name: 'Marseille', visited: 'yes' },
+    { name: 'Rome', visited: 'yes' },
+    { name: 'Milan', visited: 'no' },
+    { name: 'Palermo', visited: 'yes' },
+    { name: 'Genoa', visited: 'yes' },
+    { name: 'Berlin', visited: 'no' },
+    { name: 'Hamburg', visited: 'yes' },
+    { name: 'New York', visited: 'yes' }
+];
+
+const cityNames = Array.from(cities, ({ name}) => name);
+console.log(cityNames);
+// 输出 ["Paris", "Lyon", "Marseille", "Rome", "Milan", "Palermo", "Genoa", "Berlin", "Hamburg", "New York"]
+```
+
+23. 根据条件添加对象属性
+```
+const getUser = (emailIncluded) => {
+  return {
+    name: 'John',
+    surname: 'Doe',
+    ...(emailIncluded ? { email : 'john@doe.com' } : null)
+  }
+}
+
+const user = getUser(true);
+console.log(user); // 输出 { name: "John", surname: "Doe", email: "john@doe.com" }
+
+const userWithoutEmail = getUser(false);
+console.log(userWithoutEmail); // 输出 { name: "John", surname: "Doe" }
+```

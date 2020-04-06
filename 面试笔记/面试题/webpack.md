@@ -3,3 +3,8 @@
 3. loader和plugin的区别
 4. 怎么使用webpack对项目进行优化
 5. webpack热更新原理
+6. webpack的劣势在哪里
+7. webpack 是如何进行打包的
+8. webpack 动态 import 是如何实现的
+9. 如何编写自己的 loader 和 plugin
+10. 简述 webpack 配置文件中的 externals，UMD 了解吗

@@ -15,6 +15,7 @@ vue 魔方 [魔方](https://github.com/caolinjian/rubik-cube)
 
 快速构建多端应用 [Rax](https://rax.js.org/)
 
+[Inferno](https://infernojs.org/)
 rxjs
 
 mobx
