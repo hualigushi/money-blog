@@ -18,3 +18,24 @@
 仔细看看父子组件生命周期钩子的执行顺序，会发现created这个钩子是按照从外内顺序执行，所以回显场景的解决方案是：在created中发起请求获取数据，依次在子组件的created中会接收到这个数据。
 
 ![](https://image-static.segmentfault.com/379/352/3793524098-5b665dbbde824_articlex)
+
+
+
+# 父组件监听子组件的生命周期
+```
+//  Parent.vue
+<Child @hook:mounted="doSomething" ></Child>
+
+doSomething() {
+   console.log('父组件监听到 mounted 钩子函数 ...');
+},
+    
+//  Child.vue
+mounted(){
+   console.log('子组件触发 mounted 钩子函数 ...');
+},    
+    
+// 以上输出顺序为：
+// 子组件触发 mounted 钩子函数 ...
+// 父组件监听到 mounted 钩子函数 ...     
+```
