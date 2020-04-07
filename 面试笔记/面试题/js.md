@@ -4,7 +4,7 @@
 4. 如何对闭包进行垃圾回收
 5. 数组去重
 6. 数组打平
-7. 深拷贝，循环引用如何处理
+7. 深浅拷贝原理和实现，  深拷贝，循环引用如何处理
 8. let var const 区别
 9. 作用域是指什么
 10. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
@@ -59,3 +59,5 @@
 58. require 加载模块的是同步还是异步？谈谈你的理解
 59. exports 和 module.exports 的区别是什么？
 60. require 加载模块的时候加载的究竟是什么？
+61. call apply bind 的使用和区别 
+62. Proxy
