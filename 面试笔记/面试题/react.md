@@ -22,3 +22,6 @@
 22. react16版本的reconciliation阶段和commit阶段是什么
 23. 简单谈一下react的事件机制
 24. React性能优化
+25. jsx原理(createElement)
+26. react setState
+27. react-router原理
