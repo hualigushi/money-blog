@@ -1,4 +1,4 @@
-1. Vue生命周期
+1. Vue生命周期,各个阶段简单讲一下
 2. Vue组件如何通信
 3. computed和watch有什么区别
 4. Vue是如何实现双向绑定的
@@ -10,7 +10,7 @@
 10. 像vue-router，vuex他们都是作为vue插件，请说一下他们分别都是如何在vue中生效的？
 11. vue的设计架构
 12. vue-lazyloader的原理
-13. vue-router的原理
+13. vue-router的原理,history和hash模式有什么区别？
 14. 对vuex的理解，单向数据流
 15. keep-alive实现原理
 16. v-show元素的显示和隐藏算是重排吗?
@@ -24,6 +24,13 @@
 24. vuex原理
 25. vue编译器结构图
 26. vue computed原理
+27. delete和Vue.delete删除数组的区别
+28. 页面中定义一个定时器，在哪个阶段清除
+29. 自定义指令如何定义，它的生命周期是什么？
+30.请说一下computed中的getter和setter
+31.导航钩子有哪几种，分别如何用， 如何将数据传入下一个点击的路由页面？
+32.为什么vue中data必须是一个函数？
+33.vue-loader是什么？使用它的用途有哪些？
 
 #### 既然Vue通过数据劫持可以精准探测数据变化,为什么还需要虚拟DOM进行diff检测差异?
 
