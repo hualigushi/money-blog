@@ -1,8 +1,10 @@
 在chrome浏览器中的控制台Network中size栏通常会有三种状态
 
-1.from memory cache
+1.from memory cache   将资源存到**内存**中，从内存中获取
 
-2.from disk cache
+2.from disk cache  将资源缓存到**磁盘**中，从磁盘中获取
+
+二者最大的区别在于：**当退出进程时，内存中的数据会被清空，而磁盘的数据不会**。
 
 3.资源本身的大小(如：1.5k)
 

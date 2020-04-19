@@ -143,3 +143,4 @@ class MyPromise {
         return this.then(undefined, rejectFn)
     }
 }
+

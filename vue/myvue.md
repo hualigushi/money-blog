@@ -191,3 +191,108 @@ let vm = new Vue({
   }
 })
 ```
+
+10. 组件style的scoped
+
+问题：在组件中用js动态创建的dom，添加样式不生效。
+
+**场景**:
+
+```
+    <template>
+         <div class="test"></div>
+    </template>
+    <script>
+        let a=document.querySelector('.test');
+        let newDom=document.createElement("div"); // 创建dom
+        newDom.setAttribute("class","testAdd" ); // 添加样式
+        a.appendChild(newDom); // 插入dom
+    </script>
+    <style scoped>
+    .test{
+       background:blue;
+        height:100px;
+        width:100px;
+    }
+    .testAdd{
+        background:red;
+        height:100px;
+        width:100px;
+    }
+    </style>
+```
+
+**结果**：
+
+```
+// test生效   testAdd 不生效
+<div data-v-1b971ada class="test"><div class="testAdd"></div></div>
+.test[data-v-1b971ada]{ // 注意data-v-1b971ada
+    background:blue;
+    height:100px;
+    width:100px;
+}
+```
+
+**原因**:
+
+当 `<style>` 标签有 scoped 属性时，它的 CSS 只作用于当前组件中的元素。
+
+它会**为组件中所有的标签和class样式添加一个`scoped`标识**，就像上面结果中的`data-v-1b971ada`。
+
+所以原因就很清楚了：因为动态添加的dom没有`scoped`添加的标识，**没有跟`testAdd`的样式匹配起来**，导致样式失效。
+
+**解决方式**
+
+- 推荐：去掉该组件的scoped
+
+每个组件的css并不会很多，当设计到动态添加dom，并为dom添加样式的时候，就可以去掉scoped，会比下面的方法方便很多。
+
+- 可以动态添加style
+
+  ```
+  newDom.style.height='100px';
+  newDom.style.width='100px';
+  ```
+
+11. 列表渲染相关
+
+    **v-for循环绑定model:** input在v-for中可以像如下这么进行绑定
+
+    ```
+        // 数据    
+          data() {
+              return{
+               obj: {
+                  ob: "OB",
+                  koro1: "Koro1"
+                },
+                model: {
+                  ob: "默认ob",
+                  koro1: "默认koro1"
+                }   
+              }
+          },
+        // html模板
+        <div v-for="(value,key) in obj">
+           <input type="text" v-model="model[key]">
+        </div>
+        // input就跟数据绑定在一起了，那两个默认数据也会在input中显示
+    ```
+
+12. 这些情况下不要使用箭头函数
+    - 不应该使用箭头函数来定义一个生命周期方法
+    - 不应该使用箭头函数来定义 method 函数
+    - 不应该使用箭头函数来定义计算属性函数
+    - 不应该使用箭头函数来定义 watcher 函数
+    - 不应该对 data 属性使用箭头函数
+    - 不应该使用箭头函数来定义 watcher 函数
+
+箭头函数绑定了父级作用域的上下文，**this 将不会按照期望指向 Vue 实例**。
+
+也就是说，你**不能使用this来访问你组件中的data数据以及method方法了**。
+
+this将会指向undefined。
+
+13. 在使用`Vue`的时候，`setTimeout`和`setInterval`的this指向的是window对象，访问不到组件数据以及方法。
+14. 在使用`Vue`的时候，路由跳转并不会销毁`setInterval`，但是组件已经销毁了，这会导致问题。

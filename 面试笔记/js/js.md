@@ -222,3 +222,110 @@ console.log(isInt(4)); // true
 console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
+
+
+
+## 堆栈内存
+
+```
+let a = {},
+			b = '0',
+			c = 0;
+		a[b] = '珠峰';
+		a[c] = '培训';
+		console.log(a[b]);
+// 培训
+
+let a = {},
+			b = Symbol('1'),
+			c = Symbol('1');
+		a[b] = '珠峰';
+		a[c] = '培训';
+		console.log(a[b]);
+// 培训
+
+let a = {},
+			b = {
+				n: '1'
+			},
+			c = {
+				m: '2'
+			};
+		a[b] = '珠峰';
+		a[c] = '培训';
+		console.log(a[b]);
+// 培训
+a= {
+  [object Object]: "培训"
+}
+```
+
+```
+var test = (function (i) {
+			return function () {
+				alert(i *= 2);
+			}
+		})(2);
+		test(5);
+// '4'  字符串4 alert的结果都要转化为字符串
+
+alert({})
+// [object Object]
+```
+
+```
+var a = 0,
+			b = 0;
+		function A(a) {
+			A = function (b) {
+				alert(a + b++);
+			};
+			alert(a++);
+		}
+		A(1);
+		A(2);
+// 1   执行的是 function A
+// 4   执行的是  A = function   函数被重写
+```
+
+```
+function Foo() {
+			getName = function () {
+				console.log(1);
+			};
+			return this;
+		}
+		Foo.getName = function () {
+			console.log(2);
+		};
+		Foo.prototype.getName = function () {
+			console.log(3);
+		};
+		var getName = function () {
+			console.log(4);
+		};
+
+		function getName() {
+			console.log(5);
+		}
+		Foo.getName();
+		getName();
+		Foo().getName();
+		getName();
+		new Foo.getName();
+		new Foo().getName();
+		new new Foo().getName();
+
+// 2
+// 4
+// 1
+// 1
+// 2
+// 3
+// 3
+// 首先变量提升          getName = func => 5
+// 后面代码执行时变量定义  getName = func => 4   前面生命的函数被覆盖
+// Foo().getName() 执行后 getName = func => 1 方法又被覆盖  this => window   window.getName
+// new Foo.getName();  点运算符优先级高
+```
+

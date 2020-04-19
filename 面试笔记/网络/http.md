@@ -90,6 +90,72 @@ Pragma：no-cache 兼容HTTP/1.0
 设置Cache-Contral的情况下，过期刷新会出现304(如果有更新内容，则是200)，之后再过期之前刷新都是200（from cache）。如果要确保要向服务端确认，可以将Cache-Contral的max-age设置为0。
 
 
+
+
+
+
+
+**Last-Modified & if-modified-since:**
+
+Last-Modified与If-Modified-Since是一对报文头，属于http 1.0。
+
+last-modified是web服务器认为文件的最后修改时间，`last-modified`是第一次请求文件的时候，**服务器返回**的一个属性。
+
+```
+    Last-Modified: Sat, 09 Jun 2018 08:13:56 GMT 
+```
+
+第二次请求这个文件时，浏览器把`If-Modified-Since`**发送给服务器**，询问该时间之后文件是否被修改过。
+
+```
+    If-Modified-Since: Sat, 09 Jun 2018 08:13:56 GMT // 跟Last-Modified的值一样
+```
+
+**ETag & If-None-Match**
+
+ETag与If-None-Match是一对报文，属于http 1.1。
+
+**ETag是一个文件的唯一标志符**。就像一个哈希或者指纹，每个文件都有一个单独的标志，只要这个文件发生了改变，这个标志就会发生变化。
+
+ETag机制类似于乐观锁机制，如果请求报文的ETag与服务器的不一致，则表示该资源已经被修改过来，需要发最新的内容给浏览器。
+
+`ETag`也是首次请求的时候，服务器返回的:
+
+```
+    ETag: "8F759D4F67D66A7244638AD249675BE2" // 长这样
+```
+
+`If-None-Match`也是浏览器发送到服务器验证，文件是否改变的:
+
+```
+    If-None-Match: "8F759D4F67D66A7244638AD249675BE2" // 跟ETag的值一样
+```
+
+### **Etag/lastModified过程如下:**
+
+1. 客户端第一次向服务器发起请求,服务器将附加`Last-Modified/ETag`到所提供的资源上去
+2. 当再一次请求资源,**如果没有命中强缓存**,在执行在验证时,**将上次请求时服务器返回的Last-Modified/ETag一起传递给服务器**。
+3. 服务器检查该Last-Modified或ETag，并判断出该资源**页面自上次客户端请求之后还未被修改，返回响应304和一个空的响应体**。
+
+
+
+### Etag 主要为了解决 Last-Modified 无法解决的一些问题：
+
+1. 一些文件也许内容并不改变(仅仅改变的修改时间)，这个时候我们不希望文件重新加载。（Etag值会触发缓存，Last-Modified不会触发）
+2. If-Modified-Since能检查到的粒度是秒级的，当修改非常频繁时，Last-Modified会触发缓存，而Etag的值不会触发，重新加载。
+3. 某些服务器不能精确的得到文件的最后修改时间。·
+
+
+
+### 用户操作行为与缓存
+
+F5刷新导致强缓存失效。
+
+ctrl+F5强制刷新页面强缓存，弱缓存都会失效。
+
+
+
+
 [前端工程师必懂知识点之HTTP缓存](https://segmentfault.com/a/1190000021669953)
 
 # HTTPS
