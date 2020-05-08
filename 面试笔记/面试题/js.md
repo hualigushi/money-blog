@@ -135,3 +135,5 @@
 68. async await 和 promise 的关系(sync await 是 promise 和 generator 函数组合的一个语法糖)
 
 69. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)
+
+70. ES6 中的 let 有块级作用域，那 ES5 是如何实现块级作用域的呢
