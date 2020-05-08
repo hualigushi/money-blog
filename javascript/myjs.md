@@ -318,3 +318,8 @@ console.log(user); // 输出 { name: "John", surname: "Doe", email: "john@doe.co
 const userWithoutEmail = getUser(false);
 console.log(userWithoutEmail); // 输出 { name: "John", surname: "Doe" }
 ```
+
+24. 渐进式图片
+
+    渐进式图片一开始大小框架就定好，不会像基本式图片一样，由于尺寸未设定而造成回流——提高的渲染性能；
+    渐进式图片也有不足，就是吃CPU吃内存

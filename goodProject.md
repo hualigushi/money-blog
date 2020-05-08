@@ -1,5 +1,5 @@
 
-[剖析vue实现原理，自己动手实现mvvm](https://github.com/DMQ/mvvm)
+
 
 前端数据校验 schema-typed
 
@@ -16,6 +16,9 @@ vue 魔方 [魔方](https://github.com/caolinjian/rubik-cube)
 快速构建多端应用 [Rax](https://rax.js.org/)
 
 [Inferno](https://infernojs.org/)
+
+最具潜力的 React Hooks 数据请求库 [SWR](https://swr.now.sh/)
+
 rxjs
 
 mobx

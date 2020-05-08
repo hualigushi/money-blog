@@ -4,8 +4,6 @@
 
 [如何提升JSON.stringify()的性能？](https://zhuanlan.zhihu.com/p/68183339)
 
-[浅谈Web图像优化](https://zhuanlan.zhihu.com/p/30362177)
-
 [Web 应用中的撤销与重做](https://zhuanlan.zhihu.com/p/43743782)
 
 [浅析 HTML5 中的 download 属性](https://zhuanlan.zhihu.com/p/58888918)
@@ -15,8 +13,6 @@
 [原生js实现瀑布流效果](https://zhuanlan.zhihu.com/p/55575862)
 
 [「前端进阶」干货！深度解析瀑布流布局](https://mp.weixin.qq.com/s/CGkMY5WfbQtSCPTwwTdmPQ)
-
-[谈谈Web应用中的图片优化技巧及反思](https://zhuanlan.zhihu.com/p/76820878)
 
 [如何使用 Set 来提高代码的性能](https://mp.weixin.qq.com/s/lkWlB7yp68NETFnDsMut2Q)
 

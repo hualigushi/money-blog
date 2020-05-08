@@ -1,0 +1,20 @@
+<html>
+    <body>
+        <div style="width: 300px;height: 300px;">
+            <video></video>
+        </div>
+        <script>
+            var constraints = {
+                video: true
+            }
+            navigator.mediaDevices.getUserMedia(constraints)
+            .then(mediaStream => {
+                var video = document.querySelector('video')
+                video.srcObject = mediaStream
+                video.onloadedmetadata=function () {
+                    video.play()
+                }
+            })
+        </script>
+    </body>
+</html>

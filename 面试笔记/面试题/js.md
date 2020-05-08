@@ -129,3 +129,9 @@
 64. 自己实现symbol
 
 65. 装箱 拆箱
+
+66. 简单介绍前端模块化，amd，cmd，commonjs es6 的 module
+67. commonjs 和 es6 的 module 哪个支持异步
+68. async await 和 promise 的关系(sync await 是 promise 和 generator 函数组合的一个语法糖)
+
+69. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)

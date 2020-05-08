@@ -10,3 +10,5 @@
 10. 简述 webpack 配置文件中的 externals，UMD 了解吗
 11. webpack与grunt、gulp的不同？
 12. 如何提高 webpack 构件速度的
+
+13. 假如有 2 个团队，一个团队想用另一个团队的一个类库，并且还是想在用到的时候才加进来，怎么办？(webpack 的 externals )
