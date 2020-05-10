@@ -12,7 +12,7 @@
 12. vue-lazyloader的原理
 13. vue-router的原理,history和hash模式有什么区别？
 14. 对vuex的理解，单向数据流
-15. keep-alive实现原理
+15. keep-alive实现原理和缓存策略
 16. v-show元素的显示和隐藏算是重排吗?
 17. v-model原理
 18. vue的初始化，发生了什么？
@@ -26,11 +26,29 @@
 26. vue computed原理
 27. delete和Vue.delete删除数组的区别
 28. 页面中定义一个定时器，在哪个阶段清除
+
 29. 自定义指令如何定义，它的生命周期是什么？
-30.请说一下computed中的getter和setter
-31.导航钩子有哪几种，分别如何用， 如何将数据传入下一个点击的路由页面？
-32.为什么vue中data必须是一个函数？
-33.vue-loader是什么？使用它的用途有哪些？
+30. 请说一下computed中的getter和setter
+31. 导航钩子有哪几种，分别如何用， 如何将数据传入下一个点击的路由页面？
+32. 为什么vue中data必须是一个函数？vue-loader是什么？使用它的用途有哪些？
+
+33. vue 是如何对数组方法进行变异的
+
+34. 谈谈 Vue 事件机制,手写$on,$off,$emit,$once
+
+35. Vue 的渲染过程
+
+36. vm.$set()实现原理是什么?
+
+37. Vuex 的 Mutation 和 Action 的区别
+
+
+
+
+
+
+
+
 
 #### 既然Vue通过数据劫持可以精准探测数据变化,为什么还需要虚拟DOM进行diff检测差异?
 
