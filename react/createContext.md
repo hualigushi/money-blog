@@ -38,13 +38,17 @@ class ThemedText extends React.Component {
 ```
 ## API
 - React.createContext
+
 `cont MyContext  = React.createContext(defaultValue);`
+
 创建一个context对象。组件会向组件所处的树中距离最近的那个Provider进行匹配context。
 
 当组件所处的树没有匹配到Provider (不使用Provider组件) 时，defaultValue参数才会生效。
 
 - Context.Provider
+
 `<MyContext.Provider value={/* 值 */}>`
+
 每个 Context 对象都会返回一个 Provider React 组件，它允许消费组件订阅 context 的变化。
 
 Provider 接收一个 value 属性，传递给消费组件。一个 Provider 可以和多个消费组件有对应关系。多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。
