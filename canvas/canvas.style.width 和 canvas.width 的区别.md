@@ -1,0 +1,1 @@
+把canvas元素比作画框： `canvas.width`则是控制画框尺寸的方式。 `canvas.style.width`则是控制在画框中的画尺寸的方式。
