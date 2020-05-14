@@ -34,7 +34,6 @@ export function set(target: Array<any> | Object, key: any, val: any): any {
   ob.dep.notify();
   return val;
 }
-复制代码
 ```
 
 1. 如果目标是数组,使用 vue 实现的变异方法 splice 实现响应式
