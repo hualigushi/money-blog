@@ -458,6 +458,7 @@ Options API形式的组件生命周期钩子和Composition API之间的实际对
 ref 函数可以将一个数据包装成一个响应式数据对象（Ref类型），该函数的TypeScript类型定义如下：
 
 `function ref<T>(raw: T): Ref<T>`
+
 effect 函数则可以接受一个监听函数，如果这个监听函数中存在对响应式数据对象的访问，则一旦这些响应式数据对象的值发生变化，该监听函数就会被执行。
 
 ```
