@@ -588,7 +588,6 @@ a.value = 123
 
 #### 示例五：computed
 
-用过Vue的朋友，一定对计算属性不陌生，一般用于定义一个虚拟属性，这个虚拟属性的值来源于一个或多个可观察对象的变化而产生。在Composition API中也有对应的功能：
 ```
 const { computed, ref } = Vue
 
