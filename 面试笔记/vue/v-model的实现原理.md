@@ -12,9 +12,16 @@ v-model只不过是一个语法糖而已,真正的实现靠的还是
 //$event.target.value 就是当前dom的value值;
 //在@input方法中，value => sth;
 //在:value中,sth => value;
-```
+ ```
 ```
 <my-component v-model="price"></my-component>
 
 <my-component :value="price" @input="price = $event.target.value"></my-component>
 ```
+
+
+
+**当input且类型是`file`文件的话，则抛出一个警告**
+
+
+

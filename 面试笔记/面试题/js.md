@@ -1,4 +1,4 @@
-1. js基础类型
+1. js基础类型，引用类型
 
 2. 如何判断Symbol类型
 
@@ -179,5 +179,16 @@ foo()
 
     做一个定时的ping操作，这里成为：“心跳响应”，每隔一定的时间使用ws.send()发送一个无意义的ping消息。告诉后台我还在连接。后台收到后，也就继续推送消息。而如果ping 消息错误了。那么就说明ws可能意外的中断了，那么会走onerror()方法，这时候，我可以从新开始唤醒它。这样就能对webSocket保持一个相对的连接持久化了。
 
+75. 图片懒加载
+
+76. 如何判断`Promise`类型
+
+    ```
+    function isPromise(obj) {
+    
+      return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+    
+    }
+    ```
 
     

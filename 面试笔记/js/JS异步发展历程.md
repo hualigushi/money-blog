@@ -9,7 +9,7 @@
  - 每个任务只能指定一个回调函数
 
  - 不能捕获异常 （try catch 同步执行，回调函数会加入队列，无法捕获错误）
- 
+
  - 无法使用return语句返回值，并且也不能使用throw关键字
 
 
@@ -26,7 +26,7 @@ promise是一个容器，里面保存着某个未来才会结束的事件 (比�
   - Promise内部抛出的错误，不会反应到外部。错误不能被 try catch
   - 当处于Pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。当执行多个Promise时，一堆then看起来也很不友好。
   - promise一旦新建，就会立即执行，无法取消
-  
+
 # 3. Generator
 
 Generator是es6提出的另一种异步编程解决方案，需要在函数名之前加一个*号，函数内部使用yield语句。
@@ -35,7 +35,7 @@ Generaotr函数会返回一个遍历器，可以进行遍历操作执行每个�
 
 优点：
  - 没有了Promise的一堆then(),异步操作更像同步操作，代码更加清晰。
-     
+   
  - 错误可以被try catch
 
 缺点：不能自动执行异步操作，需要写多个next()方法，需要配合使用Thunk函数和Co模块才能做到自动执行。
@@ -47,3 +47,83 @@ async是es2017引入的异步操作解决方案，可以理解为Generator的语
 优点：内置执行器，比Generator操作更简单。async/await比*/yield语义更清晰。返回值是Promise对象，可以用then指定下一步操作。代码更整洁。可以捕获同步和异步的错误。
 
 缺点：暂时没有人提及这种写法的缺点
+
+
+
+### babel实现async/await
+
+```
+async function t() {
+    const x = await getResult();
+  	const y = await getResult2();
+  	return x + y;
+}
+```
+
+babel转化代码
+
+```
+"use strict";
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) {
+        resolve(value);
+    } else {
+        Promise.resolve(value).then(_next, _throw);
+    }
+}
+
+function _asyncToGenerator(fn) {
+    return function () {
+        var self = this, args = arguments;
+        return new Promise(function (resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+
+function t() {
+  return _t.apply(this, arguments);
+}
+
+function _t() {
+  _t = _asyncToGenerator(function* () {
+    const x = yield getResult();
+    const y = yield getResult2();
+    return x + y;
+  });
+  return _t.apply(this, arguments);
+}
+```
+
+从代码中可以看出，babel将一个generator转化为async用了两步`_asyncToGenerator`和`asyncGeneratorStep`。
+
+#### `_asyncToGenerator`干了什么
+
+1、调用`_asyncToGenerator`返回了一个promise，刚好符合async函数可以接then的特性。
+
+2、定义了一个成功的方法`_next`，定义了一个失败的方法`_throw`。两个函数中是调用`asyncGeneratorStep`。看完`asyncGeneratorStep`就知道这其实是一个递归。
+
+3、执行`_next`。也就是上面说的自执行的generator。
+
+#### `asyncGeneratorStep`干了什么
+
+1. try-catch去捕获generator执行过程中的错误。如果有报错，async函数直接是reject状态。
+
+2. 判断info中的done值，是否为true，为true就代表迭代器已经执行完毕了，可以将value值resolve出去。反之，则继续调用`_next`将值传递到下一个去。
+
+
