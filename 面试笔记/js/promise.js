@@ -144,3 +144,11 @@ class MyPromise {
     }
 }
 
+class ListNode {
+    constructor(key) {
+        this.prev = null
+        this.next = null
+        this.key = key
+    }
+}
+
