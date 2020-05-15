@@ -1,12 +1,12 @@
 computed：
 
-①有缓存机制；
+①有缓存机制,当依赖的计算值没有发生改变时，computed会保持当前的值不变化
 
 ②不能接受参数；
 
 ③可以依赖其他computed，甚至是其他组件的data；
 
-④不能与data中的属性重复
+④不能与data/methds中的属性重复
 
 watch：
 

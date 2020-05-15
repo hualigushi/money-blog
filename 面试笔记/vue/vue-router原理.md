@@ -16,10 +16,19 @@ beforeEnter
 
 ## 3.路由组件内的守卫
 1. beforeRouteEnter 进入路由前, 在路由独享守卫后调用 不能 获取组件实例 this，组件实例还没被创建
-
 2. beforeRouteUpdate (2.2) 路由复用同一个组件时, 在当前路由改变，但是该组件被复用时调用 可以访问组件实例 this
-
 3. beforeRouteLeave 离开当前路由时, 导航离开该组件的对应路由时调用，可以访问组件实例 this
+
+
+
+# 路由模式
+
+- hash模式下，URL中会带有一个 `#` 号，history没有。
+- history路由如果后端部署没有更改页面指向则会出现刷新和跳转404的问题，而hash路由却不会
+- hash路由相对history兼容比较好。
+
+
+
 
 # 原理
 

@@ -4,9 +4,11 @@ XSS的攻击方式就是想办法“教唆”用户的浏览器去执行一些�
 
 XSS的攻击过程都是在浏览器通过执行javascript脚本自动进行，缺少与用户交互的过程
 
+![img](https://segmentfault.com/img/remote/1460000012693785?w=1031&h=767)
+
 ### XSS的危害
 
-- 窃取网页浏览中的cookie值
+- 窃取网页浏览中的cookie值，这里和CSRF的区别是，这里是拿到了cookie后主动冒充用户的，而CSRF中根本就不知cookie，仅利用浏览器的隐式校验方式冒充用户。
 
 - 劫持流量实现恶意跳转
 想办法插入一句像这样的语句：`<script>window.location.href="http://www.baidu.com";</script>`

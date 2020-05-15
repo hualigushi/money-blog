@@ -85,9 +85,9 @@ Pragma：no-cache 兼容HTTP/1.0
 
 ![200 304](https://upload-images.jianshu.io/upload_images/1726248-8af74e5ab792e71f.png?imageMogr2/auto-orient/strip|imageView2/2/w/554/format/webp)
 
-在没有设置Cache-Contral的情况下，设置Last-Modified和ETag缓存，会出现200（from cache）和304 交替出现的情况
+在没有设置Cache-Control的情况下，设置Last-Modified和ETag缓存，会出现200（from cache）和304 交替出现的情况
 
-设置Cache-Contral的情况下，过期刷新会出现304(如果有更新内容，则是200)，之后再过期之前刷新都是200（from cache）。如果要确保要向服务端确认，可以将Cache-Contral的max-age设置为0。
+设置Cache-Control的情况下，过期刷新会出现304(如果有更新内容，则是200)，之后再过期之前刷新都是200（from cache）。如果要确保要向服务端确认，可以将Cache-Control的max-age设置为0。
 
 
 

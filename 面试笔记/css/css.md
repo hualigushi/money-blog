@@ -12,35 +12,6 @@ border-box的宽高计算方法是 width/height = content + padding + border
 应用场景: 通过百分比设定整体盒子的宽高,子元素整个盒子撑满父元素的内容区域,
         边框和填充被计算到盒模型内，不会破坏布局
         
-# BFC
-
-BFC(块级格式化上下文：block formatting context)规定了内部的Block Box如何布局。
-定位方案：
-
-1. 内部的Box会在垂直方向上一个接一个放置。
-
-2. Box垂直方向的距离由margin决定，属于同一个BFC的两个相邻Box的margin会发生重叠。
-
-3. 每个元素的margin box 的左边，与包含块border box的左边相接触。
-
-4. BFC的区域不会与float box重叠。
-
-5. BFC是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。
-
-6.计算BFC的高度时，浮动元素也会参与计算。
-
-
-满足下列条件之一就可触发BFC
-
-1. 根元素，即html
-
-2. float的值不为none（默认）
-
-3. overflow的值不为visible（默认）
-
-4. display的值为inline-block、table-cell、table-caption
-
-5. position的值为absolute或fixed
 
 # 浮动
 
@@ -76,3 +47,25 @@ BFC(块级格式化上下文：block formatting context)规定了内部的Block 
 多数显示屏默认频率是60hz，所以理论上最小间隔1/60*1000ms = 16.7ms
 
 # 在css中，padding-top或padding-bottom的百分比值是根据容器的width来计算的。
+
+# 如何给一组列表首尾之外的元素添加样式
+
+```
+// 考察了css伪类的使用
+
+// DOM
+<ul class="list">
+  <li class="item">1</li>
+  <li class="item">2</li>
+  <li class="item">3</li>
+  <li class="item">4</li>
+  <li class="item">5</li>
+</ul>
+
+// Style
+
+.list > .item:not(:first-child):not(:last-child) {
+  /* ... style */
+}
+```
+

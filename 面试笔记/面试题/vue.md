@@ -42,9 +42,10 @@
 
 37. Vuex 的 Mutation 和 Action 的区别
 
+38. Vue中v-show 和 v-if的区别
 
-
-
+39. vue router路由模式，路由守卫
+40. Vuex中模块命名空间
 
 
 

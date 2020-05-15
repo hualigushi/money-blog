@@ -20,13 +20,13 @@
 
     设计一个方法，让CommonJS导出的模块也能改变其内部变量
     
-11. promise原理 优缺点 如何中断promise 在事件循环中的执行过程是怎样的
+11. promise原理 优缺点 如何中断promise 在事件循环中的执行过程是怎样的, promise.race,Promise.all作用
 
 12. JS 异步解决方案的发展历程以及优缺点
 
 13. async/await和promise性能差异
 
-14. forEach for of 区别
+14. forEach, for of 区别
 
 15. event loop
 
@@ -131,7 +131,9 @@
 65. 装箱 拆箱
 
 66. 简单介绍前端模块化，amd，cmd，commonjs es6 的 module
+
 67. commonjs 和 es6 的 module 哪个支持异步
+
 68. async await 和 promise 的关系(sync await 是 promise 和 generator 函数组合的一个语法糖)
 
 69. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)
@@ -139,3 +141,43 @@
 70. ES6 中的 let 有块级作用域，那 ES5 是如何实现块级作用域的呢
 
 71. deffer 和 async 的区别
+
+72. 执行下面的异步函数大约需要消耗多长时间?
+
+```
+// @promise function
+function speed() {
+  return new Promise(resolve => {
+    setTimeout(resolve, 3000)
+  })
+}
+
+// @async function
+async function foo() {
+  let mySpeed = speed()
+  await mySpeed
+  await mySpeed
+  await mySpeed
+  await speed()
+  await speed()
+  await speed()
+}
+
+foo()
+答：约等于12S，但是时间超出12S。
+```
+
+73. webSocket常用的API
+
+- onopen()，打开通道并连接ws
+- send()，发送消息
+- onmessage()，ws消息回调
+- onerror()，ws连接错误
+- onclose()，ws连接关闭
+
+74. 保持socket连接，如何保持当前socket连接正常的
+
+    做一个定时的ping操作，这里成为：“心跳响应”，每隔一定的时间使用ws.send()发送一个无意义的ping消息。告诉后台我还在连接。后台收到后，也就继续推送消息。而如果ping 消息错误了。那么就说明ws可能意外的中断了，那么会走onerror()方法，这时候，我可以从新开始唤醒它。这样就能对webSocket保持一个相对的连接持久化了。
+
+
+    

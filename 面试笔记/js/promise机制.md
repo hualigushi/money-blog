@@ -18,7 +18,7 @@ Promise的调用流程：
 7. promise 对象如果 resolve 或者 reject 的也是一个 promise 对象，那么 promise 对象的状态会由 resolve 或者 reject 的 promise 对象的状态决定。
 
 ## Promise.all 缺陷
-都知道 Promise.all 具有并发执行异步任务的能力。但它的最大问题就是如果其中某个任务出现异常(reject)，所有任务都会挂掉，Promise直接进入 reject 状态。
+都知道 Promise.all 具有并发执行异步任务的能力。但它的最大问题就是如果其中某个任务出现异常(reject)，所有任务都会挂掉，Promise直接进入reject 状态。
 
 es 2020 `Promise.allSettled`
 ```

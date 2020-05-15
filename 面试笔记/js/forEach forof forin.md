@@ -202,7 +202,6 @@ Array.prototype.forEach = function (callback) {
 如果按照上述写法，那么在回调函数内部调用 await 需要这个回调函数本身也是 async 函数，因此改为如下写法：
 
 ```
-// 语法错误
 {(async () => {
     array.forEach(async element => {
         const result = await new Promise(res => setTimeout(() => { res(element) }, 1000))

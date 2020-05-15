@@ -247,9 +247,7 @@ HTTP1.1定义了八种请求方法：GET、POST、HEAD、OPTIONS, PUT, DELETE, T
 5xx——服务器端错误，服务器未能实现合法的请求
 ```
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="509" height="594"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2cb556ea88?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
@@ -331,7 +329,9 @@ LF->Unix Style
 CR->Mac Style
 ```
 
+如下图是对某请求的http报文结构的简要分析
 
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2ccee5168b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 ### cookie以及优化
 
@@ -383,9 +383,7 @@ cookie是浏览器的一种本地存储方式，一般用来帮助客户端和�
 
 关于cookie的交互，可以看下图总结
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="916" height="603"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2cceb2c4e4?imageslim)
 
 
 
@@ -580,17 +578,13 @@ If-None-Match/E-tag、If-Modified-Since/Last-Modified、Cache-Control/Max-Age、
 
 各大缓存头部的整体关系如下图
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="886" height="539"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2d2b4b73d0?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
 ## 解析页面流程
 
 前面有提到http交互，那么接下来就是浏览器获取到html，然后解析，渲染
-
-**这部分很多都参考了网上资源，特别是图片，参考了来源中的文章**
 
 ### 流程简述
 
@@ -608,14 +602,9 @@ If-None-Match/E-tag、If-Modified-Since/Last-Modified、Cache-Control/Max-Age、
 5. 绘制render树（paint），绘制页面像素信息
 
 6. 浏览器会将各层的信息发送给GPU，GPU会将各层合成（composite），显示在屏幕上
-复制代码
 ```
 
-如下图：
-
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="352"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2d36a44924?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
@@ -631,10 +620,9 @@ If-None-Match/E-tag、If-Modified-Since/Last-Modified、Cache-Control/Max-Age、
 
 ```
 Bytes → characters → tokens → nodes → DOM
-复制代码
 ```
 
-譬如假设有这样一个HTML页面：（以下部分的内容出自参考来源，修改了下格式）
+譬如假设有这样一个HTML页面
 
 ```
 <html>
@@ -648,14 +636,11 @@ Bytes → characters → tokens → nodes → DOM
     <div><img src="awesome-photo.jpg"></div>
   </body>
 </html>
-复制代码
 ```
 
 浏览器的处理如下：
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="498"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2d550c358c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
@@ -670,7 +655,6 @@ Bytes → characters → tokens → nodes → DOM
 
 4. DOM构建：因为HTML标记定义的就是不同标签之间的关系，这个关系就像是一个树形结构一样
 例如：body对象的父节点就是HTML对象，然后段略p对象的父节点就是body对象
-复制代码
 ```
 
 最后的DOM树如下：
@@ -687,7 +671,6 @@ Bytes → characters → tokens → nodes → DOM
 
 ```
 Bytes → characters → tokens → nodes → CSSOM
-复制代码
 ```
 
 譬如`style.css`内容如下：
@@ -698,7 +681,6 @@ p { font-weight: bold }
 span { color: red }
 p span { display: none }
 img { float: right }
-复制代码
 ```
 
 那么最终的CSSOM树就是：
@@ -719,9 +701,7 @@ img { float: right }
 
 整体来说可以看图：
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="420"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2dc7fc51cc?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
@@ -729,11 +709,7 @@ img { float: right }
 
 有了render树，接下来就是开始渲染，基本流程如下：
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="248"></svg>)
-
-
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2e2b70b8a9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 图中重要的四个步骤就是：
 
@@ -745,7 +721,6 @@ img { float: right }
 3. 布局，主要定位坐标和大小，是否换行，各种position overflow z-index属性
 
 4. 绘制，将图像绘制出来
-复制代码
 ```
 
 然后，图中的线与箭头代表通过js动态修改了DOM或CSS，导致了重新布局（Layout）或渲染（Repaint）
@@ -776,7 +751,6 @@ img { float: right }
      (3) cilent(Top/Left/Width/Height)
      (4) width,height
      (5) 调用了getComputedStyle()或者IE的currentStyle
-复制代码
 ```
 
 回流一定伴随着重绘，重绘却可以单独出现
@@ -802,7 +776,6 @@ s.backgroundColor = "#ccc"; // 再一次 重绘
 s.fontSize = "14px"; // 再一次 回流+重绘
 // 添加node，再一次 回流+重绘
 document.body.appendChild(document.createTextNode('abc!'));
-复制代码
 ```
 
 ### 简单层与复合层
@@ -816,19 +789,15 @@ document.body.appendChild(document.createTextNode('abc!'));
 - 复合图层之间的绘制互不干扰，由GPU直接控制
 - 而简单图层中，就算是absolute等布局，变化时不影响整体的回流，但是由于在同一个图层中，仍然是会影响绘制的，因此做动画时性能仍然很低。而复合层是独立的，所以一般做动画推荐使用硬件加速
 
-更多参考：
 
-[普通图层和复合图层](https://segmentfault.com/a/1190000012925872#articleHeader16)
 
 ### Chrome中的调试
 
 Chrome的开发者工具中，Performance中可以看到详细的渲染过程：
 
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2dc0f5d0f8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="432"></svg>)
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="900" height="437"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2da219c0f8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
@@ -882,8 +851,6 @@ JS脚本资源的处理有几个特点：
 
 ## CSS的可视化格式模型
 
-**这一部分内容很多参考《精通CSS-高级Web标准解决方案》以及参考来源**
-
 前面提到了整体的渲染概念，但实际上文档树中的元素是按什么渲染规则渲染的，是可以进一步展开的，此部分内容即： **CSS的可视化格式模型**
 
 先了解：
@@ -904,7 +871,6 @@ IFC（Inline Formatting Context）
 定位体系
 浮动
 ...
-复制代码
 ```
 
 另外，CSS有三种定位机制：`普通流`，`浮动`，`绝对定位`，如无特别提及，下文中都是针对普通流中的
@@ -940,7 +906,6 @@ IFC（Inline Formatting Context）
 Some text
 <P>More text
 </DIV>
-复制代码
 ```
 
 `div`生成了一个块框，包含了另一个块框`p`以及文本内容`Some text`，此时`Some text`文本会被强制加到一个匿名的块框里面，被`div`生成的块框包含（其实这个就是`IFC`中提到的行框，包含这些行内框的这一行匿名块形成的框，行框和行内框不同）
@@ -958,7 +923,6 @@ Some text
 
 ```
 <P>Some <EM>emphasized</EM> text</P>
-复制代码
 ```
 
 `P`元素生成一个块框，其中有几个行内框（如`EM`），以及文本`Some`，`text`，此时会专门为这些文本生成匿名行内框
@@ -979,8 +943,6 @@ Some text
 
 ### BFC（Block Formatting Context）
 
-FC（格式上下文）？
-
 FC即格式上下文，它定义框内部的元素渲染规则，比较抽象，譬如
 
 ```
@@ -989,7 +951,6 @@ FC像是一个大箱子，里面装有很多元素
 箱子可以隔开里面的元素和外面的元素（所以外部并不会影响FC内部的渲染）
 
 内部的规则可以是：如何定位，宽高计算，margin折叠等等
-复制代码
 ```
 
 不同类型的框参与的FC类型不同，譬如块级框对应BFC，行内框对应IFC
@@ -1006,7 +967,6 @@ FC像是一个大箱子，里面装有很多元素
 即使存在浮动也是如此（所以浮动元素正常会直接贴近它的包含块的左边，与普通元素重合）
 
 除非这个元素也创建了一个新的BFC
-复制代码
 ```
 
 总结几点BFC特点：
@@ -1027,8 +987,6 @@ FC像是一个大箱子，里面装有很多元素
 
 这里提下，`display: table`，它本身不产生BFC，但是它会产生匿名框（包含`display: table-cell`的框），而这个匿名框产生BFC
 
-更多请自行网上搜索
-
 ### IFC（Inline Formatting Context）
 
 IFC即行内框产生的格式上下文
@@ -1043,7 +1001,6 @@ IFC即行内框产生的格式上下文
 水平方向上的 margin，border 和 padding 在框之间得到保留
 
 框在垂直方向上可以以不同的方式对齐：它们的顶部或底部对齐，或根据其中文字的基线对齐
-复制代码
 ```
 
 **行框**
@@ -1102,17 +1059,16 @@ IFC即行内框产生的格式上下文
 当然还有有一些其它内容：
 
 - 譬如常规流，浮动，绝对定位等区别
+
 - 譬如浮动元素不包含在常规流中
+
 - 譬如相对定位，绝对定位，`Fixed`定位等区别
+
 - 譬如`z-index`的分层显示机制等
 
-这里不一一展开，更多请参考：
-
-[bbs.csdn.net/topics/3402…](http://bbs.csdn.net/topics/340204423)
+  
 
 ## JS引擎解析过程
-
-前面有提到遇到JS脚本时，会等到它的执行，实际上是需要引擎解析的，这里展开描述（介绍主干流程）
 
 ### JS的解释阶段
 
@@ -1128,7 +1084,6 @@ IFC即行内框产生的格式上下文
 3. 使用翻译器（translator），将代码转为字节码（bytecode）
 
 4. 使用字节码解释器（bytecode interpreter），将字节码转为机器码
-复制代码
 ```
 
 最终计算机执行的就是机器码。
@@ -1156,7 +1111,6 @@ JS执行是需要分号的，但为什么以下语句却可以正常运行呢？
 ```
 console.log('a')
 console.log('b')
-复制代码
 ```
 
 原因就是JS解释器有一个[Semicolon Insertion](http://inimino.org/~inimino/blog/javascript_semicolons)规则，它会按照一定规则，在适当的位置补充分号
@@ -1172,7 +1126,6 @@ console.log('b')
 ```
 console.log('a');
 console.log('b');
-复制代码
 ```
 
 所以可以正常运行
@@ -1186,7 +1139,6 @@ function b() {
         a: 'a'
     };
 }
-复制代码
 ```
 
 由于分号补全机制，所以它变成了：
@@ -1198,7 +1150,6 @@ function b() {
         a: 'a'
     };
 }
-复制代码
 ```
 
 所以运行后是`undefined`
@@ -1207,8 +1158,6 @@ function b() {
 
 一般包括函数提升和变量提升
 
-譬如：
-
 ```
 a = 1;
 b();
@@ -1216,7 +1165,6 @@ function b() {
     console.log('b');
 }
 var a;
-复制代码
 ```
 
 经过变量提升后，就变成：
@@ -1228,16 +1176,11 @@ function b() {
 var a;
 a = 1;
 b();
-复制代码
 ```
 
-这里没有展开，其实展开也可以牵涉到很多内容的
 
-譬如可以提下变量声明，函数声明，形参，实参的优先级顺序，以及es6中let有关的临时死区等
 
 ### JS的执行阶段
-
-此阶段的内容中的图片来源：[深入理解JavaScript系列（10）：JavaScript核心（晋级高手必读篇）](http://www.cnblogs.com/TomXu/archive/2012/01/12/2308594.html)
 
 解释器解释完语法规则后，就开始执行，然后整个执行流程中大致包含以下概念：
 
@@ -1246,7 +1189,7 @@ b();
 - 作用域链
 - this机制等
 
-这些概念如果深入讲解的话内容过多，因此这里仅提及部分特性
+
 
 **执行上下文简单解释**
 
@@ -1307,18 +1250,13 @@ AO（`activation object`)，当函数被调用者激活，AO就被创建了
 如果父级中没找到，继续往上找
 
 直到全局上下文中也没找到就报错
-复制代码
 ```
 
-
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="221" height="426"></svg>)
+![img](https://user-gold-cdn.xitu.io/2018/3/12/16217a2e481a6c79?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
 
 **this指针**
-
-这也是JS的核心知识之一，由于内容过多，这里就不展开，仅提及部分
 
 注意：**this是执行上下文环境的一个属性，而不是某个变量对象的属性**
 
@@ -1327,8 +1265,6 @@ AO（`activation object`)，当函数被调用者激活，AO就被创建了
 - this是没有一个类似搜寻变量的过程
 - 当代码中使用了this，这个 this的值就直接从执行的上下文中获取了，而不会从作用域链中搜寻
 - this的值只取决中进入上下文时的情况
-
-所以经典的例子：
 
 ```
 var baz = 200;
@@ -1345,14 +1281,9 @@ foo(); // 200，严格模式中会报错，Cannot read property 'baz' of undefin
 
 // 进入环境：global bar
 bar.foo(); // 100
-复制代码
 ```
 
-就要明白了上面this的介绍，上述例子很好理解
 
-更多参考：
-
-[深入理解JavaScript系列（13）：This? Yes,this!](http://www.cnblogs.com/TomXu/archive/2012/01/17/2310479.html)
 
 ### 回收机制
 
@@ -1416,57 +1347,18 @@ Javascript引擎基础GC方案是（`simple GC`）：`mark and sweep`（标记�
 
 像node v8引擎就是采用的分代回收（和java一样，作者是java虚拟机作者。）
 
-更多可以参考：
 
-[V8 内存浅析](https://zhuanlan.zhihu.com/p/33816534)
 
 ## 其它
 
-### 可以提到跨域
+#### 跨域
 
-譬如发出网络请求时，会用AJAX，如果接口跨域，就会遇到跨域问题
-
-可以参考：
-
-[ajax跨域，这应该是最全的解决方案了](https://segmentfault.com/a/1190000012469713)
-
-### 可以提到web安全
+#### web安全
 
 譬如浏览器在解析HTML时，有`XSSAuditor`，可以延伸到web安全相关领域
 
-可以参考：
+#### viewport
 
-[AJAX请求真的不安全么？谈谈Web安全与AJAX的关系。](https://segmentfault.com/a/1190000012693772)
-
-### 更多
-
-如可以提到`viewport`概念，讲讲物理像素，逻辑像素，CSS像素等概念
-
-如熟悉Hybrid开发的话可以提及一下Hybrid相关内容以及优化
-
-...
-
-## 总结
-
-上述这么多内容，目的是：**梳理出自己的知识体系**
-
-本文由于是前端向，所以知识梳理时有重点，很多其它的知识点都简述或略去了，重点介绍的模块总结：
-
-- 浏览器的进程/线程模型、JS运行机制（这一块的详细介绍链接到了另一篇文章）
-- http规范（包括报文结构，头部，优化，http2.0，https等）
-- http缓存（单独列出来，因为它很重要）
-- 页面解析流程（HTML解析，构建DOM，生成CSS规则，构建渲染树，渲染流程，复合层的合成，外链的处理等）
-- JS引擎解析过程（包括解释阶段，预处理阶段，执行阶段，包括执行上下文、VO、作用域链、this、回收机制等）
-- 跨域相关，web安全单独链接到了具体文章，其它如CSS盒模型，viewport等仅是提及概念
-
-关于本文的价值？
-
-**本文是个人阶段性梳理知识体系的成果**，然后加以修缮后发布成文章，因此并不确保适用于所有人员
-
-但是，个人认为本文还是有一定参考价值的
+#### 物理像素，逻辑像素，CSS像素等概念
 
 
-作者：dailc
-链接：https://juejin.im/post/5aa5cb846fb9a028e25d2fb1
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
