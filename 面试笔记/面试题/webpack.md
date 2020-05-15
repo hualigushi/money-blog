@@ -10,14 +10,13 @@
 10. 简述 webpack 配置文件中的 externals，UMD 了解吗
 11. webpack与grunt、gulp的不同？
 12. 如何提高 webpack 构件速度的
-
 13. 假如有 2 个团队，一个团队想用另一个团队的一个类库，并且还是想在用到的时候才加进来，怎么办？(webpack 的 externals )
-
 14. sourcemap的原理
-
 15. npm install 是怎么工作的
 16. Compiler 和 Compilation 以及它们的区别
 17. Webpack 是通过什么方式实现了插件之间的关系以及保证它们的有序性
 18. 开发插件时需要依据当前配置是否使用了某个其他的插件而做下一步决定，如何判断 Webpack 当前使用了哪些插件
-
 19. `webpack`打包`.vue`文件过程
+20. webpack如何减小资源打包大小
+21. 说说webpack打包优化具体干了什么？为什么要这么做呢？
+

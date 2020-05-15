@@ -39,6 +39,8 @@ function reverse(str) {
 
 ## typeof null 等于 Object
 
+null 不是对象
+
 不同的对象在底层原理的存储是用二进制表示的，在 javaScript中，如果二进制的前三位都为 0 的话，系统会判定为是 Object类型。null的存储二进制是 000，也是前三位，所以系统判定 null为 Object类型。
 
 扩展：
@@ -174,21 +176,7 @@ console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
 
-# 箭头函数
-
-普通函数和箭头函数的区别：
-
-1. 箭头函数没有prototype(原型)，所以箭头函数本身没有this
-2. 箭头函数的this在定义的时候继承自外层第一个普通函数的this。
-3. 如果箭头函数外层没有普通函数，严格模式和非严格模式下它的this都会指向window(全局对象)
-4. 箭头函数本身的this指向不能改变，但可以修改它要继承的对象的this。
-5. 箭头函数的this指向全局，使用arguments会报未声明的错误。
-6. 箭头函数的this指向普通函数时,它的argumens继承于该普通函数
-7. 使用new调用箭头函数会报错，因为箭头函数没有constructor
-8. 箭头函数不支持new.target
-9. 箭头函数不支持重命名函数参数,普通函数的函数参数支持重命名
-
-[箭头函数](https://juejin.im/post/5c76972af265da2dc4538b64)
+https://juejin.im/post/5c76972af265da2dc4538b64)
 
 ## promise resolve 只能接受并处理一个参数，多余的参数会被忽略掉
 使用对象传递多个参数
@@ -206,7 +194,7 @@ promise2.then(obj=>{
 ```
 
 ## Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
-Oject.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
+Object.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
 
 ## Object.is()
 Object.is在处理-0和+0是返回false,但是Object.is(NaN, NaN)返回true
@@ -328,4 +316,21 @@ function Foo() {
 // Foo().getName() 执行后 getName = func => 1 方法又被覆盖  this => window   window.getName
 // new Foo.getName();  点运算符优先级高
 ```
+
+# instanceof 和 Array.isArray 是如何实现的
+
+instanceof
+
+```
+能在实例的原型对象链中找到改构造函数的prototype属性所指向的原型对象，返回true
+instance.[_proto_] === instance.constructor.prototype
+
+```
+
+Array.isArray
+
+```
+通过Object.prototype.toString.call()
+```
+
 

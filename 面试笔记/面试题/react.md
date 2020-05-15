@@ -24,5 +24,15 @@
 24. React性能优化
 25. jsx原理(createElement)
 26. react setState
-27. react-router原理
-28. setState原理
+27. react-router原理    React路由懒加载和实现原理（就是在问react-loadable的实现原理）
+28. setState更新原理
+29. constructor和super
+30. React diff算法是如何优化的，o(n3)和o(n)是如何计算出来的
+31. jsx是如何转化为浏览器可识别的js的（babel）
+32. redux-saga作用是什么  (处理redux的副作用)
+33. React为什么把reducer设置成纯函数
+34. react怎么优化
+35. 谈下mobx和redux的差异和选择
+36. redux-saga 和 mobx 的比较
+37. mobx 大概实现的原理，如数据劫持，发布订阅
+
