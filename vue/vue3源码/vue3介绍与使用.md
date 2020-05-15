@@ -153,6 +153,13 @@ main.css
 ```
 
 ## 使用Composition API
+
+当前，我们使用所谓的 Options API 构建组件。为了向 Vue 组件添加逻辑，我们填充（可选）属性，例如 `data`、`methods`、`computed`等。这种方法的最大缺点是其本身并不是有效的 JavaScript 代码。你需要确切地知道模板中可以访问哪些属性以及 `this` 关键字的行为。在后台，Vue 编译器需要将此属性转换为工作代码。因此我们无法从自动建议或类型检查中受益。
+
+
+
+组件 API 旨在通过将组件属性中当前可用的机制公开为 JavaScript 函数来解决这个问题。 Vue 核心团队将组件 API 描述为 *“一组基于函数的附加 API，可以灵活地组合组件逻辑。”* 用组件 API 编写的代码更具有可读性，并且其背后没有任何魔力，因此更易于阅读和学习。
+
 ```
 const { createApp, ref } = Vue
 
@@ -607,3 +614,26 @@ num.value = 2
 console.log(text.value)
 ```
 这个例子中，我们根据数字类型的 num，来生成新的字符串 text，实现了一个比较方便的数据生成转换。
+
+
+
+## 全局挂载/配置 API 更改
+
+```
+import { createApp } from 'vue'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.config.ignoredElements = [/^app-/]
+app.use(/* ... */)
+app.mixin(/* ... */)
+app.component(/* ... */)
+app.directive(/* ... */)
+
+app.mount('#app')
+```
+
+每个配置都限于使用 `createApp` 定义的某个 Vue 程序。
+
+它可以使你的代码更易于理解，并且不易出现由第三方插件引发的意外问题。目前，如果某些第三方解决方案正在修改 Vue 对象，那么它可能会以意想不到的方式（尤其是全局混合）影响你的程序，而 Vue 3 则没有这个问题。

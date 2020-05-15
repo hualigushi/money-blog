@@ -61,3 +61,5 @@
 21. transition和animation的区别
 
 22. ::before和:after中的双冒号和单冒号的区别
+
+23. 如何理解`getComputedStyle`
