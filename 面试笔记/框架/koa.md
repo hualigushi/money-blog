@@ -1,4 +1,4 @@
-# 1、koa洋葱模型怎么实现的。
+# 1 koa洋葱模型怎么实现的
 ```
 // 这样就可能更好理解了。
 // simpleKoaCompose
@@ -24,7 +24,7 @@ fnMiddleware(ctx).then(handleResponse).catch(onerror);
 
 中间函数的第一个参数ctx是包含响应和请求的一个对象，会不断传递给下一个中间件。next是一个函数，返回的是一个promise。
 
-# 2、如果中间件中的next()方法报错了怎么办。
+# 2 如果中间件中的next()方法报错了怎么办
 ```
 ctx.onerror = function {  
   this.app.emit('error', err, this);
@@ -40,6 +40,6 @@ listen(){
   }  
   onerror(err) {    // 代码省略    // ...  }
 ```
-答：中间件链错误会由`ctx.onerror`捕获，该函数中会调用`this.app.emit('error', err, this)`（因为koa继承自events模块，所以有'emit'和on等方法），
+答：中间件链错误会由`ctx.onerror`捕获，该函数中会调用`this.app.emit('error', err, this)`（因为koa继承自events模块，所以有emit和on等方法），
 
 可以使用`app.on('error', (err) => {})`，或者`app.onerror = (err) => {}`进行捕获。
