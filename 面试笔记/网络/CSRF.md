@@ -1,20 +1,26 @@
 ## 攻击过程
 
-![](https://pic002.cnblogs.com/img/hyddd/200904/2009040916453171.jpg)
+角色：
 
-第一步，用户C打开浏览器，输入账号和密码请求登录受信任网站A；
+- 正常浏览网页的用户：User
+- 正规的但是具有漏洞的网站：WebA
+- 利用CSRF进行攻击的网站：WebB
 
-第二步，用户信息通过验证后，网站A将产生的Cookie信息返回给浏览器，用户便成功登录网站A；
+流程：
+1.用户登录、浏览并信任正规网站WebA，同时，WebA通过用户的验证并在用户的浏览器中产生Cookie。
+![img](https://i.loli.net/2018/03/19/5aaf72e9147f0.png)
+2.攻击者WebB通过在WebA中添加图片链接等方式诱导用户User访问网站WebB。
+![img](https://i.loli.net/2018/03/19/5aaf7332f2eec.png)
+3.在用户User被诱导访问WebB后，WebB会利用用户User的浏览器访问第三方网站WebA，并发出操作请求。
+![img](https://i.loli.net/2018/03/19/5aaf73dee5c0d.png)
+4.用户User的浏览器根据WebB的要求，带着步骤一中产生的Cookie访问WebA。
+![img](https://i.loli.net/2018/03/19/5aaf7491b60ff.png)
+5.网站WebA接收到用户浏览器的请求，WebA无法分辨请求由何处发出，由于浏览器访问时带上用户的Cookie，因此WebA会响应浏览器的请求，如此一来，攻击网站WebB就达到了模拟用户操作的目的。
+![img](https://i.loli.net/2018/03/19/5aaf74c4538e3.png)
 
-第三步，用户在登录网站A的同时，在同一浏览器中访问网站B；
 
-第四步，网站B接收到用户登录请求后，返回的不是Cookie信息，而是一些攻击性代码，同时发出请求要求访问第三方站点A；
 
-第五步，浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下向网站A发出访问请求，并执行网站B的恶意代码。
-
-跨站请求伪造在受害者是毫不知情的情况下，以受害者名义伪造请求并发送给受攻击的站点，这样就能以受害者的身份和权限执行一些特殊敏感的操作。
-
-跨站请求伪造具有以下几个特点：
+# 跨站请求伪造具有以下几个特点：
 
 1. 采用cookie来进行用户校验
 2. 用户在受攻击站点已经登录，且没有正常退出。
@@ -25,31 +31,18 @@
 
 5. 受害者主动访问含有伪造请求的页面。
 
-## 攻击手段
 
-一般在`(4)`处`恶意网站(B)`的攻击手段如下（必须是指向`A`的地址，否则无法带上cookie）：
-
-```
-// 1.譬如在网站内的图片资源中潜入恶意的转账操作
-<img src=http://www.bank.example/transfer?toBankId=hello&amount=1000000 width='0' height='0'>
-
-// 2.构建恶意的隐藏表单，并通过脚本提交恶意请求
-<iframe style="display: none;" name="csrf-frame"></iframe>
-<form method='POST' action='http://www.bank.example/transfer' target="csrf-frame" id="csrf-form">
-  <input type='hidden' name='toBankId' value='hello'>
-  <input type='hidden' name='amount' value='1000000'>
-  <input type='submit' value='submit'>
-</form>
-<script>document.getElementById("csrf-form").submit()</script>
-```
-
-而且，从头到尾，攻击网站都没有获取到过 cookie，都是通过浏览器间接实现（利用Web的cookie隐式身份验证机制），所以`HttpOnly`并不会影响这个攻击
 
 ### CSRF的防御
 
 1. 尽量使用POST，限制GET
+
 2. 将cookie设置为HttpOnly
-通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。 
-在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
-3. 增加token
+    通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。 
+    在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
+
+3. 在请求地址中添加takon验证
+
+   CSRF 攻击之所以能够成功，是因为黑客可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于      cookie 中，因此黑客可以在不知道这些验证信息的情况下直接利用用户自己的 cookie 来通过安全验证。要抵御 CSRF，关键在于在请求中放入黑客所不能伪造的信息，并且该信息不存在于 cookie 之中。可以在 HTTP 请求中以参数的形式加入一个随机产生的 token，并在服务器端建立一个拦截器来验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击而拒绝该请求。
+
 4. Samesite Cookie属性

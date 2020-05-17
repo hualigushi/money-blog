@@ -68,3 +68,15 @@ jsonhandle({
     "sex": "男"
 })
 ```
+
+
+
+
+
+### JSONP跨域时如何解决xss漏洞
+
+(1) 前后端约定jsonp请求的js的回调函数名
+
+(2) 服务器端指定返回的数据格式为json
+
+(3) 进行referrer验证 （$_SERVER['HTTP_REFERER'] 中的 host，是否在白名单内）

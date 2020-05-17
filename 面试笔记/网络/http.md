@@ -4,27 +4,85 @@
 
 
 
+# 面试题：`http2.0`的二进制分帧底层相关，这个二进制传输相对于文本传输有什么区别，文本最终不应该也是转为二进制进行传输吗，流、消息是什么？
+
+主要是指 header 部分的传输
+二进制编码可以更高效率的压缩
+比如 content-type 占 12 字节，enum key 就只占一到两个字节
+
+![](https://img-blog.csdn.net/20180611105209645?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3lhbmdndW9zYg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+**为什么使用二进制协议？**
+
+1. 性能。二进制协议的解析效率超高，几乎没有解析代价；
+2. 带宽。二进制协议没有冗余字段，占用带宽少；
+3. 压缩及Https技术弱化了文本协议的价值；
+
+
+
+# HTTP首部（Header）和实体（Body）的分隔符是什么
+
+HTTP协议规定，HTTP首部（headers）和HTTP主体之间是以一个空行分割的。因为HTTP每一行（每一行是指一个头部字段）是以`\r\n`结束的，一个空行的`\r\n`，再加上最后一行的结束符`\r\n`，一起是`\r\n\r\n`，也就是说，当检测到`\r\n\r\n`四个字符时，下一个字符开始就是HTTP body的内容了。
+
+
+
+# http强行使用udp能实现吗
+
+**HTTP 不可以基于 UDP 传输**
+
+
+
+
+# HTTP 性能优化方案
+
+1. 合理使用 `HTTP` 的缓存策略，避免同一资源多次请求服务端而导致的额外性能开销
+2. 尽量使用 `HTTP` 长连接，避免每次重建 `TCP` 连接带来的时间损耗
+3. 尽量使用 `HTTPS` 来保证网络传输的安全性。
+4. 可以使用 `HTTP2` 来大幅提高数据传输的效率，使用 `server push` 开启 `HTTP2` 的服务端推送功能
+5. 客户端开启 `Accept-Encoding` 压缩方式的支持，服务端传输压缩后的文件，减少传输数据的大小
+
+
+
+# HTTP 状态码
+
+![](https://img-blog.csdnimg.cn/20190530105724767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2lkd3R3dA==,size_16,color_FFFFFF,t_70)
+
+
+
+# 401 403
+
+401 Unauthorized： 该HTTP状态码表示认证错误，它是为了认证设计的，而不是为了授权设计的。收到401响应，表示请求没有被认证—压根没有认证或者认证不正确—但是请重新认证和重试。（一般在响应头部包含一个WWW-Authenticate来描述如何认证）。通常由web服务器返回，而不是web应用。从性质上来说是临时的东西。（服务器要求客户端重试）
+
+403 Forbidden：该HTTP状态码是关于授权方面的。从性质上来说是永久的东西，和应用的业务逻辑相关联。它比401更具体，更实际。收到403响应表示服务器完成认证过程，但是客户端请求没有权限去访问要求的资源。
+
+
+
+# 301、302、303、307状态码的区别
+
+#### 301永久重定向
+
+#### 302临时重定向，HTTP1.0的状态码，HTTP1.1也有保留。
+如果client向server发送post请求。
+server返回URL和302。
+如果用户确认，client发送post请求。（但实际情况是，很多浏览器都不问问用户，直接变为get发送get请求）
+
+#### 303临时重定向，HTTP1.1的状态码
+发送Post请求，收到303，直接重定向为get，发送get请求，不需要向用户确认
+
+#### 307临时重定向，HTTP1.1的状态码
+客户端发送post请求返回307时，浏览器询问用户是否再次post
+
+
+
+
+
 # 浏览器缓存，状态码200与304
-
-HTTP头信息
-
-Expires：即在 HTTP 头中指明具体失效的时间(HTTP/1.0)
-
-Cache Control：max-age 在 HTTP 头中按秒指定失效的时间，优先级高于Expires(HTTP/1.1)
-
-Last-Modified/If-Modified-Since：文件最后一次修改的时间（精度是秒，HTTP/1.0），需要Cache-Contral过期
-
-Etag：当前资源在服务器的唯一标识（生成规则由服务器决定）ETag的值，默认是对文件的索引节（INode），大小（Size）和最后修改时间（MTime）进行Hash后得到的，优先级高于Last-Modified；在分布式的Web系统中，当访问落在不同的物理机上时会返回不同的ETag，进而导致304失效，降级为200请求（HTTP/1.1），需要Cache-Contral过期
-
-Pragma：no-cache 兼容HTTP/1.0
-
-
 
 **200 OK (from cache) 是浏览器没有跟服务器确认，直接用了浏览器缓存**
 
 **304 Not Modified 是浏览器和服务器多确认了一次缓存有效性，再用的缓存**  
 
-如果客户端发送了一个带条件的 GET 请求且该请求已被允许，而文档的内容（自上次访问以来或者根据请求的条件）并没有改变，则服务器应当返回这个状态码。即客户端和服务器端只需要传输很少的数据量来做文件的校验，如果文件没有修改过，则不需要返回全量的数据。
+
 
 304 Not Modified 比 200 OK (from cache) 慢，指的是浏览器还向服务器确认了下 "If-Not-Modified"，才用的缓存
 
@@ -32,80 +90,15 @@ Pragma：no-cache 兼容HTTP/1.0
 
 **在客户端非强制刷新，如点击刷新按钮或按f5的情况下，服务器端会根据request头中：If-Modified-Since字段的时间与文件的实际修改时间进行比较**
 
-如果修改时间比If-Modified-Since时间要新，则服务器会认为文件已经修改过了，向客户端返回全量的数据，客户端本地的缓存失效，状态码为200。
 
-如果修改时间比If-Modified-Since时间要旧，则服务器会认为文件并未修改过，并且只会向客户端写回头文件，不返回文件数据，客户端使用本地缓存，状态码为304。
 
 
 ![200 304](https://upload-images.jianshu.io/upload_images/1726248-8af74e5ab792e71f.png?imageMogr2/auto-orient/strip|imageView2/2/w/554/format/webp)
 
-在没有设置Cache-Control的情况下，设置Last-Modified和ETag缓存，会出现200（from cache）和304 交替出现的情况
-
-设置Cache-Control的情况下，过期刷新会出现304(如果有更新内容，则是200)，之后再过期之前刷新都是200（from cache）。如果要确保要向服务端确认，可以将Cache-Control的max-age设置为0。
-
-
-
-**Last-Modified & if-modified-since:**
-
-Last-Modified与If-Modified-Since是一对报文头，属于http 1.0。
-
-last-modified是web服务器认为文件的最后修改时间，`last-modified`是第一次请求文件的时候，**服务器返回**的一个属性。
-
-```
-    Last-Modified: Sat, 09 Jun 2018 08:13:56 GMT 
-```
-
-第二次请求这个文件时，浏览器把`If-Modified-Since`**发送给服务器**，询问该时间之后文件是否被修改过。
-
-```
-    If-Modified-Since: Sat, 09 Jun 2018 08:13:56 GMT // 跟Last-Modified的值一样
-```
-
-**ETag & If-None-Match**
-
-ETag与If-None-Match是一对报文，属于http 1.1。
-
-**ETag是一个文件的唯一标志符**。就像一个哈希或者指纹，每个文件都有一个单独的标志，只要这个文件发生了改变，这个标志就会发生变化。
-
-ETag机制类似于乐观锁机制，如果请求报文的ETag与服务器的不一致，则表示该资源已经被修改过来，需要发最新的内容给浏览器。
-
-`ETag`也是首次请求的时候，服务器返回的:
-
-```
-    ETag: "8F759D4F67D66A7244638AD249675BE2" // 长这样
-```
-
-`If-None-Match`也是浏览器发送到服务器验证，文件是否改变的:
-
-```
-    If-None-Match: "8F759D4F67D66A7244638AD249675BE2" // 跟ETag的值一样
-```
-
-### **Etag/lastModified过程如下:**
-
-1. 客户端第一次向服务器发起请求,服务器将附加`Last-Modified/ETag`到所提供的资源上去
-2. 当再一次请求资源,**如果没有命中强缓存**,在执行在验证时,**将上次请求时服务器返回的Last-Modified/ETag一起传递给服务器**。
-3. 服务器检查该Last-Modified或ETag，并判断出该资源**页面自上次客户端请求之后还未被修改，返回响应304和一个空的响应体**。
-
-
-
-### Etag 主要为了解决 Last-Modified 无法解决的一些问题：
-
-1. 一些文件也许内容并不改变(仅仅改变的修改时间)，这个时候我们不希望文件重新加载。（Etag值会触发缓存，Last-Modified不会触发）
-2. If-Modified-Since能检查到的粒度是秒级的，当修改非常频繁时，Last-Modified会触发缓存，而Etag的值不会触发，重新加载。
-3. 某些服务器不能精确的得到文件的最后修改时间。·
 
 
 
 
-[前端工程师必懂知识点之HTTP缓存](https://segmentfault.com/a/1190000021669953)
-
-
-
-# 401 403
-401 Unauthorized： 该HTTP状态码表示认证错误，它是为了认证设计的，而不是为了授权设计的。收到401响应，表示请求没有被认证—压根没有认证或者认证不正确—但是请重新认证和重试。（一般在响应头部包含一个WWW-Authenticate来描述如何认证）。通常由web服务器返回，而不是web应用。从性质上来说是临时的东西。（服务器要求客户端重试）
-
-403 Forbidden：该HTTP状态码是关于授权方面的。从性质上来说是永久的东西，和应用的业务逻辑相关联。它比401更具体，更实际。收到403响应表示服务器完成认证过程，但是客户端请求没有权限去访问要求的资源。
 
 
 

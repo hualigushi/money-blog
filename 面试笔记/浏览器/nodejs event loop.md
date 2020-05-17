@@ -6,13 +6,13 @@
  - 进入一个 phase 后，都会执行完自己 queue 的回调才会进入下一个 phase
  - 在回调中执行长时间任务会被阻塞
  - 在每次运行的事件循环之间，Node.js 检查它是否在等待任何异步 I/O 或计时器，如果没有的话，则关闭干净, 事件循环就结束了
- 
+
  ## Event Loop 各阶段说明
 
   - timers 阶段：执行已经准备好的 setTimeout、setInterval 回调。
   - pending callbacks 阶段：执行被延迟到下一个 event loop 的I/O回调。如网络、stream、tcp错误回调
   - idle, prepare 阶段：内部使用。
-  - poll 阶段：取出新的 I/O 事件回调执行，(除: close 事件、setImmediate、timers 回调) node 程序将在这个阶段阻塞。
+  - poll 阶段：取出新的 I/O 事件回调执行，除close 事件、setImmediate、timers 回调， node 程序将在这个阶段阻塞。
   - check 阶段：setImmediate() 将在这个阶段调用。
   - close callbacks 阶段：close 事件的回调将在这执行，如 socket.on('close', ...)
 
@@ -43,30 +43,26 @@ fs.readFile(__filename, () => {
  - 绝不可在 process.nextTick 的 callback 中执行 long-running task
  - 不要执行会返回process.nextTick 的函数，不然这个阶段会一直认为还有回调需要执行，事件循环会被阻塞在这个阶段。
  ```
- let bar;
-
-function someAsyncApiCall(callback) { callback(); }
-
+let bar;
+function someAsyncApiCall(callback) { 
+	callback(); 
+}
 someAsyncApiCall(() => {
-  // 同步的执行，但此时变量还没赋值
-  console.log('bar', bar); // undefined
+	// 同步的执行，但此时变量还没赋值
+	console.log('bar', bar); // undefined
 });
-
 bar = 1;
-```
+ ```
 
 ```
 let bar;
-
 function someAsyncApiCall(callback) {
   process.nextTick(callback);
 }
-
 someAsyncApiCall(() => {
   // process.nextTick 使此回调在阶段结束后才执行
   console.log('bar', bar); // 1
 });
-
 bar = 1;
 ```
 

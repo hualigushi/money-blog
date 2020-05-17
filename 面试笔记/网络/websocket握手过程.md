@@ -1,5 +1,5 @@
 ## WebSocket和HTTP之间的关系
-客户端开始建立WebSocket连接时要发送一个header标记了 Upgrade的**HTTP请求**，表示请求协议升级。
+客户端开始建立WebSocket连接时要发送**一个header标记了 Upgrade的HTTP请求**，表示请求协议升级。
 所以服务器端做出响应的简便方法是，直接在现有的HTTP服务器软件和现有的端口上实现WebSocket协议，然后再回一个**状态码为101**的HTTP响应完成握手，
 再往后发送数据时就没 HTTP的事了。也就是说WebSocket只是使用HTTP协议来完成一部分握手。
 
