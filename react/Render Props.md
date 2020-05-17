@@ -2,8 +2,6 @@
 
 简而言之，只要一个组件中某个属性的值是函数，那么就可以说改组件使用了 Render Props 这种技术。
 
-
-
 ```
 const Greeting = props => {    
 	return props.render(props);

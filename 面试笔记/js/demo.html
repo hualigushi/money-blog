@@ -1,20 +1,79 @@
-<html>
-    <body>
-        <div style="width: 300px;height: 300px;">
-            <video></video>
+<!DOCTYPE html>
+<head>
+ <title>demo</title> 
+</head>
+ 
+<body>
+    <div id="page">
+        <div class="content main">
+            <div class="refer">
+                <ul>
+                    <li>11</li>
+                    <li>22</li>
+                </ul>
+            </div>
         </div>
-        <script>
-            var constraints = {
-                video: true
-            }
-            navigator.mediaDevices.getUserMedia(constraints)
-            .then(mediaStream => {
-                var video = document.querySelector('video')
-                video.srcObject = mediaStream
-                video.onloadedmetadata=function () {
-                    video.play()
+    </div>
+
+ 
+<script>
+// var genCssSelector = function () {
+//         let selectorArr = [];
+ 
+//         function nodeSelector(el) {
+//             let id = '';
+//             let className = '';
+//             let tagName = '';
+ 
+//             if (el.id)
+//                 id = el.id.split(' ').map(item => '#' + item).join('');
+//             if (el.className)
+//                 className = el.className.split(' ').map(item => '.' + item).join('');
+//             tagName = el.nodeName.toLowerCase();
+ 
+//             selectorArr.unshift(tagName + id + className);
+ 
+//             if (el.parentNode !== document)
+//                 nodeSelector(el.parentNode);
+//         }
+ 
+//         let el = arguments[0];
+//         nodeSelector(el);
+ 
+//         return selectorArr.join(' ');
+//     }
+var genCssSelector = function (e) {
+    //you code here
+    let ele = arguments[0];
+    let parentEle = ele.parentNode;
+    let CSelector = ele.tagName.toLowerCase();
+    while (parentEle.nodeName.toLowerCase() !== '#document') {
+        if (parentEle.id !== '') {
+            CSelector = '#' + parentEle.id + ' ' + CSelector;
+            parentEle = parentEle.parentNode;
+            continue;
+        } else if (parentEle.className != '') {
+            CSelector = ' ' + CSelector;
+            let classList = parentEle.classList || parentEle.className.split(' ');
+            for(var i=classList.length-1;i>=0;i--){
+                CSelector='.'+classList[i]+CSelector;
                 }
-            })
-        </script>
-    </body>
+            parentEle = parentEle.parentNode;
+            continue;
+        } else {
+            CSelector = parentEle.nodeName.toLowerCase() + ' ' + CSelector;
+            parentEle = parentEle.parentNode;
+            continue;
+        }
+
+    }
+    return CSelector;
+}
+ 
+    document.addEventListener('click', function (e) {
+        //点击li时，返回：html body #page .content.main .refer ul li
+        console.log(genCssSelector(e.target));
+    });
+</script>
+</body>
 </html>

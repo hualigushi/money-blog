@@ -35,4 +35,5 @@
 35. 谈下mobx和redux的差异和选择
 36. redux-saga 和 mobx 的比较
 37. mobx 大概实现的原理，如数据劫持，发布订阅
+38. 谈下react fiber的理解
 

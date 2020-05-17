@@ -1,15 +1,4 @@
-## 跨域怎么携带cookie
-
-首先要知道，不能携带cookies是因为同源策略造成的：不允许js访问跨域cookies
-
-解决方法
-1. 服务器端使用CROS协议解决跨域访问数据问题时，需要设置响应消息头Access-Control-Allow-Credentials值为“true”
-2. 同时，还需要设置响应消息头Access-Control-Allow-Origin值为指定单一域名（注：不能为通配符“*”）
-3. 客户端需要设置Ajax请求属性withCredentials=true，让Ajax请求都带上Cookie。
-
 ![](https://image-static.segmentfault.com/214/846/2148460748-5d01e744cac7a_articlex)
-
-[cookies、sessionStorage和localStorage解释及区别](https://www.cnblogs.com/pengc/p/8714475.html)
 
 
 
@@ -29,7 +18,7 @@
 
 #### Name/Value
 
-用 JavaScript 操作 Cookie 的时候注意对 Value 进行编码处理。
+用 JavaScript 操作 Cookie 的时候,**注意对 Value 进行编码处理**。
 
 #### Expires
 
@@ -83,9 +72,9 @@ Domain 和 Path 标识共同定义了 Cookie 的作用域：即 Cookie 应该发
 
 标记为 Secure 的 Cookie 只应通过被HTTPS协议加密过的请求发送给服务端。使用 HTTPS 安全协议，可以保护 Cookie 在浏览器和 Web 服务器间的传输过程中不被窃取和篡改。
 
-#### HTTPOnly
+#### HTTP Only
 
-设置 HTTPOnly 属性可以防止客户端脚本通过 document.cookie 等方式访问 Cookie，有助于避免 XSS 攻击。
+设置 HTTP Only 属性可以防止客户端脚本通过 document.cookie 等方式访问 Cookie，有助于避免 XSS 攻击。
 
 #### SameSite
 
@@ -117,14 +106,6 @@ SameSite 可以有下面三种值：
 
 从上图可以看出，对大部分 web 应用而言，Post 表单，iframe，AJAX，Image 这四种情况从以前的跨站会发送三方 Cookie，变成了不发送。
 
-Post表单：应该的，学 CSRF 总会举表单的例子。
-
-iframe：iframe 嵌入的 web 应用有很多是跨站的，都会受到影响。
-
-AJAX：可能会影响部分前端取值的行为和结果。
-
-Image：图片一般放 CDN，大部分情况不需要 Cookie，故影响有限。但如果引用了需要鉴权的图片，可能会受到影响。
-
 
 
 不过也会有两点要注意的地方：
@@ -139,7 +120,19 @@ IOS 12 的 Safari 以及老版本的一些 Chrome 会把 SameSite=none 识别成
 
 
 
+# 跨域怎么携带cookie
 
+首先要知道，不能携带cookies是因为同源策略造成的：不允许js访问跨域cookies
+
+解决方法
+
+1. 服务器端使用CROS协议解决跨域访问数据问题时，需要设置响应消息头Access-Control-Allow-Credentials值为true
+
+2. 同时，还需要设置响应消息头Access-Control-Allow-Origin值为指定单一域名（注：**不能为通配符“*”**）
+
+3. 客户端需要设置Ajax请求属性withCredentials=true，让Ajax请求都带上Cookie。
+
+   
 
 
 # IndexedDB

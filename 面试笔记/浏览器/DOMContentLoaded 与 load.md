@@ -69,7 +69,3 @@ window.addEventListener("load",function() {
 "element painting and the state is complete"
 ```
 `readyState:loading` -> 静态script 执行 -> `readystatechange:interacitve` -> `DOMContentLoaded` -> `readystatechange:complete` -> `load` -> `动态script`
-
-
-#### 首屏时间
-这段时间其实就是HTML 文档加载和解析的时间。也就是DOMContentLoaded 事件触发之前所经历的时间
