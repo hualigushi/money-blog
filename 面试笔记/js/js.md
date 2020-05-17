@@ -1,4 +1,4 @@
-# ES5 是实现块级作用域
+# ES5 实现块级作用域
 
 ```
 function outputNumbers(count){
@@ -31,22 +31,7 @@ Array.isArray
 
 
 
-## slice()和splice()区别
 
-1. slice(start,end)：方法可从已有数组中返回选定的元素，返回一个新数组，包含从start到end（不包含该元素）的数组元素。
-
-注意：该方法不会改变原数组，而是返回一个子数组，如果想删除数组中的一段元素，应该使用Array.splice()方法。
-
-- start参数：必须，规定从何处开始选取，如果为负数，规定从数组尾部算起的位置，-1是指最后一个元素。
-- end参数：可选（如果该参数没有指定，那么切分的数组包含从start倒数组结束的所有元素，如果这个参数为负数，那么规定是从数组尾部开始算起的元素）。
-
-2. splice()：该方法向或者从数组中添加或者删除项目，返回被删除的项目。（该方法会改变原数组）
-
-splice（index,howmany,item1,...itemX）
-
-- index参数：必须，整数，规定添加或者删除的位置，使用负数，从数组尾部规定位置。
-- howmany参数：必须，要删除的数量，如果为0，则不删除项目。
-- tem1,...itemX参数：可选，向数组添加的新项目。
 
 ## 字符串反转
 
@@ -70,25 +55,49 @@ function reverse(str) {
 }
 ```
 
-## +0 === -0 true
+
+
+## +0 === -0   true
+
+
 
 ## new/字面量 与 Object.create(null) 创建对象的区别
 
 - new 和 字面量创建的对象的原型指向 Object.prototype，会继承 Object 的属性和方法。
 - 而通过 Object.create(null) 创建的对象，其原型指向 null，null 作为原型链的顶端，没有也不会继承任何属性和方法。
 
+
+
 ## js 实现数值千分位
 
 `number.toLocaleString()`
+
+
 
 ## 页面可见性（Page Visibility API） 可以有哪些用途 ？
 
 - 通过 visibilityState 的值检测页面当前是否可见，以及打开网页的时间等;
 - 在页面被切换到其他后台进程的时候，自动暂停音乐或视频的播放；
 
+
+
 ## [] == []  false
 
 两个操作数都是空数组，都是Object对象,存放在不同的堆中
+
+
+
+### [] == ![]结果是什么？为什么？
+
+== 中，左右两边都需要转换为数字然后进行比较。
+
+[]转换为数字为0。
+
+![] 首先是转换为布尔值，由于[]作为一个引用类型转换为布尔值为true,
+
+因此![]为false，进而在转换成数字，变为0。
+
+0 == 0 ， 结果为true
 
 
 
@@ -106,6 +115,8 @@ function reverse(str) {
 
 ## console.log(typeof NaN === "number");  // true
 
+
+
 ## 如何检查一个数字是否是整数？
 
 一个最简单的方法是判断除以1的余数是否为0.
@@ -120,25 +131,15 @@ console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
 
-https://juejin.im/post/5c76972af265da2dc4538b64)
 
-## promise resolve 只能接受并处理一个参数，多余的参数会被忽略掉
-使用对象传递多个参数
-```
-promise2 = new Promise((resolve,reject)=>{
-    let a = 1
-    let b = 2
-    let c = 3
-    resolve({a,b,c}) 
-})
 
-promise2.then(obj=>{
-    console.log(obj.a,obj.b,obj.c)
-})
-```
+
 
 ## Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
+
 Object.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
+
+
 
 ### Object.is和===的区别
 
@@ -159,35 +160,9 @@ function is(x, y) {
 
 
 
-### [] == ![]结果是什么？为什么？
-
-== 中，左右两边都需要转换为数字然后进行比较。
-
-[]转换为数字为0。
-
-![] 首先是转换为布尔值，由于[]作为一个引用类型转换为布尔值为true,
-
-因此![]为false，进而在转换成数字，变为0。
-
-0 == 0 ， 结果为true
 
 
 
-
-
-
-
-## 如何检查一个数字是否为整数
-检查一个数字是小数还是整数，可以使用一种非常简单的方法，就是将它对 1 进行取模，看看是否有余数
-```
-function isInt(num) {
-  return num % 1 === 0;
-}
-
-console.log(isInt(4)); // true
-console.log(isInt(12.2)); // false
-console.log(isInt(0.3)); // false
-```
 
 ## '1'.toString()为什么可以调用？
 
