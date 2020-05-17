@@ -2,143 +2,164 @@
 
 2. 隐式转换   装箱 拆箱
 
-3. 判断对象的数据类型
+3. == 和 === 有什么区别
 
-4. 如何判断Symbol类型，作用
+4. Object.is和===的区别
 
-5. 自己实现symbol
+5. [] == ![]结果是什么？为什么？
 
-6. null 和 undefined
+6. 判断对象的数据类型(instanceOf、isPrototypeof、Object.prototype.toString.call())
 
-7. let var const 区别
+7. 如何判断是不是数组(Array.isArray())
 
-   let/const声明的变量在windows上面吗
+8. instanceof 和 Array.isArray 是如何实现的
 
-8. ES6 中的 let 有块级作用域，那 ES5 是如何实现块级作用域的呢
+9. 如何判断Symbol类型，作用(getOwnPropertySymbols, Reflect.ownKeys)
 
-9. 如何判断是不是数组(instanceOf、isPrototypeof、Array.isArray()、Object.prototype.toString.call())
+10. 自己实现symbol
 
-10. instanceof 和 Array.isArray 是如何实现的
+11. null 和 undefined
 
-11. == 和 === 有什么区别
+12. let var const 区别
 
-12. 什么是闭包，作用， 优缺点
+13. let/const声明的变量在windows上面吗
+
+14. 如何理解BigInt
+
+15. 作用域是指什么
+
+16. ES6 中的 let 有块级作用域，那 ES5 是如何实现块级作用域的呢(闭包)
+
+17. 什么是闭包，作用， 优缺点
 
     如何对闭包进行垃圾回收
 
-13. 深浅拷贝原理和实现，  深拷贝循环引用如何处理
+18. this
 
-14. 作用域是指什么
+19. 普通函数和箭头函数的区别
 
-15. 简单介绍前端模块化，amd，cmd，commonjs es6 的 module
+20. Proxy
 
-16. commonjs 和 es6 的 module 哪个支持异步
+21. map中的键值会不会被回收（weakMap，weakSet等）
 
-17. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
+    什么是强引用、弱引用、循环引用
+
+22. new操作符干了什么
+
+23. es6 class 的new实例和es5的new实例有什么区别
+
+24. es6的class如何实现私有变量（symbol + 闭包）
+
+25. JS继承的方式，优缺点
+
+26. 如何实现原型替换
+
+27. 数组去重
+
+28. 数组打平
+
+29. 数组乱序
+
+30. forEach, for of 区别
+
+31. 深浅拷贝原理和实现，  深拷贝循环引用如何处理
+
+32. call apply bind 的使用和区别 
+
+33. 事件流
+
+34. 事件委托
+
+35. mouseover和mouseenter的区别
+
+36. Event对象中，target和currentTarget的区别
+
+37. 移动端的点击穿透，原理及解决方法？
+
+38. 移动端的click事件行为与PC端有什么不同？如何屏蔽掉这个不同？
+
+39. 简单介绍前端模块化，amd，cmd，commonjs，es6 的 module
+
+40. Commonjs 和 es6 的 module 哪个支持异步
+
+41. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
 
     设计一个方法，让CommonJS导出的模块也能改变其内部变量
 
-18. 模块在同一个页面引入两次，会引起几次js渲染？为什么？
+42. 模块在同一个页面引入两次，会引起几次js渲染？为什么？
 
-19. require 的解析规则
+43. require 的解析规则
 
-20. require 的运行机制和缓存策略你了解吗？
+44. require 的运行机制和缓存策略你了解吗？
 
-21. require 加载模块的是同步还是异步？谈谈你的理解
+45. require 加载模块的是同步还是异步？谈谈你的理解
 
-22. exports 和 module.exports 的区别是什么？
+46. exports 和 module.exports 的区别是什么？
 
-23. require 加载模块的时候加载的究竟是什么？
+47. require 加载模块的时候加载的究竟是什么？
 
-24. import 在浏览器中怎么运行的
+48. import 在浏览器中怎么运行的
 
-25. JS 异步解决方案的发展历程以及优缺点
+49. JS 异步解决方案的发展历程以及优缺点
 
-26. promise原理 优缺点
+50. promise原理 优缺点
 
-    如何中断promise 在事件循环中的执行过程是怎样的,
+    如何中断promise 在事件循环中的执行，过程是怎样的,
 
-    promise.race,Promise.all作用
+    promise.race,promise.all作用
 
-27. promise的resolve函数中最多能携带几个参数？
+51. promise的resolve函数中最多能携带几个参数？(1个)
 
-28. 如何统一管理promise的错误处理函数？
+52. 如何统一管理promise的错误处理函数？
 
-29. async await 和 promise 的关系(sync await 是 promise 和 generator 函数组合的一个语法糖)
+53. 如何判断`Promise`类型
 
-30. async/await和promise性能差异
+    ```
+    function isPromise(obj) {
+      return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+    
+    }
+    ```
 
-31. 说说async和await的es5实现
+54. async await 和 promise 的关系(async await 是 promise 和 generator 函数组合的一个语法糖)
 
-32. 数组去重
+55. 说说async和await的es5实现
 
-33. 数组打平
+56. 描述二叉树的几种遍历方式
 
-34. 数组乱序
+57. 函数式编程
 
-35. forEach, for of 区别
+58. Koa 的中间件原理，介绍一下 compose 函数
 
-36. 事件流
+59. NodeJS 是单线程还是多线程，都有哪些线程，JS 为什么是单线程的
 
-37. 事件委托
+60. node中cluster是怎样开启多进程的，并且一个端口可以被多个进程监听吗
 
-38. mouseover和mouseenter的区别
+61. NodeJS的eventEmitter的实现
 
-39. Event对象中，target和currentTarget的区别
+62. Node.js 哪里应用到了发布/订阅模式
 
-40. 移动端的点击穿透，原理及解决方法？
+63. NodeJS 中存在哪些流，怎么理解 pipe() 及其优点
 
-41. 移动端的click事件行为与PC端有什么不同？如何屏蔽掉这个不同？
+64. 介绍一下负载均衡，NodeJS 的 cluster 和 child_process 是什么
 
-42. new操作符干了什么
+65. Events 监听函数的执行顺序是异步还是同步的？
 
-43. es6 class 的new实例和es5的new实例有什么区别
+66. 说几个 Events 模块的常用函数吧？
 
-44. 如何实现原型替换
+67. 说几个 fs模块的常用函数？什么情况下使用 fs.open的方式读取文件？用 fs模块写一个大文件拷贝的例子(注意大文件)？
 
-45. JS继承的方式，优缺点
+68. 单例模式、原型模式、工厂模式、观察者模式、策略模式、代理模式   功能、代码实现、使用场景
 
-46. this
+69. 怎么理解ts
 
-47. 描述二叉树的几种遍历方式
+70. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)
 
-48. 排序，原理是什么
+71. ts的type和interface什么区别
 
-49. 函数式编程
+72. deffer 和 async 的区别
 
-50. 普通函数和箭头函数的区别
-
-51. Koa 的中间件原理，介绍一下 compose 函数
-
-52. NodeJS 是单线程还是多线程，都有哪些线程，JS 为什么是单线程的
-
-53. node中cluster是怎样开启多进程的，并且一个端口可以被多个进程监听吗
-
-54. NodeJS的eventEmitter的实现
-
-55. Node.js 哪里应用到了发布/订阅模式
-
-56. NodeJS 中存在哪些流，怎么理解 pipe() 及其优点
-
-57. 介绍一下负载均衡，NodeJS 的 cluster 和 child_process 是什么
-
-58. Events 监听函数的执行顺序是异步还是同步的？
-
-59. 说几个 Events 模块的常用函数吧？
-
-60. 说几个 fs模块的常用函数？什么情况下使用 fs.open的方式读取文件？用 fs模块写一个大文件拷贝的例子(注意大文件)？
-
-61. call apply bind 的使用和区别 
-
-62. 单例模式、原型模式、工厂模式、观察者模式、策略模式、代理模式   功能、代码实现、使用场景
-
-63. Proxy
-
-64. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)
-
-65. deffer 和 async 的区别
-
-66. 执行下面的异步函数大约需要消耗多长时间?
+73. 执行下面的异步函数大约需要消耗多长时间?
 
 ```
 // @promise function
@@ -169,31 +190,14 @@ foo()
 
 75. 图片懒加载
 
-76. 如何判断`Promise`类型
-
-    ```
-    function isPromise(obj) {
-    
-      return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
-    
-    }
-    ```
 
 81. babel 原理
-
-82. es6的class如何实现私有变量（symbol + 闭包）
 
 83. 内存泄露如何发现，如何解决
 
 84. setTimeout是否准时，如果不是则应该提前还是延迟
 
-81. map中的键值会不会被回收（weakMap，weakSet等）
-
-    什么是强引用、弱引用、循环引用
-
 82. 假如说你的富文本编辑器内部要显示脚本，该怎么办呢？
-
-83. 场景题：这里有cat和animal子类和父类，如何进行es5继承，至少说出5种
 
 84. 大型文件上传
 

@@ -109,7 +109,7 @@ Symbol 值作为对象属性名时，不能用点运算符
 
 Symbol类型的key是不能通过`Object.keys()`或者`for...in`来枚举的，它未被包含在对象自身的属性名集合(property names)之中。
 
-当使用`JSON.stringify()`将对象转换成JSON字符串的时候，Symbol属性也会被排除在输出内容之外
+**当使用`JSON.stringify()`将对象转换成JSON字符串的时候，Symbol属性也会被排除在输出内容之外**
 
 所以，利用该特性，我们可以把一些不需要对外操作和访问的属性使用Symbol来定义
 

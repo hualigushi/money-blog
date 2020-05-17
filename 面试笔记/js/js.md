@@ -1,3 +1,36 @@
+# ES5 是实现块级作用域
+
+```
+function outputNumbers(count){
+  (function(){
+    for(var i = 0; i < count; ++i){
+      console.log(i);
+    }  
+  })();
+  console.log(i);//Uncaught ReferenceError: i is not defined
+}
+outputNumbers(5);
+```
+
+
+
+# instanceof 和 Array.isArray 是如何实现的
+
+instanceof
+
+```
+能在实例的原型对象链中找到改构造函数的prototype属性所指向的原型对象，返回true
+instance.[_proto_] === instance.constructor.prototype
+```
+
+Array.isArray
+
+```
+通过Object.prototype.toString.call()
+```
+
+
+
 ## slice()和splice()区别
 
 1. slice(start,end)：方法可从已有数组中返回选定的元素，返回一个新数组，包含从start到end（不包含该元素）的数组元素。
@@ -37,51 +70,6 @@ function reverse(str) {
 }
 ```
 
-## typeof null 等于 Object
-
-null 不是对象
-
-不同的对象在底层原理的存储是用二进制表示的，在 javaScript中，如果二进制的前三位都为 0 的话，系统会判定为是 Object类型。null的存储二进制是 000，也是前三位，所以系统判定 null为 Object类型。
-
-扩展：
-
-这个 bug 个第一版的 javaScript留下来的。俺也进行扩展一下其他的几个类型标志位：
-
-- 000：对象类型。
-- 1：整型，数据是31位带符号整数。
-- 010：双精度类型，数据是双精度数字。
-- 100：字符串，数据是字符串。
-- 110：布尔类型，数据是布尔值。
-
-1. typeof null==='object'  //true
-
-2. null instanceof Object  //false
-
-
-## ES6 中的 class 语法糖
-
-```
-class A{}
-console.log(A instanceof Function) // true
-```
-
-## 转布尔类型
-
-```
-Boolean({})		    // true
-Boolean([])		    // true
-```
-
-## 转数字类型
-```
-Number(null);      // 0  
-Number('');        // 0  
-Number([]);        // 0 
-Number([1,2]);     // NaN
-Number('10a');     // NaN
-Number(undefined); // NaN
-```
-
 ## +0 === -0 true
 
 ## new/字面量 与 Object.create(null) 创建对象的区别
@@ -93,21 +81,6 @@ Number(undefined); // NaN
 
 `number.toLocaleString()`
 
-## 建设多语言网站必须要注意的细节
-
-1. 各语言间的切换
-2. 切换语言后能确保停留在当前页面
-3. 检测用户默认语言
-4. 编码和字体
-5. 语言是从左到右，还是从右到左
-6. 日期格式、时区和货币
-7. 验证码的使用
-8. 电话号码
-
-## 前端缓存
-
-![](https://upload-images.jianshu.io/upload_images/13277068-efe830b68127838c.png?imageMogr2/auto-orient/strip|imageView2/2/w/800/format/webp)
-
 ## 页面可见性（Page Visibility API） 可以有哪些用途 ？
 
 - 通过 visibilityState 的值检测页面当前是否可见，以及打开网页的时间等;
@@ -117,17 +90,7 @@ Number(undefined); // NaN
 
 两个操作数都是空数组，都是Object对象,存放在不同的堆中
 
-## 连续二进制
 
-计算一个整数的二进制表示中连续出现1最多的次数。
-
-比如13的二进制是：1101，那么他的二进制表示中连续出现的1最多为2次，所以答案就是2：
-
-输入描述:
-一个整数n表示要计算的数字。（1<=n<=1018）
-
-输出描述:
-输出一个数字表示n的二进制表示中连续出现1最多的次数。
 
 ## 请说出三种减少网页加载时间的方法
 
@@ -138,29 +101,10 @@ Number(undefined); // NaN
 5. 压缩合并JavaScript.css代码
 6. 使用多域名负载网页内的多个文件.图片
 
-## http协议中与资源缓存相关的协议头有哪些？
-
-## DOM Tree与Render Tree之间的区别是什么?
-
-- Dom Tree 包含了所有的HTMl标签，包括display：none  ，JS动态添加的元素等。
-- Dom Tree 和样式结构体结合后构建呈现Render Tree。Render Tree 能识别样式，每个node都有自己的style，且不包含隐藏的节点（比如display : none的节点）。
 
 
-## console.log(typeof NaN === "number");  // logs "true"
 
-## Symbol 不会被序列化
-
-```
-const a = {
-    key1: Symbol(),
-    key2: 10
-}
-// What will happen?
-console.log(JSON.stringify(a));
-
-{"key2":10}
-
-```
+## console.log(typeof NaN === "number");  // true
 
 ## 如何检查一个数字是否是整数？
 
@@ -196,8 +140,42 @@ promise2.then(obj=>{
 ## Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
 Object.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
 
-## Object.is()
+### Object.is和===的区别
+
 Object.is在处理-0和+0是返回false,但是Object.is(NaN, NaN)返回true
+
+```
+
+function is(x, y) {
+  if (x === y) {
+    //运行到1/x === 1/y的时候x和y都为0，但是1/+0 = +Infinity， 1/-0 = -Infinity, 是不一样的
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    //NaN===NaN是false,这是不对的，我们在这里做一个拦截，x !== x，那么一定是 NaN, y 同理
+    //两个都是NaN的时候返回true
+    return x !== x && y !== y;
+  }
+```
+
+
+
+### [] == ![]结果是什么？为什么？
+
+== 中，左右两边都需要转换为数字然后进行比较。
+
+[]转换为数字为0。
+
+![] 首先是转换为布尔值，由于[]作为一个引用类型转换为布尔值为true,
+
+因此![]为false，进而在转换成数字，变为0。
+
+0 == 0 ， 结果为true
+
+
+
+
+
+
 
 ## 如何检查一个数字是否为整数
 检查一个数字是小数还是整数，可以使用一种非常简单的方法，就是将它对 1 进行取模，看看是否有余数
@@ -210,6 +188,23 @@ console.log(isInt(4)); // true
 console.log(isInt(12.2)); // false
 console.log(isInt(0.3)); // false
 ```
+
+## '1'.toString()为什么可以调用？
+
+```
+var s = new Object('1');
+s.toString();
+s = null;
+```
+
+第一步: 创建Object类实例。注意为什么不是String ？ 由于Symbol和BigInt的出现，对它们调用new都会报错，目前ES6规范也不建议用new来创建基本类型的包装类。
+
+第二步: 调用实例方法。
+
+第三步: 执行完方法立即销毁这个实例。
+
+整个过程体现了`基本包装类型`的性质，而基本包装类型恰恰属于基本数据类型，包括Boolean, Number和String。
+
 
 
 
@@ -315,22 +310,6 @@ function Foo() {
 // 后面代码执行时变量定义  getName = func => 4   前面生命的函数被覆盖
 // Foo().getName() 执行后 getName = func => 1 方法又被覆盖  this => window   window.getName
 // new Foo.getName();  点运算符优先级高
-```
-
-# instanceof 和 Array.isArray 是如何实现的
-
-instanceof
-
-```
-能在实例的原型对象链中找到改构造函数的prototype属性所指向的原型对象，返回true
-instance.[_proto_] === instance.constructor.prototype
-
-```
-
-Array.isArray
-
-```
-通过Object.prototype.toString.call()
 ```
 
 

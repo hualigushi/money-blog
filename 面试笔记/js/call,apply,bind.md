@@ -5,12 +5,16 @@
 #### 语法：
 
 ```
-fun.call(thisArg, param1, param2, ...)fun.apply(thisArg, [param1,param2,...])fun.bind(thisArg, param1, param2, ...)
+fun.call(thisArg, param1, param2, ...)
+fun.apply(thisArg, [param1,param2,...])
+fun.bind(thisArg, param1, param2, ...)
 ```
 
 #### 返回值：
 
-call/apply： `fun`执行的结果 bind：返回 `fun`的拷贝，并拥有指定的 `this`值和初始参数
+call/apply： `fun`执行的结果 
+
+bind：返回 `fun`的拷贝，并拥有指定的 `this`值和初始参数
 
 #### 参数
 
@@ -32,7 +36,9 @@ call、apply和bind是挂在Function对象上的三个方法,只有函数才有�
 
 只要是函数就可以，比如: `Object.prototype.toString`就是个函数，我们经常看到这样的用法： `Object.prototype.toString.call(data)`
 
-#### call/apply与bind的区别
+
+
+## call/apply与bind的区别
 
 **执行**：
 
@@ -44,7 +50,9 @@ call、apply和bind是挂在Function对象上的三个方法,只有函数才有�
 - call/apply 返回 `fun`的执行结果
 - bind返回fun的拷贝，并指定了fun的this指向，保存了fun的参数。
 
-### call和apply的应用场景：
+
+
+## call和apply的应用场景
 
 > 这些应用场景，多加体会就可以发现它们的理念都是：借用方法
 
@@ -113,7 +121,7 @@ console.log(instance2)
 // {"name":"小明","colors":["red","blue","green"],"age":18}
 ```
 
-### bind的应用场景：
+## bind的应用场景
 
 1.保存函数参数
 

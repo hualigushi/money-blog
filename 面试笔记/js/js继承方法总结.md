@@ -22,7 +22,7 @@ SubType.prototype.constructor = SubType;
 
   - 父类的引用属性会被所有子类实例共享
   - 子类构建实例时不能向父类传递参数
-  
+
  ## 2.2 构造函数继承
 
 核心：将父类构造函数的内容复制给了子类的构造函数。这是所有继承中唯一一个不涉及到prototype的继承。
@@ -33,7 +33,7 @@ SubType.prototype.constructor = SubType;
 
   - 父类的引用属性不会被共享
   - 子类构建实例时可以向父类传递参数
-  
+
 缺点：父类的方法不能复用，子类实例的方法每次都是单独创建的。
 
 ## 2.3 组合继承
@@ -60,7 +60,7 @@ SubType.prototype = new SuperType() // 第一次调用SuperType
   - 父类的方法可以被复用
   - 父类的引用属性不会被共享
   - 子类构建实例时可以向父类传递参数
-  
+
 缺点：
 
 调用了两次父类的构造函数，第一次给子类的原型添加了父类的name, arr属性，第二次又给子类的构造函数添加了父类的name, arr属性，从而覆盖了子类原型中的同名参数。这种被覆盖的情况造成了性能上的浪费。
@@ -95,7 +95,7 @@ var yetAnotherPerson = object(person);
 yetAnotherPerson.name = "Linda";
 yetAnotherPerson.friends.push("Barbie");
 alert(person.friends);   //"Shelby,Court,Van,Rob,Barbie"
-```
+  ```
 
 所以上文中代码可以转变为
 
@@ -157,7 +157,12 @@ SubType.prototype.sayAge = function(){
 
 ## 2.7 ES6 Class extends
 
-核心： ES6继承的结果和寄生组合继承相似，本质上，ES6继承是一种语法糖。但是，寄生组合继承是先创建子类实例this对象，然后再对其增强；而ES6先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。
+核心： ES6继承的结果和寄生组合继承相似，本质上，ES6继承是一种语法糖。
+
+但是，寄生组合继承是先创建子类实例this对象，然后再对其增强；
+
+而ES6先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。
+
 ```
 class A {}
 

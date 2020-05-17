@@ -74,9 +74,15 @@ var Parent = function () {
 
 可以看到ES6类的底层还是通过构造函数去创建的。
 
-通过ES6创建的类，是不允许你直接调用的。在ES5中，构造函数是可以直接运行的，比如`Parent()`。但是在ES6就不行。我们可以看到转码的构造函数中有`_classCallCheck(this, Parent)`语句,这句话是防止你通过构造函数直接运行的。你直接在ES6运行`Parent()`,这是不允许的,ES6中抛出`Class constructor Parent cannot be invoked without 'new'`错误。转码后的会抛出`Cannot call a class as a function.`能够规范化类的使用方式。
+通过ES6创建的类，是不允许你直接调用的。
 
-转码中`_createClass`方法，它调用`Object.defineProperty`方法去给新创建的Parent添加各种属性。`defineProperties(Constructor.prototype, protoProps)`是给原型添加属性。如果你有静态属性，会直接添加到构造函数`defineProperties(Constructor, staticProps)`上。
+在ES5中，构造函数是可以直接运行的，比如`Parent()`。但是在ES6就不行。
+
+可以看到转码的构造函数中有`_classCallCheck(this, Parent)`语句,这句话是防止你通过构造函数直接运行的。你直接在ES6运行`Parent()`,这是不允许的,ES6中抛出`Class constructor Parent cannot be invoked without 'new'`错误。转码后的会抛出`Cannot call a class as a function.`能够规范化类的使用方式。
+
+转码中`_createClass`方法，它调用`Object.defineProperty`方法去给新创建的Parent添加各种属性。`defineProperties(Constructor.prototype, protoProps)`是给原型添加属性。
+
+如果有静态属性，会直接添加到构造函数`defineProperties(Constructor, staticProps)`上。
 
 # 三、ES6实现继承
 
@@ -235,7 +241,7 @@ subClass.prototype.__proto__ = superClass.prototype
 subClass.__proto__ = superClass
 ```
 
-首先 `subClass.prototype.__proto__ = superClass.prototype`保证了子类的实例instanceof父类是true，子类的实例可以访问到父类的属性，包括内部属性，以及原型属性。
+首先 `subClass.prototype.__proto__ = superClass.prototype`保证了子类的实例`instanceof`父类是true，子类的实例可以访问到父类的属性，包括内部属性，以及原型属性。
 
 其次，`subClass.__proto__ = superClass`，保证了静态属性也能访问到，也就是这个例子中的Child.height。
 

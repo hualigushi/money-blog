@@ -1,7 +1,7 @@
 # forEach
 
 1. 三个参数，第一个value, 第二个 index, 第三个数组体。
-2. 适用于 数组，set，map，不适应于 字符串，Object。
+2. 适用于数组，set，map，不适用于字符串，Object。
 3. 无法修改和删除集合数据，效率和for循环相同，不用关心集合下标的返回。
 4. 不能终止循环，break，continue不能使用。
 
@@ -36,7 +36,7 @@ for (const key in array) {
 1. 是目前遍历数组最好的方法，可以用在set，map，类数组，字符串上，但是不支持原生的Object遍历。
 2. 支持break, continue
 
-并不能循环一个普通对象
+3. 并不能循环一个普通对象，但是可以循环一个拥有enumerable属性的对象，可使用内置的Object.keys()，Object.values()方法
 
 ```
 let obj = {a: '1', b: '2', c: '3', d: '4'}
@@ -45,17 +45,12 @@ for (let o of obj) {
 }
 ```
 
-但是可以循环一个拥有enumerable属性的对象。
-如果我们按对象所拥有的属性进行循环，可使用内置的Object.keys()方法
-
 ```
 let obj = {a: '1', b: '2', c: '3', d: '4'}
 for (let o of Object.keys(obj)) {
     console.log(o) // a,b,c,d
 }
 ```
-
-如果我们按对象所拥有的属性值进行循环，可使用内置的Object.values()方法
 
 ```
 let obj = {a: '1', b: '2', c: '3', d: '4'}
