@@ -113,19 +113,19 @@ touch: 使用具有回弹效果的滚动,当手指从触摸屏上移开，内容
 引发的bug（仅ios）
 
     3.1 在设置了该属性的滚动容器内手动设置scrollTop时容器会变空白，（内容绘制出错，应该是浏览器底层的问题）
-
+    
     3.2 手动设置scrollTop,某些机型上的scrollTop值改变了，但是页面不滚动
-
+    
     3.3 滑动时偶尔卡顿
 
 解决方案
 
     3.1 & 3.2（规避问题）：在手动改变scrollTop前先将-webkit-overflow-scrolling属性设置为auto,scrollTop改变后再设置回touch
-
+    
     3.1: 可先让页面延时100ms再滚动1px,空白可以恢复正常
-
+    
     3.2：给容器的某个子元素高度加1px
-
+    
     3.3：给容器设置position:static
 &nbsp;
 ## 10.-webkit-tap-highlight-color
@@ -177,7 +177,7 @@ box-align:center;
 ```
 根据不同的dpr显示不同的图像
 
-## p 标签不能包含 div
+## 15. p 标签不能包含 div
 
 p 标签中的内容构成 `Phrasing content`, 如果包含则将div从p中提取出来
 
@@ -189,4 +189,4 @@ address,article,aside,base,blockquote,body,caption,col,colgroup,dd,
   h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta,
   optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead,
   title,tr,track
-  ```
+```

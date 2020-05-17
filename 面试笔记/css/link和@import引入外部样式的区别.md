@@ -17,5 +17,3 @@
 5. @import次数
 
 　　限制@import只能引入31次css文件。
-
-6. link是html方式，@import是css方式

@@ -17,6 +17,8 @@ image.onload = function() {
 
 图片服务器需要配置Access-Control-Allow-Origin
 
+
+
 2.
 如果不想修改图片服务器的设置 可以用下面这种做法
 

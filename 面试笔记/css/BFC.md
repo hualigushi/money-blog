@@ -44,7 +44,3 @@ Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页�
 1. 利用BFC避免margin重叠
 2. 自适应两栏布局
 3. 清除浮动
-
-
-
-[什么是BFC？看这一篇就够了](https://blog.csdn.net/sinat_36422236/article/details/88763187)
