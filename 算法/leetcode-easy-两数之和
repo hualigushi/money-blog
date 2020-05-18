@@ -10,6 +10,17 @@
 
 因为 nums[0] + nums[1] = 2 + 7 = 9
 所以返回 [0, 1]
+
+测试用例
+```
+[3,2,4] 6
+[3,3] 6
+[0,4,3,0] 0
+[-1,-2,-3,-4,-5] -8
+[-3,4,3,90] 0
+```
+
+
 ```
 /**
  * @param {number[]} nums
@@ -28,6 +39,8 @@ var twoSum = function(nums, target) {
    }
 };
 ```
+自我分析：indexOf底层还是数组遍历，所以复杂度是O(n2)
+
 
 ```
 /**
@@ -41,18 +54,11 @@ var twoSum = function(nums, target) {
 		let num = nums[i]
         let left = target - num
         if (left in map) {
-			return [i, map[left]]
+		return [i, map[left]]
         } else {
-			map[num] = i
+		map[num] = i
         }
     }
 };
 ```
-测试用例
-```
-[3,2,4] 6
-[3,3] 6
-[0,4,3,0] 0
-[-1,-2,-3,-4,-5] -8
-[-3,4,3,90] 0
-```
+
