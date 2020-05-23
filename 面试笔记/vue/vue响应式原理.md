@@ -1,3 +1,11 @@
+## 简介回答
+
+通过Object.definerProperty来劫持各个数据的属性的setter和getter，在数据变化时，发布消息给依赖收集器，通知观察者去执行回调函数，达到视图更新的效果。
+
+
+
+## 具体回答
+
 Vue响应系统，其核心有三点：observe、watcher、dep：
 
 1. observe:遍历data中的属性，使用 Object.defineProperty 的get/set方法对其进行数据劫持

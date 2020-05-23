@@ -183,6 +183,34 @@ s = null;
 
 
 
+
+# `(a ==1 && a== 2 && a==3) === true `
+
+```
+const a = {
+      num: 0,
+      valueOf: function() {
+        return this.num += 1
+      }
+    };
+    const equality = (a==1 && a==2 && a==3);
+    console.log(equality); // true
+
+```
+
+
+
+# es6  class 的 super 是如何实现的
+
+```
+if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+```
+
+
+
+
+
+
 ## 堆栈内存
 
 ```
