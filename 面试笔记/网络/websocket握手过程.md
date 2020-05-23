@@ -57,3 +57,11 @@ Sec-WebSocket-Protocol: chat
 ```
 1. 101 状态码表示服务器已经理解了客户端的请求，并将通过 Upgrade 消息头通知客户端采用不同的协议来完成这个请求；
 2. `Sec-WebSocket-Accept` 这个则是经过服务器确认，并且加密过后的 `Sec-WebSocket-Key`
+
+
+
+握手完成后，接下来的 TCP 数据包就都是 WebSocket 协议的帧了
+
+
+
+WebSocket 提供两种协议：不加密的 `ws://` 和 加密的 `wss://`. 因为是用 HTTP 握手，它和 HTTP 使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）

@@ -11,3 +11,14 @@ mounted（）：挂载之后调用，el选项的DOM节点被新创建的 vm.$el 
 后续的钩子函数执行的过程都是需要外部的触发才会执行
 
 有数据的变化，会调用beforeUpdate，然后经过Virtual Dom，最后updated更新完毕，当组件被销毁的时候，会调用beforeDestory，以及destoryed。
+
+
+
+
+
+beforeUpdate阶段：响应式数据更新时调用，发生在虚拟DOM打补丁之前，适合在更新之前访问现有的DOM，比如手动移除已添加的事件监听器
+ updated阶段：虚拟DOM重新渲染和打补丁之后调用，组成新的DOM已经更新，避免在这个钩子函数中操作数据，防止死循环
+
+
+ beforeDestroy阶段：实例销毁前调用，实例还可以用，this能获取到实例，常用于销毁定时器，解绑事件
+destroyed阶段：实例销毁后调用，调用后所有事件监听器会被移除，所有的子实例都会被销毁

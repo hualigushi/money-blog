@@ -49,9 +49,23 @@
 
 48. nextTick 作用和原理
 
+49. 父子组件的生命周期触发顺序
+50. 如何将组件所有props传递给子组件？   `<user v-bind = "$props"/>`
+51. vue 为何是异步渲染，$nextTick何用？
 
+​      vue 是组件级更新 为了防止每次修改数据都更新视图，所以使用异步渲染
 
+​     异步渲染（以及合并data修改）提高渲染性能
+​     $nextTick在DOM更新完之后，触发回调
 
+52. **何时需要使用keep-alive?**
+
+​      缓存组件，不需要重复渲染
+
+​      如多个静态tab页面切换，可以优化性能
+​      常用的2个属性 include exclude
+​      两个生命周期 activated deactivated
+​      LRU算法
 
 
 

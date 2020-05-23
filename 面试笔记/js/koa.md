@@ -24,7 +24,10 @@ fnMiddleware(ctx).then(handleResponse).catch(onerror);
 
 中间函数的第一个参数ctx是包含响应和请求的一个对象，会不断传递给下一个中间件。next是一个函数，返回的是一个promise。
 
+
+
 # 2 如果中间件中的next()方法报错了怎么办
+
 ```
 ctx.onerror = function {  
   this.app.emit('error', err, this);

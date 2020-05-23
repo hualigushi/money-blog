@@ -1,6 +1,26 @@
 [Vue生命周期，及父子组件生命周期顺序](https://www.cnblogs.com/jaykoo/p/10529518.html)
 
 
+
+
+
+**父子组件的生命周期触发顺序?**
+ 加载渲染过程：
+ 父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
+ 子组件更新过程：
+ 父beforeUpdate->子beforeUpdate->子updated->父updated
+ 父组件更新过程：
+ 父beforeUpdate->父updated
+ 销毁过程：
+ 父beforeDestroy->子beforeDestroy->子destroyed->父destroyed
+
+
+
+
+
+
+
+
 # 问题描述
 
 有一个组件有由一系列子组件组成，子组件又被分解成组件，这样下来就构成了三级组件。需求是在组件显示在页面上之后，再将数据初始化进行回显。父组件获取数据后传递到子组件，要求子组件根据这个值将内部元数据进行过滤和加工。那么在子组件中什么时机下才能获取父组件传递过来的新值呢？。
