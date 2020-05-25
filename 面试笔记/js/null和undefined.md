@@ -4,6 +4,9 @@
 - 如果给对象属性和局部变量赋值null，给这个属性分配了空的内存，值为null 
   JS会回收值为null的对象
 - null 是 保留字
+- 作为对象原型链的终点
+
+
 
 # undefined
 - undefined表示‘无的初始值’，变为数值为NaN 

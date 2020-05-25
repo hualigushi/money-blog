@@ -23,6 +23,14 @@ canvas 的 drawImage 或 getImageData() 来截取
 
 
 
+# offsetWidth/offsetHeight,clientWidth/clientHeight与scrollWidth/scrollHeight的区别
+
+- `offsetWidth/offsetHeight`返回值包含**content + padding + border**，效果与e.getBoundingClientRect()相同
+- `clientWidth/clientHeight`返回值只包含**content + padding**，如果有滚动条，也**不包含滚动条**
+- `scrollWidth/scrollHeight`返回值包含**content + padding + 溢出内容的尺寸**
+
+
+
 # 如何给一组列表首尾之外的元素添加样式
 
 ```

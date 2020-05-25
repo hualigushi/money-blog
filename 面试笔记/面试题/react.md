@@ -86,3 +86,7 @@
 
     新的props导致更新。大量节点使用immutable
 
+44. react组件的通信
+45. react组件的优化
+46. react 的virtual dom和diff算法的实现方式
+47. react-router实现方式

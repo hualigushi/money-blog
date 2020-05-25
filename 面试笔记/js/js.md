@@ -160,7 +160,11 @@ function is(x, y) {
 
 
 
+# 去除字符串里面的重复字符
 
+```javascript
+[...new Set('ababbc')].join('')
+```
 
 
 
