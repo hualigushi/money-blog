@@ -39,3 +39,63 @@ Promise.allSettled([
     }));
 });
 ```
+
+
+
+# **取消promise**
+
+```
+      // 方法一 取消promise方法   promise.race方法
+      function wrap(p) {
+        let obj = {};
+        let p1 = new Promise((resolve, reject) => {
+          obj.resolve = resolve;
+          obj.reject = reject;
+        });
+        obj.promise = Promise.race([p1, p]);
+        return obj;
+      }
+
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(123);
+        }, 1000);
+      });
+      let obj = wrap(promise);
+      obj.promise.then(res => {
+        console.log(res);
+      });
+      obj.resolve("请求被拦截了");
+
+      obj.reject("请求被拒绝了");
+
+
+      //方法二 取消promise方法   新包装一个可操控的promise
+
+      function wrap(p) {
+        let res = null;
+        let abort = null;
+
+        let p1 = new Promise((resolve, reject) => {
+          res = resolve;
+          abort = reject;
+        });
+
+        p1.abort = abort;
+        p.then(res, abort);
+
+        return p1;
+      }
+
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(123);
+        }, 1000);
+      });
+      let obj = wrap(promise);
+      obj.then(res => {
+        console.log(res);
+      });
+      obj.abort("请求被拦截");
+```
+

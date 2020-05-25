@@ -22,6 +22,8 @@ watch：
 
 ④允许异步
 
+
+
 watch配置：handler、deep（是否深度）、immeditate （是否立即执行）
 
 总结：

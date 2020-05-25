@@ -1,26 +1,37 @@
-# MVVM
+### MVVM是什么?
 
-### 定义
+MVVM 模式，顾名思义即 Model-View-ViewModel 模式。
 
-MVVM(Model-View-ViewModel), 源自于经典的 Model–View–Controller（MVC）模式。
+Model 层: 对应数据层的域模型，它主要做域模型的同步。通过 Ajax/fetch 等 API 完成客户端和服务端业务 Model 的同步。在层间关系里，它主要用于抽象出 ViewModel 中视图的 Model。
 
-MVVM 的核心是 ViewModel 层，它就像是一个中转站（value converter），负责转换 Model 中的数据对象来让数据变得更容易管理和使用
+View 层:作为视图模板存在，在 MVVM 里，整个 View 是一个动态模板。除了定义结构、布局外，它展示的是 ViewModel 层的数据和状态。View 层不负责处理状态，View 层做的是 数据绑定的声明、 指令的声明、 事件绑定的声明。
 
-该层向上与视图层进行双向数据绑定，向下与 Model 层通过接口请求进行数据交互，起呈上启下作用。
-
-View 层展现的不是 Model 层的数据，而是 ViewModel 的数据，由 ViewModel 负责与 Model 层交互，这就完全解耦了 View 层和 Model 层，
-
-MVVM 就是将其中的View 的状态和行为抽象化，让我们将视图 UI 和业务逻辑分开。
-
-### 优点
-
-双向绑定技术，当Model变化时，View-Model会自动更新，View也会自动变化。
-
-### 缺点
-
-数据绑定使得 Bug 很难被调试
-
-数据双向绑定不利于代码重用
+ViewModel 层:把 View 需要的层数据暴露，并对 View 层的 数据绑定声明、 指令声明、 事件绑定声明 负责，也就是处理 View 层的具体业务逻辑。ViewModel 底层会做好绑定属性的监听。当 ViewModel 中数据变化，View 层会得到更新；而当 View 中声明了数据的双向绑定（通常是表单元素），框架也会监听 View 层（表单）值的变化。一旦值变化，View 层绑定的 ViewModel 中的数据也会得到自动更新。
 
 
 
+![2019-07-16-21-47-05](https://user-gold-cdn.xitu.io/2019/8/1/16c498ca0de66530?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+
+
+### MVVM的优缺点?
+
+优点:
+
+1. 分离视图（View）和模型（Model）,降低代码耦合，提高视图或者逻辑的重用性: 比如视图（View）可以独立于Model变化和修改，一个ViewModel可以绑定不同的"View"上，当View变化的时候Model不可以不变，当Model变化的时候View也可以不变。你可以把一些视图逻辑放在一个ViewModel里面，让很多view重用这段视图逻辑
+2. 提高可测试性: ViewModel的存在可以帮助开发者更好地编写测试代码
+3. 自动更新dom: 利用双向绑定,数据更新后视图自动更新,让开发者从繁琐的手动dom中解放
+
+缺点:
+
+1. Bug很难被调试: 因为使用双向绑定的模式，当你看到界面异常了，有可能是你View的代码有Bug，也可能是Model的代码有问题。数据绑定使得一个位置的Bug被快速传递到别的位置，要定位原始出问题的地方就变得不那么容易了。另外，数据绑定的声明是指令式地写在View的模版当中的，这些内容是没办法去打断点debug的
+2. 一个大的模块中model也会很大，虽然使用方便了也很容易保证了数据的一致性，当时长期持有，不释放内存就造成了花费更多的内存
+3. 对于大型的图形应用程序，视图状态较多，ViewModel的构建和维护的成本都会比较高
+
+## 
+
+
+作者：寻找海蓝96
+链接：https://juejin.im/post/5d41eec26fb9a06ae439d29f
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

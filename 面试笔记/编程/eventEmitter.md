@@ -110,3 +110,67 @@ EE.emit('event1');
 
 如果把上面的代码 setImmediate() 换成 process.nextTick() 讲会报错，因为 process.nextTick() 是在当前阶段结束时且在下个阶段前执行，而在 process.nextTick() 里触发回调会导致程序一直认为当前阶段还有任务需要执行而出错的，这个阶段将会有无法清除的 nextTick 需要执行。
 
+
+
+
+
+```
+      // 手写发布订阅模式 EventEmitter
+      class EventEmitter {
+        constructor() {
+          this.events = {};
+        }
+        // 实现订阅
+        on(type, callBack) {
+          if (!this.events) this.events = Object.create(null);
+
+          if (!this.events[type]) {
+            this.events[type] = [callBack];
+          } else {
+            this.events[type].push(callBack);
+          }
+        }
+        // 删除订阅
+        off(type, callBack) {
+          if (!this.events[type]) return;
+          this.events[type] = this.events[type].filter(item => {
+            return item !== callBack;
+          });
+        }
+        // 只执行一次订阅事件
+        once(type, callBack) {
+          function fn() {
+            callBack();
+            this.off(type, fn);
+          }
+          this.on(type, fn);
+        }
+        // 触发事件
+        emit(type, ...rest) {
+          this.events[type] &&
+            this.events[type].forEach(fn => fn.apply(this, rest));
+        }
+      }
+// 使用如下
+      const event = new EventEmitter();
+
+      const handle = (...rest) => {
+        console.log(rest);
+      };
+
+      event.on("click", handle);
+
+      event.emit("click", 1, 2, 3, 4);
+
+      event.off("click", handle);
+
+      event.emit("click", 1, 2);
+
+      event.once("dbClick", () => {
+        console.log(123456);
+      });
+      event.emit("dbClick");
+      event.emit("dbClick");
+
+```
+
