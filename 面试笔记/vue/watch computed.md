@@ -8,6 +8,10 @@ computed：
 
 ④不能与data/methds中的属性重复
 
+
+
+
+
 watch：
 
 ①可接受两个参数；

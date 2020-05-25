@@ -26,7 +26,7 @@ fullName: {
 ```
 注意：**不是说我们更改了getter里使用的变量，就会触发computed的更新，前提是computed里的值必须要在模板里使用才行**。
 
-如果将{{fullName}}去掉，get（）方法是不会触发的。
+如果将`{{fullName}}`去掉，get（）方法是不会触发的。
 
 二、setter的写法，可以设值
 ```

@@ -1,5 +1,5 @@
-- $route 是“路由信息对象”，包括`path，params，hash，query，fullPath，matched，name`等路由参数。
-- $router 是“路由实例”对象, 包括了路由的跳转方法，钩子函数等
+- `$route` 是“路由信息对象”，包括`path，params，hash，query，fullPath，matched，name`等路由参数。
+- `$router` 是“路由实例”对象, 包括了路由的跳转方法，钩子函数等, 想要导航到不同URL，则使用`$router.push`方法
 
 
 
@@ -15,9 +15,59 @@ vue-router全局有三个守卫：
 beforeEnter
 
 ## 3.路由组件内的守卫
-1. beforeRouteEnter 进入路由前, 在路由独享守卫后调用 不能 获取组件实例 this，组件实例还没被创建
+1. beforeRouteEnter 进入路由前, 在路由独享守卫后调用 不能 获取组件实例 this，组件实例还没被创建.
+
+   可以通过给 next 传入一个回调来访问组件实例。在导航被确认时，会执行这个回调，这时就可以访问组件实例了.
+
+   仅仅是 beforRouteEnter 支持给 next 传递回调，其他两个并不支持，因为剩下两个钩子可以正常获取组件实例 this
+
 2. beforeRouteUpdate (2.2) 路由复用同一个组件时, 在当前路由改变，但是该组件被复用时调用 可以访问组件实例 this
+
 3. beforeRouteLeave 离开当前路由时, 导航离开该组件的对应路由时调用，可以访问组件实例 this
+
+
+
+如何通过路由将数据传入下一个跳转的页面呢？
+
+答： params 和 query
+
+params
+
+```
+传参
+this.$router.push({
+ name:"detail",
+ params:{
+   name:'xiaoming',
+ }
+});
+接受
+this.$route.params.name
+```
+
+query
+
+```
+传参
+this.$router.push({
+  path:'/detail',
+  query:{
+    name:"xiaoming"
+  }
+ })
+接受 //接收参数是this.$route
+this.$route.query.id  
+```
+
+那query和params什么区别呢？
+
+① params只能用name来引入路由，query既可以用name又可以用path（通常用path）
+
+② params类似于post方法，参数不会再地址栏中显示
+
+query类似于get请求，页面跳转的时候，可以在地址栏看到请求参数
+
+
 
 
 

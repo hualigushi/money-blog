@@ -6,7 +6,8 @@ v-model只不过是一个语法糖而已,真正的实现靠的还是
  ```
  <input v-model="sth" />
 //  等同于
-<input :value="sth" @input="sth = $event.target.value" /> //自html5开始,input每次输入都会触发oninput事件，所以输入时input的内容会绑定到sth中，于是sth的值就被改变;
+<input :value="sth" @input="sth = $event.target.value" /> 
+//自html5开始,input每次输入都会触发oninput事件，所以输入时input的内容会绑定到sth中，于是sth的值就被改变;
 //$event 指代当前触发的事件对象;
 //$event.target 指代当前触发的事件对象的dom;
 //$event.target.value 就是当前dom的value值;

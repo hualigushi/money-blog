@@ -25,6 +25,7 @@ requireComponent.keys().forEach(fileName=>{
 ```
 
 
+
 # 局部批量引入
 
 （ 相当于在这个.vue文件中引入了这些组件，其他页面若要使用需再次引入。）
