@@ -72,6 +72,6 @@ timeout
 15. 执行inner回调的Promise.resolve - microtask 输出promise
 16. microtask 执行完毕，执行MutationObserver输出mutate
 
---最后因为两个setTimeout都是在触发inner回调后存入浏览器资源的--
+最后因为两个setTimeout都是在触发inner回调后存入浏览器资源的
 
 所以最后两个setTimeout回调完成排入队列执行.

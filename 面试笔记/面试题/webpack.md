@@ -9,7 +9,7 @@
 9. webpack 动态 import 是如何实现的
 10. 简述 webpack 配置文件中的 externals，UMD 了解吗
 11. webpack与grunt、gulp的不同？
-12. 如何提高 webpack 构件速度的
+12. 如何提高 webpack 构建速度的
 13. 假如有 2 个团队，一个团队想用另一个团队的一个类库，并且还是想在用到的时候才加进来，怎么办？(webpack 的 externals )
 14. sourcemap的原理
 15. npm install 是怎么工作的
@@ -21,3 +21,5 @@
 21. 说说webpack打包优化具体干了什么？为什么要这么做呢？
 22. webpack针对模块化做的处理
 23. hash chunkHash contentHash的区别
+24. webpack如何查找模块依赖
+25. webpack是如何实现动态导入的

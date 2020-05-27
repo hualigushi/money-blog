@@ -26,7 +26,7 @@
     }
   }
 }
-```
+ ```
 启用抽离代码
 
 ```
@@ -54,7 +54,7 @@
       }
     }
   }
-  ```
+```
 
 # 懒加载
 
@@ -224,6 +224,7 @@ if ('serviceWorker' in navigator) {
   - `npm run build`
   - `serve -s dist`
   
+
 此时在浏览器控制台就能看到 service worker 注册成功，你可以尝试关掉服务器或者断开网络，这时神奇的事就发生了，我们网页还能正常浏览~
 
 # noParse
@@ -234,8 +235,8 @@ module: {
     // 不去解析jquery的依赖关系
     noParse: /jquery/
   },
- ```
- 
+```
+
  # ignorePlugin
  - moment 2.18 会将所有本地化内容和核心功能一起打包）。可以使用 IgnorePlugin 在打包时忽略本地化内容，经过实验，使用 ignorePlugin 之后 ? 之后的体积由 1.2M 降低至 800K
  - ignorePlugin启用方法
@@ -245,7 +246,7 @@ new webpack.IgnorePlugin(requestRegExp, [contextRegExp]);
  
 //eg.
 plugins: [new webpack.IgnorePlugin(/\.\/local/, /moment/)];
-```
+ ```
 
 # DllPlugin
 - DllPlugin 是基于 Windows 动态链接库（dll）的思想被创作出来的。这个插件会把第三方库单独打包到一个文件中，这个文件就是一个单纯的依赖库。这个依赖库不会跟着你的业务代码一起被重新打包，只有当依赖自身发生版本变化时才会重新打包。
@@ -703,6 +704,15 @@ module.exports = {
 
 [探索webpack构建速度提升方法和优化策略](https://juejin.im/post/5e6502fa51882549052f531b#heading-5)
 
-构建优化 1、减少编译体积 ContextReplacementPugin、IgnorePlugin、babel-plugin-import、babel-plugin-transform-runtime。 2、并行编译 happypack、thread-loader、uglifyjsWebpackPlugin开启并行 3、缓存 cache-loader、hard-source-webpack-plugin、uglifyjsWebpackPlugin开启缓存、babel-loader开启缓存 4、预编译 dllWebpackPlugin && DllReferencePlugin、auto-dll-webapck-plugin
+构建优化 
 
-性能优化 1、减少编译体积 Tree-shaking、Scope Hositing。 2、hash缓存 webpack-md5-plugin 3、拆包 splitChunksPlugin、import()、require.ensure
+1. 减少编译体积 ContextReplacementPugin、IgnorePlugin、babel-plugin-import、babel-plugin-transform-runtime。 
+2. 并行编译 happypack、thread-loader、uglifyjsWebpackPlugin开启并行 
+3. 缓存 cache-loader、hard-source-webpack-plugin、uglifyjsWebpackPlugin开启缓存、babel-loader开启缓存 
+4. 预编译 dllWebpackPlugin && DllReferencePlugin、auto-dll-webapck-plugin
+
+性能优化 
+
+1. 减少编译体积 Tree-shaking、Scope Hositing。 
+2. hash缓存 webpack-md5-plugin 
+3. 拆包 splitChunksPlugin、import()、require.ensure
