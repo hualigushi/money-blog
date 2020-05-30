@@ -1,4 +1,13 @@
-v-model只不过是一个语法糖而已,真正的实现靠的还是
+v-model只不过是一个语法糖而已,v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：
+
+- text 和 textarea 元素使用 value 属性和 input 事件；
+- checkbox 和 radio 使用 checked 属性和 change 事件；
+- select 字段将 value 作为 prop 并将 change 作为事件。
+
+
+
+以 input 表单元素为例, 真正的实现靠的还是
+
  - v-bind:绑定响应式数据
  - 触发oninput 事件并传递数据
 

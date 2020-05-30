@@ -27,14 +27,48 @@ vue2采用的是典型的混入式架构，类似于express和jquery，各部分
 
 
 
-# 何时需要使用keep-alive?
 
-​      缓存组件，不需要重复渲染
 
-​      如多个静态tab页面切换，可以优化性能
-​      常用的2个属性 include exclude
-​      两个生命周期 activated deactivated
-​      LRU算法
+# 直接给一个数组项赋值，Vue 能检测到变化吗？
+
+由于 JavaScript 的限制，Vue 不能检测到以下数组的变动：
+
+- 当你利用索引直接设置一个数组项时，例如：`vm.items[indexOfItem] = newValue`
+- 当你修改数组的长度时，例如：`vm.items.length = newLength`
+
+为了解决第一个问题，Vue 提供了以下操作方法：
+
+```
+// Vue.set
+Vue.set(vm.items, indexOfItem, newValue)
+// vm.$set，Vue.set的一个别名
+vm.$set(vm.items, indexOfItem, newValue)
+// Array.prototype.splice
+vm.items.splice(indexOfItem, 1, newValue)
+```
+
+为了解决第二个问题，Vue 提供了以下操作方法：
+
+```
+// Array.prototype.splice
+vm.items.splice(newLength)
+```
+
+
+
+
+
+# 在哪个生命周期内调用异步请求？
+
+可以在钩子函数 created、beforeMount、mounted 中进行调用，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。但是本人推荐在 created 钩子函数中调用异步请求，因为在 created 钩子函数中调用异步请求有以下优点：
+
+- 能更快获取到服务端数据，减少页面 loading 时间；
+- ssr 不支持 beforeMount 、mounted 钩子函数，所以放在 created 中有助于一致性；
+
+
+
+
+
 
 
 
