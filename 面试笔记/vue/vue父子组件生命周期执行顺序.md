@@ -1,4 +1,11 @@
-**父子组件的生命周期触发顺序?**
+组件的调用顺序都是`先父后子`,渲染完成的顺序是`先子后父`。
+
+组件的销毁操作是`先父后子`，销毁完成的顺序是`先子后父`。
+
+
+
+
+
  加载渲染过程：
  父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
 
