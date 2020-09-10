@@ -323,3 +323,14 @@ console.log(userWithoutEmail); // 输出 { name: "John", surname: "Doe" }
 
     渐进式图片一开始大小框架就定好，不会像基本式图片一样，由于尺寸未设定而造成回流——提高的渲染性能；
     渐进式图片也有不足，就是吃CPU吃内存
+
+25. 数组生成26个英文字母
+```
+const alphabet = Array.from(new Array(26), (ele, index) => {
+    return String.fromCharCode(65 + index)
+}
+```
+
+26. scrollIntoView
+`Element.scrollIntoView()` 方法让当前的元素滚动到浏览器窗口的可视区域内。
+`document.querySelector(`[data-cate='${alpha}']`).scrollIntoView()`

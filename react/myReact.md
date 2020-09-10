@@ -80,3 +80,6 @@ class Demo {
   }
 }
 ```
+
+5. useState(() => { return })
+useState初始化的值支持回调，用于计算值，只会执行一次
