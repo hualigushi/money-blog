@@ -236,6 +236,7 @@ var set=new Set([1,2,3]);
 通用普通对象是不可以转为数组的。
 
 `var obj={name:'zhang'};[..obj]//报错`
+
 ![](https://mmbiz.qpic.cn/mmbiz/vLKqut7Zx90mEScXIxCibzYpGwxhYWvHxJdCYsZQaqNAmB3yibRqpffn1MG4ACniccckwicBhwjPwOBe5MSHeaH13g/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 #### 作为数据源
