@@ -186,9 +186,11 @@ console.log(d,e);
 因为普通对象不是可迭代对象。
 
 `var [d,e]={name:'zhang'};`
+
 ![](https://mmbiz.qpic.cn/mmbiz/vLKqut7Zx90mEScXIxCibzYpGwxhYWvHxjjLOIlAZDjYmjXySR46jdJ449AHj8jpNt77fwcYW8jcx3xmaZbWsow/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 从一个自定义的可迭代对象进行解构赋值。
+
 ```
 var iterableObj = {
     items:['红','绿','蓝'],
