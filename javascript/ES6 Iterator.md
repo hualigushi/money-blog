@@ -47,7 +47,7 @@ function getIterator(list) {
 
   此时，这个对象就是可迭代的，也就是可以被 for of 遍历。
   
-  Symbol.iterator，它是一个表达式，返回Symbol对象的iterator属性，这是一个预定义好的、类型为 Symbol 的特殊值。
+  `Symbol.iterator` 它是一个表达式，返回Symbol对象的iterator属性，这是一个预定义好的、类型为 Symbol 的特殊值。
   ```
   var iterableObj = {
     items:[100,200,300],
@@ -161,7 +161,7 @@ for(var item of iterableObj){
 # 不止 for of
 #### 解构赋值
 
-对可迭代对象进行解构赋值的时候，会默认调用Symbol.iterator方法。
+对可迭代对象进行解构赋值的时候，会默认调用`Symbol.iterator`方法。
 ```
 //字符串
 var str='12345';
