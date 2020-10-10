@@ -43,6 +43,7 @@ text：对用户的选择没有限制
 all：目标元素将整体被选中，也就是说不能只选中一部分，浏览器会自动选中整个元素里的内容
 ```
 &nbsp;
+
 ## 3.appearance:none 去除浏览器默认样式
 ```
 input {
@@ -52,16 +53,19 @@ input {
 }
 ```
 &nbsp;
+
 ## 4. outline: none 定义无轮廓
 
 outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
 
 注释：轮廓线不会占据空间，也不一定是矩形。
 &nbsp;
+
 ## 5. ::-webkit-slider-thumb
 
 这是type为range的input标签内的一种伪类样式,用于设置range的滑块的具体样式,该伪类只在内核为webkit/blink的浏览器中有效
 &nbsp;
+
 ## 6. input type=range 进度条样式
 
 使用linear-gradient 和 background-size 可实现进度条颜色设置
@@ -73,6 +77,7 @@ outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的
 }
 ```
 &nbsp;
+
 ## 7. font-size:0
 
 ```
@@ -82,13 +87,24 @@ outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的
 ```
 div后面和span前面存在间距，可以设置font-size:0
 &nbsp;
-## 8.多行文本省略
 
+## 8.文本省略
+单行文本省略
+```css
+div {
+  white-space:nowrap;/* 规定文本是否折行 */
+  overflow: hidden;/* 规定超出内容宽度的元素隐藏 */
+  text-overflow: ellipsis;
+  /* 规定超出的内容文本省略号显示，通常跟上面的属性连用，因为没有上面的属性不会触发超出规定的内容 */
+}
 ```
+
+多行文本省略
+```css
 @mixin ellipsis2($line) {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: $line;
+  display: -webkit-box; /* 将对象作为弹性伸缩盒子模型显示 */
+  -webkit-box-orient: vertical;  /* 设置或检索伸缩盒对象的子元素的排列方式 */
+  -webkit-line-clamp: $line;  /* 控制最多显示几行 */
   word-break: keep-all;
   white-space: normal;
   overflow: hidden;
@@ -97,6 +113,7 @@ div后面和span前面存在间距，可以设置font-size:0
 }
 ```
 &nbsp;
+
 ## 9.-webkit-overflow-scrolling: touch;
 
 解决移动端滚动卡顿问题
@@ -128,6 +145,7 @@ touch: 使用具有回弹效果的滚动,当手指从触摸屏上移开，内容
     
     3.3：给容器设置position:static
 &nbsp;
+
 ## 10.-webkit-tap-highlight-color
 
 这个属性只用于iOS (iPhone和iPad)。
@@ -135,8 +153,10 @@ touch: 使用具有回弹效果的滚动,当手指从触摸屏上移开，内容
 要重设这个表现，你可以设置-webkit-tap-highlight-color为任何颜色。
 想要禁用这个高亮，设置颜色的alpha值为0即可。
 &nbsp;
+
 ## 11.修改输入框placeholder文字默认颜色  ::-webkit-input-placeholder
 &nbsp;
+
 ## 12.animation-fill-mode
 动画的时间外属性，可设none，forwards，backwards，both。
 默认值none表示动画播完后，恢复到初始状态。
@@ -144,9 +164,10 @@ forwards当动画播完后，保持@keyframes里最后一帧的属性。
 backwards表示开始播动画时，应用@keyframes里第一帧的属性，要看出效果，通常要设animation-delay延迟时间。
 both表示forwards和backforwards都应用。
 &nbsp;
+
 ## 13.CSS3 box-pack box-align 属性
 对 div 框的子元素进行居中
-```
+```css
 <style> 
 div
 {
@@ -169,7 +190,7 @@ box-align:center;
 ```
 
 ## 14.图片引入 `image-set()`
-```
+```css
 .logo {
     background-image: image-set(url(logo@1x.png);
     background-image: image-set(url(logo@1x.png) 1x,url(logo@2x.png) 2x);
@@ -190,3 +211,6 @@ address,article,aside,base,blockquote,body,caption,col,colgroup,dd,
   optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead,
   title,tr,track
 ```
+
+## 16. 快速重置表单元素 unset
+`button { all: unset; }`
