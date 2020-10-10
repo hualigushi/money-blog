@@ -214,3 +214,28 @@ address,article,aside,base,blockquote,body,caption,col,colgroup,dd,
 
 ## 16. 快速重置表单元素 unset
 `button { all: unset; }`
+
+
+## 17. 改变滚动条样式
+滚动条的组成分为三个部分，滚动条容器 `scrollbar`, 滚筒条轨道 `scrollbar-track`,滚动条滑块 `scrollbar-thumb`
+```css
+div::-webkit-scrollbar {
+  /* 这里的宽是指竖向滚动条的宽，高是指横向滚动条的高*/
+  width: 16px;
+  height: 16px;
+  background: pink;
+}
+div::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background:
+  linear-gradient(red,orange);
+}
+```
+
+## 18. 最后一个 div 不显示下边框
+`div:not(:last-child) /* 匹配非最后一个 div 元素的 div 元素 */`
+
+## 19. 规定图像展示方式
+显示图片的时候会遇到这种问题，对面返回的图片宽高比例是不一样的。但是设置的容器大小是一样的，这个时候需要让图片保持比例最大填充容器。
+
+`object-fit：fill | contain | cover | none | scale-down`
