@@ -4,7 +4,7 @@
 
 3. 树形结构转为一维数组
 
-```
+```js
 const nav = [
     {
         id: 1,
@@ -55,7 +55,7 @@ const c = [[1,2,3],[4,5,6]]
 ```
 
 5. 删除数组中某一项数据，利用filter
-```
+```js
 if (this.bookmark) {
         saveBookmark(this.fileName, this.bookmark.filter(item => item.cfi !== cfi))
       }
@@ -72,7 +72,7 @@ if (keyword) {
 ```
 
 7. 数组添加不重复的数据
-```
+```js
 Array.prototype.pushWithoutDuplicate = function () {
   for (let i = 0; i < arguments.length; i++) {
     const arg = arguments[i]
@@ -84,7 +84,7 @@ Array.prototype.pushWithoutDuplicate = function () {
 ```
 
 8. axios 下载进度
-```
+```js
 axios.create({
     baseURL: '',
     method: 'get',
@@ -101,7 +101,7 @@ axios.create({
 ```
 
 9. 类型判断
-```
+```js
 const toString = Object.prototype.toString // 方法缓存, 不需要反复地从Object开始一层层地访问
 
 export function isDate(val: any): val is Date { // val is Date 类型保护
@@ -115,7 +115,7 @@ export function isPlainObject(val: any): val is Object {
 
 10. extend
 
-```
+```js
 // extend 方法的实现用到了交叉类型，并且用到了类型断言。extend 的最终目的是把 from 里的属性都扩展到 to 中，包括原型上的属性
 export function extend<T, U>(to: T, from: U): T & U {
     for (const key in from) {
@@ -127,7 +127,7 @@ export function extend<T, U>(to: T, from: U): T & U {
 
 11. 普通对象的深拷贝
 
-```
+```js
 export function deepMerge(...objs: any[]): any {
     const result = Object.create(null)
 
@@ -152,7 +152,7 @@ export function deepMerge(...objs: any[]): any {
 ```
 
 12. 同域请求判断
-```
+```js
 interface URLOrigin {
   protocol: string
   host: string
@@ -183,7 +183,7 @@ function resolveURL(url: string): URLOrigin {
 
 13. img srcset sizes
 
-```
+```html
 <img src="lighthouse-200.jpg" sizes="50vw"
     srcset="lighthouse-100.jpg 100w, lighthouse-200.jpg 200w,
             lighthouse-400.jpg 400w, lighthouse-800.jpg 800w,
@@ -208,7 +208,7 @@ window.devicePixelRatio = 物理像素 / dips
 
 解释：.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透
 
-```
+```js
  Promise.resolve('foo')
     .then(Promise.resolve('bar'))
     .then(function(result){
@@ -219,7 +219,7 @@ window.devicePixelRatio = 物理像素 / dips
 foo
 
 ```
-```
+```js
 Promise.resolve(1)
   .then(function(){return 2})
   .then(Promise.resolve(3))
@@ -228,7 +228,7 @@ Promise.resolve(1)
   2
 ```
 
-```
+```js
 Promise.resolve(1)
   .then(function(){return 2})
   .then(function(){return Promise.resolve(3)})
@@ -246,7 +246,7 @@ Promise.resolve(1)
 20. JavaScript的数组是否分配连续内存取决于数组成员的类型，如果统一是单一类型的数组那么会分配连续内存，如果数组内包括了各种各样的不同类型，那么则是非连续内存。非连续内存的数组用的是类似哈希映射的方式存在，当我们查询某元素的时候其实是需要遍历这个线性链表结构的，这十分消耗性能。线性储存的数组只需要遵循这个寻址公式,进行数学上的计算就可以找到对应元素的内存地址
 
 21. 将对象数组合并成一个对象
-```
+```js
 const cities = [
     { name: 'Paris', visited: 'no' },
     { name: 'Lyon', visited: 'no' },
@@ -283,7 +283,7 @@ Rome: "yes"
 ```
 
 22. 数组映射（不使用 Array.map）
-```
+```js
 const cities = [
     { name: 'Paris', visited: 'no' },
     { name: 'Lyon', visited: 'no' },
@@ -303,7 +303,7 @@ console.log(cityNames);
 ```
 
 23. 根据条件添加对象属性
-```
+```js
 const getUser = (emailIncluded) => {
   return {
     name: 'John',
@@ -334,3 +334,12 @@ const alphabet = Array.from(new Array(26), (ele, index) => {
 26. scrollIntoView
 `Element.scrollIntoView()` 方法让当前的元素滚动到浏览器窗口的可视区域内。
 `document.querySelector(`[data-cate='${alpha}']`).scrollIntoView()`
+
+27. 快速幂运算
+可以使用位左移运算符<<来表示以 2 为底的幂运算
+```js
+// 以下表达式是等效的:
+Math.pow(2, n);
+2 << (n - 1);
+2**n;
+```
