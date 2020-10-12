@@ -239,3 +239,18 @@ div::-webkit-scrollbar-thumb {
 显示图片的时候会遇到这种问题，对面返回的图片宽高比例是不一样的。但是设置的容器大小是一样的，这个时候需要让图片保持比例最大填充容器。
 
 `object-fit：fill | contain | cover | none | scale-down`
+
+## 20. 模拟input的placeholder
+
+思路：利用伪类添加自定义属性 （在input为空并且失焦添加placeholder属性）
+
+tip：也可以用此方法来改变placeholder默认颜色
+
+```css
+.input:empty:not(:focus):before{
+  content: attr(placeholder);
+  color: #aaaeb9;
+  font-size: 14px;
+  line-height: 22px;
+}
+```
