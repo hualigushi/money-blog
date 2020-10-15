@@ -43,7 +43,7 @@ Proxy 支持13种拦截操作
 
 ## 2.1  Object.defineProperty 不能监听所有属性
 `Object.defineProperty` 无法一次性监听对象所有属性，必须遍历或者递归来实现。
-```
+```js
 let girl = {
      name: "marry",
      age: 22
@@ -68,7 +68,7 @@ let girl = {
 
 `Object.defineProperty` 可以监听数组的变化，`Object.defineProperty` 无法对 push、shift、pop、unshift 等方法进行响应。
 
-```
+```js
 const arr = [1, 2, 3];
    /* Proxy 监听数组*/
    arr = new Proxy(arr, {
@@ -89,7 +89,7 @@ const arr = [1, 2, 3];
 ```
 
 对于新增加的数组项，`Object.defineProperty` 依旧无法监听到。因此，在 Mobx 中为了监听数组的变化，默认将数组长度设置为1000，监听 0-999 的属性变化。
-```
+```js
 const arr = [1, 2, 3];
    /* Object.defineProperty */
    [...Array(1000)].forEach((item, index) => {
@@ -105,7 +105,7 @@ const arr = [1, 2, 3];
 在 Vue 和 Mobx 中都是通过重写原型实现的。
 
 在定义变量的时候，判断其是否为数组，如果是数组，那么就修改它的 `__proto__`，将其指向 `subArrProto`，从而实现重写原型链。
-```
+```js
 const arrayProto = Array.prototype;
    const subArrProto = Object.create(arrayProto);
    const methods = ['pop', 'shift', 'unshift', 'sort', 'reverse', 'splice', 'push'];
@@ -129,7 +129,7 @@ const arrayProto = Array.prototype;
 get 方法用来拦截对目标对象属性的读取，它接收三个参数，分别是目标对象、属性名和 Proxy 实例本身。
 基于 get 方法的特性，可以实现很多实用的功能，比如在对象里面设置私有属性（一般定义属性我们以 _ 开头表明是私有属性） ，实现禁止访问私有属性的功能。
 
-```
+```js
 const person = {
     name: 'tom',
     age: 20,
@@ -148,7 +148,7 @@ proxy._sex; // _sex is private attribute
 ```
 
 还可以给对象中未定义的属性设置默认值。通过拦截对属性的访问，如果是 undefined，那就返回最开始设置的默认值。
-```
+```js
 let person = {
     name: 'tom',
     age: 20
@@ -174,7 +174,7 @@ person.sex // null
 
 set 方法可以拦截对属性的赋值操作，一般来说接收四个参数，分别是目标对象、属性名、属性值、Proxy 实例。
 下面是一个 set 方法的用法，在对属性进行赋值的时候打印出当前状态。
-```
+```js
 const proxy = new Proxy({}, {
     set(target, key, value, receiver) {
         console.log(`${key} has been set to ${value}`);
@@ -185,7 +185,7 @@ proxy.name = 'tom'; // name has been setted ygy
 ```
 
 第四个参数 receiver 则是指当前的 Proxy 实例，在下例中指代 proxy。
-```
+```js
 const proxy = new Proxy({}, {
     set(target, key, value, receiver) {
         if (key === 'self') {
@@ -201,7 +201,7 @@ proxy.self === proxy; // true
 使用 Proxy 可以在填写表单的时候，拦截其中的字段进行格式校验。
 
 通常来说，大家都会用一个对象来保存验证规则，这样会更容易对规则进行扩展。
-```
+```js
 // 验证规则
 const validators = {
     name: {
@@ -226,7 +226,7 @@ const validators = {
 ```
 
 然后编写验证方法，用 set 方法对 form 表单对象设置属性进行拦截，拦截的时候用上面的验证规则对属性值进行校验，如果校验失败，则弹窗提示。
-```
+```js
 // 验证方法
 function validator(obj, validators) {
     return new Proxy(obj, {
@@ -249,7 +249,7 @@ form.password = '113123123123123';
 ```
 
 如果这个属性已经设置为不可写，那么 set 将不会生效（但 set 方法依然会执行）。
-```
+```js
 const person = {
     name: 'tom'
 }
@@ -268,7 +268,7 @@ proxy.name = '';
 ## 3.3. apply
 
 `apply` 一般是用来拦截函数的调用，它接收三个参数，分别是目标对象、上下文对象（this）、参数数组。
-```
+```js
 function test() {
     console.log('this is a test function');
 }
@@ -278,5 +278,171 @@ const func = new Proxy(test, {
         target.apply(context, args);
     }
 })
-```
 func();
+```
+
+通过 apply 方法可以获取到函数的执行次数，也可以打印出函数执行消耗的时间，常常可以用来做性能分析。
+```js
+function log() {}
+const func = new Proxy(log, {
+    _count: 0,
+    apply(target, context, args) {
+        target.apply(context, args);
+        console.log(`this function has been called ${++this._count} times`);
+    }
+})
+func()
+```
+
+## 3.4. construct
+
+`construct` 方法用来拦截 `new` 操作符。它接收三个参数，分别是目标对象、构造函数的参数列表、`Proxy` 对象，最后需要返回一个对象。
+
+
+```js
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+const P = new Proxy(Person, {
+    construct(target, args, newTarget) {
+        console.log('construct');
+        return new target(...args);
+    }
+})
+const p = new P('tom', 21); // 'construct'
+```
+
+如果构造函数没有返回任何值或者返回了原始类型的值，那么默认返回的就是 `this`，如果返回的是一个引用类型的值，那么最终 `new` 出来的就是这个值。
+因此，你可以代理一个空函数，然后返回一个新的对象。
+```js
+function noop() {}
+const Person = new Proxy(noop, {
+    construct(target, args, newTarget) {
+        return {
+            name: args[0],
+            age: args[1]
+        }
+    }
+})
+const person = new Person('tom', 21); // { name: 'tom', age: 21 }
+```
+
+# 4. Proxy 可以做哪些有意思的事情？
+
+## 4.1 骚操作：代理类
+使用 `construct` 可以代理类, 类的本质也是构造函数和原型（对象）组成的，完全可以对其进行代理。
+
+有这么一个需求，需要拦截对属性的访问，以及计算原型上函数的执行时间, 可以对属性设置 `get` 拦截，对原型函数设置 `apply` 拦截。
+
+先考虑对下面的 `Person` 类的原型函数进行拦截。使用 `Object.getOwnPropertyNames` 来获取原型上面所有的函数，遍历这些函数并对其使用 `apply` 拦截。
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  say() {
+    console.log(`my name is ${this.name}, and my age is ${this.age}`)
+  }
+}
+const proxyTrack = (targetClass) => {
+  const prototype = targetClass.prototype;
+  Object.getOwnPropertyNames(prototype).forEach((name) => {
+        targetClass.prototype[name] = new Proxy(prototype[name], {
+            apply(target, context, args) {
+                console.time();
+                target.apply(context, args);
+                console.timeEnd();
+            }
+        })
+  })
+
+  return new Proxy(targetClass, {
+    construct(target, args) {
+      const obj = new target(...args);
+      return new Proxy(obj, {
+        get(target, prop) {
+              console.log(`${target.name}.${prop} is being getting`);
+              return target[prop]
+        }
+      })
+    }
+  })       
+}
+
+const MyClass = proxyTrack(Person);
+const myClass = new MyClass('tom', 21);
+myClass.say();
+myClass.name;
+ ```
+ 
+## 4.2 等不及可选链：深层取值（get）
+平时取数据的时候，经常会遇到深层数据结构，如果不做任何处理，很容易造成 JS 报错。
+
+为了避免这个问题，也许你会用多个 && 进行处理
+
+最新的 ES 提案中提供了可选链的语法糖，支持我们用下面的语法来深层取值。
+
+`country?.province?.city?.name`
+
+但是这个特性只是处于 stage3 阶段，还没有被正式纳入 ES 规范中，更没有浏览器已经支持了这个特性。
+
+```js
+let isFirst = true;
+function noop() {}
+let proxyVoid = get(undefined);
+function get(obj) {
+   if (obj === undefined) {
+       if (!isFirst) {
+           return proxyVoid;
+       }
+       isFirst = false;
+   }
+   // 注意这里拦截的是 noop 函数
+   return new Proxy(noop, {
+       // 这里支持返回执行的时候传入的参数
+       apply(target, context, [arg]) {
+           return obj === undefined ? arg : obj;
+       },
+       get(target, prop) {
+           if (
+               obj !== undefined &&
+               obj !== null &&
+               obj.hasOwnProperty(prop)
+           ) {
+               return get(obj[prop]);
+           }
+           return proxyVoid;
+       }
+   })
+}
+this.get = get;
+
+get(obj)() === obj; // true
+get(obj).person.name(); // undefined
+get(obj).person.name.xxx.yyy.zzz(); // Cannot read property 'xxx' of undefined
+```
+
+## 4.3 管道
+```js
+const pipe = (value) => {
+    const stack = [];
+    const proxy = new Proxy({}, {
+        get(target, prop) {
+            if (prop === 'execute') {
+                return stack.reduce(function (val, fn) {
+                    return fn(val);
+                }, value);
+            }
+            stack.push(window[prop]);
+            return proxy;
+        }
+    })
+    return proxy;
+}
+var double = n => n * 2;
+var pow = n => n * n;
+pipe(3).double.pow.execute;
+```
+注意：这里为了在 stack 存入方法，使用了 window[prop] 的形式，是为了获取到对应的方法。也可以将 double 和 pow 方法挂载到一个对象里面，用这个对象替换 window。
