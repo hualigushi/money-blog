@@ -140,5 +140,3 @@ methodsToPatch.forEach(function (method) {
   })
 })
 ```
-
-# 3. 对比Object.defineProperty和 Proxy。
