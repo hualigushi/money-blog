@@ -72,3 +72,5 @@
 59. 使用过 Vue SSR 吗？说说 SSR？
 60. 使用 Vuex 只需执行 Vue.use(Vuex)，并在 Vue 的配置中传入一个 store 对象的示例，store 是如何实现注入的？
 61. state 内部支持模块配置和模块嵌套，如何实现的？
+62. 在执行 dispatch 触发 action(commit 同理)的时候，只需传入(type, payload)，action 执行函数中第一个参数 store 从哪里获取的？
+63. Vuex 如何区分 state 是外部直接修改，还是通过 mutation 方法修改的？
