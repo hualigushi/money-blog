@@ -31,3 +31,35 @@
 Mutation主要是用来改变state当中的数据，因此它主要作为一个中间人。它不支持异步，这样就可以被Vue监听，devtools就可以同步到它的记录。如果它是异步的，那么就很可能导致devtools无法同步它究竟什么时候发生改变。
 
 而我们常用的方式是通过Action来提交Mutation，因为Action是一个异步的过程，所以这样做既保证了逻辑的异步调用，同时不破坏Mutation的记录良好。方便开发者调试。其实就是一个数据的交换过程。
+
+
+# 使用 Vuex 只需执行 `Vue.use(Vuex)`，并在 Vue 的配置中传入一个 store 对象的示例，store 是如何实现注入的？
+
+`Vue.use(Vuex)` 方法执行的是 install 方法，它实现了 Vue 实例对象的 init 方法封装和注入，
+
+使传入的 store 对象被设置到 Vue 上下文环境的store中。
+
+因此在VueComponent任意地方都能够通过this.store 访问到该 store。
+
+# state 内部支持模块配置和模块嵌套，如何实现的？
+在 store 构造方法中有 makeLocalContext 方法，所有 module 都会有一个 local context，根据配置时的 path 进行匹配。
+
+所以执行如 dispatch('submitOrder', payload)这类 action 时，默认的拿到都是 module 的 local state，
+
+如果要访问最外层或者是其他 module 的 state，只能从 rootState 按照 path 路径逐步进行访问。
+
+# 在执行 dispatch 触发 action(commit 同理)的时候，只需传入(type, payload)，action 执行函数中第一个参数 store 从哪里获取的？
+store 初始化时，所有配置的 action 和 mutation 以及 getters 均被封装过。
+
+在执行如 dispatch('submitOrder', payload)的时候，actions 中 type 为 submitOrder 的所有处理方法都是被封装后的，其第一个参数为当前的 store 对象，
+
+所以能够获取到 { dispatch, commit, state, rootState } 等数据。
+
+# Vuex 如何区分 state 是外部直接修改，还是通过 mutation 方法修改的？
+Vuex 中修改 state 的唯一渠道就是执行 `commit('xx', payload)` 方法，其底层通过执行 `this._withCommit(fn)` 设置_committing 标志变量为 true，
+
+然后才能修改 state，修改完毕还需要还原_committing 变量。
+
+外部修改虽然能够直接修改 state，但是并没有修改_committing 标志位，
+
+所以只要 watch 一下 state，state change 时判断是否_committing 值为 true，即可判断修改的合法性。
