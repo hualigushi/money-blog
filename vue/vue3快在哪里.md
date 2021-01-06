@@ -15,7 +15,7 @@ Vue 2.x 中的虚拟 DOM 是全量对比的模式，而到了 Vue 3.0 开始，�
 在 Vue 2.x 的全量对比模式下，如下图所示：
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bfaa5a5f5044a5aabc91fb98803a8a8~tplv-k3u1fbpfcp-zoom-1.image)
 
-通过上图，我们发现，Vue 2.x 的 diff 算法将每个标签都比较了一次，最后发现带有 `{{ message }}` 变量的标签是需要被更新的标签，显然这还有优化的空间。
+通过上图，我们发现，Vue 2.x 的 diff 算法将每个标签都比较了一次，最后发现带有 $\color{#ff0000}{message}$ 变量的标签是需要被更新的标签，显然这还有优化的空间。
 
 在 Vue 3.0 中，对 diff 算法进行了优化，在创建虚拟 DOM 时，根据 DOM 内容是否会发生变化，而给予相对应类型的静态标记（PatchFlag），如下图所示：
 
