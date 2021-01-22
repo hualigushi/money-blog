@@ -77,7 +77,52 @@ React调度(Schedule)的优先级,React有5个优先级级别:
 目前`ContinuousEvent`对应的是Immediate优先级; `UserBlockingEven`t对应的是UserBlocking(需要手动开启); 而`DiscreteEvent`对应的也是UserBlocking, 只不过它在执行之前，先会执行完其他Discrete任务。
 
 # 实现细节
+React是怎么实现事件机制？主要分为两个部分: **绑定**和**分发**.
+
 ## 事件是如何绑定的？
+React事件机制中的插件协议。 每个插件的结构如下:
+```js
+export type EventTypes = {[key: string]: DispatchConfig};
+
+// 插件接口
+export type PluginModule<NativeEvent> = {
+  eventTypes: EventTypes,          // 声明插件支持的事件类型
+  extractEvents: (                 // 对事件进行处理，并返回合成事件对象
+    topLevelType: TopLevelType,
+    targetInst: null | Fiber,
+    nativeEvent: NativeEvent,
+    nativeEventTarget: EventTarget,
+  ) => ?ReactSyntheticEvent,
+  tapMoveThreshold?: number,
+};
+```
+** `eventTypes` ** 声明该插件负责的事件类型, 它通过`DispatchConfig`来描述:
+```js
+export type DispatchConfig = {
+  dependencies: Array<TopLevelType>, // 依赖的原生事件，表示关联这些事件的触发. ‘简单事件’一般只有一个，复杂事件如onChange会监听多个, 如下图 
+  phasedRegistrationNames?: {    // 两阶段props事件注册名称, React会根据这些名称在组件实例中查找对应的props事件处理器
+    bubbled: string,             // 冒泡阶段, 如onClick
+    captured: string,            // 捕获阶段，如onClickCapture
+  },
+  registrationName?: string      // props事件注册名称, 比如onMouseEnter这些不支持冒泡的事件类型，只会定义  registrationName，不会定义phasedRegistrationNames
+  eventPriority: EventPriority,  // 事件的优先级，上文已经介绍过了
+};
+```
+
+![](https://pic2.zhimg.com/80/v2-1e97a4fee63fd875e901be06cb2d9fc9_720w.jpg)
+
+上面列举了三个典型的`EventPlugin`：
+
+- **SimpleEventPlugin** - 简单事件最好理解，它们的行为都比较通用，没有什么Trick, 例如不支持事件冒泡、不支持在Document上绑定等等. 和原生DOM事件是一一对应的关系，比较好处理.
+
+- **EnterLeaveEventPlugin** - 从上图可以看出来，mouseEnter和mouseLeave依赖的是mouseout和mouseover事件。也就是说*Enter/*Leave事件在React中是通过*Over/*Out事件来模拟的。这样做的好处是可以在document上面进行委托监听，还有避免*Enter/*Leave一些奇怪而不实用的行为。
+
+- **ChangeEventPlugin** - onChange是React的一个自定义事件，可以看出它依赖了多种原生DOM事件类型来模拟onChange事件.
+
+另外每个插件还会定义`extractEvents`
+
+方法，这个方法接受事件名称、原生DOM事件对象、事件触发的DOM元素以及React组件实例, 返回一个合成事件对象，如果返回空则表示不作处理. 
+
 ## 事件是如何分发的？
 ### 事件触发调度
 ### 插件是如何处理事件?
