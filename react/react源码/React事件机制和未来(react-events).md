@@ -119,13 +119,136 @@ export type DispatchConfig = {
 
 - **ChangeEventPlugin** - onChange是React的一个自定义事件，可以看出它依赖了多种原生DOM事件类型来模拟onChange事件.
 
-另外每个插件还会定义`extractEvents`
+另外每个插件还会定义`extractEvents`方法，这个方法接受事件名称、原生DOM事件对象、事件触发的DOM元素以及React组件实例, 返回一个合成事件对象，如果返回空则表示不作处理. 
 
-方法，这个方法接受事件名称、原生DOM事件对象、事件触发的DOM元素以及React组件实例, 返回一个合成事件对象，如果返回空则表示不作处理. 
+在ReactDOM启动时就会向`EventPluginHub`注册这些插件：
+```js
+EventPluginHubInjection.injectEventPluginsByName({
+  SimpleEventPlugin: SimpleEventPlugin,
+  EnterLeaveEventPlugin: EnterLeaveEventPlugin,
+  ChangeEventPlugin: ChangeEventPlugin,
+  SelectEventPlugin: SelectEventPlugin,
+  BeforeInputEventPlugin: BeforeInputEventPlugin,
+});
+```
+事件是怎么绑定的呢？ 打个断点看一下调用栈:
+![](https://pic4.zhimg.com/80/v2-7f95214a6c1846576a2036ec506e25d7_720w.jpg)
+
+通过调用栈可以看出React在props初始化和更新时会进行事件绑定。这里先看一下流程图
+
+![](https://pic2.zhimg.com/80/v2-fc1951960382e285155ced704dd7bfd5_720w.jpg)
+
+1. **在props初始化和更新时会进行事件绑定。** 首先React会判断元素是否是媒体类型，**媒体类型的事件是无法在Document监听的，所以会直接在元素上进行绑定**
+
+2. **在Document上绑定.**  这里面需要两个信息，一个就是上文提到的'事件依赖列表', 比如nMouseEnter`赖`ouseover/mouseout` 第二个是`eactBrowserEventEmitter`护的'已订阅事件表'。**处理器只需在Document订阅一次，所以相比在每个元素上订阅事件会节省很多资源.**
+
+代码大概如下:
+
+```js
+export function listenTo(
+  registrationName: string,           // 注册名称，如onClick
+  mountAt: Document | Element | Node, // 组件树容器，一般是Document
+): void {
+  const listeningSet = getListeningSetForElement(mountAt);             // 已订阅事件表
+  const dependencies = registrationNameDependencies[registrationName]; // 事件依赖
+
+  for (let i = 0; i < dependencies.length; i++) {
+    const dependency = dependencies[i];
+    if (!listeningSet.has(dependency)) {                               // 未订阅
+      switch (dependency) {
+        // ... 特殊的事件监听处理
+        default:
+          const isMediaEvent = mediaEventTypes.indexOf(dependency) !== -1;
+          if (!isMediaEvent) {
+            trapBubbledEvent(dependency, mountAt);                     // 设置事件处理器
+          }
+          break;
+      }
+      listeningSet.add(dependency);                                    // 更新已订阅表
+    }
+  }
+}
+```
+
+3. **根据事件的'优先级'和'捕获阶段'(是否是capture)来设置事件处理器**
+```js
+function trapEventForPluginEventSystem(
+  element: Document | Element | Node,   // 绑定到元素，一般是Document
+  topLevelType: DOMTopLevelEventType,   // 事件名称
+  capture: boolean,
+): void {
+  let listener;
+  switch (getEventPriority(topLevelType)) {
+    // 不同优先级的事件类型，有不同的事件处理器进行分发, 下文会详细介绍
+    case DiscreteEvent:                      // ⚛️离散事件
+      listener = dispatchDiscreteEvent.bind(
+        null,
+        topLevelType,
+        PLUGIN_EVENT_SYSTEM,
+      );
+      break;
+    case UserBlockingEvent:                 // ⚛️用户阻塞事件
+      listener = dispatchUserBlockingUpdate.bind(
+        null,
+        topLevelType,
+        PLUGIN_EVENT_SYSTEM,
+      );
+      break;
+    case ContinuousEvent:                   // ⚛️可连续事件
+    default:
+      listener = dispatchEvent.bind(null, topLevelType, PLUGIN_EVENT_SYSTEM);
+      break;
+  }
+
+  const rawEventName = getRawEventName(topLevelType);
+  if (capture) {                            // 绑定事件处理器到元素
+    addEventCaptureListener(element, rawEventName, listener);
+  } else {
+    addEventBubbleListener(element, rawEventName, listener);
+  }
+}
+```
+
 
 ## 事件是如何分发的？
+![](https://pic2.zhimg.com/80/v2-fc1951960382e285155ced704dd7bfd5_720w.jpg)
+
 ### 事件触发调度
 ### 插件是如何处理事件?
+通过上面的trapEventForPluginEventSystem函数可以知道，不同的事件类型有不同的事件处理器, 它们的区别是调度的优先级不一样
+
+```js
+// 离散事件
+// discrentUpdates 在UserBlocking优先级中执行
+function dispatchDiscreteEvent(topLevelType, eventSystemFlags, nativeEvent) {
+  flushDiscreteUpdatesIfNeeded(nativeEvent.timeStamp);
+  discreteUpdates(dispatchEvent, topLevelType, eventSystemFlags, nativeEvent);
+}
+
+// 阻塞事件
+function dispatchUserBlockingUpdate(
+  topLevelType,
+  eventSystemFlags,
+  nativeEvent,
+) {
+  // 如果开启了enableUserBlockingEvents, 则在UserBlocking优先级中调度，
+  // 开启enableUserBlockingEvents可以防止饥饿问题，因为阻塞事件中有scroll、mouseMove这类频繁触发的事件
+  // 否则同步执行
+  if (enableUserBlockingEvents) {
+    runWithPriority(
+      UserBlockingPriority,
+      dispatchEvent.bind(null, topLevelType, eventSystemFlags, nativeEvent),
+    );
+  } else {
+    dispatchEvent(topLevelType, eventSystemFlags, nativeEvent);
+  }
+}
+
+// 可连续事件则直接同步调用dispatchEvent
+```
+
+最终不同的事件类型都会调用dispatchEvent函数. dispatchEvent中会从DOM原生事件对象获取事件触发的target，再根据这个target获取关联的React节点实例.
+
 ### 批量执行
 # 未来
 ## 初探Responder的创建
