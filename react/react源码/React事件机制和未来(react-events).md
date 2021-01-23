@@ -39,7 +39,7 @@ React自定义一套事件系统的动机有以下几个:
   
   - **SelectEventPlugin** - 和change事件一样，React为表单元素规范化了`select`(选择范围变动)事件，适用于`input`、`textarea`、`contentEditable`元素.
   
-  - **BeforeInputEventPlugin** - `beforeinpu`t事件以及`composition`事件处理。
+  - **BeforeInputEventPlugin** - `beforeinput`事件以及`composition`事件处理。
   
 - **EventPropagators** 按照DOM事件传播的两个阶段，遍历React组件树，并收集所有组件的事件处理器.
 - **EventBatching** 负责批量执行事件队列和事件处理器，处理事件冒泡。
@@ -140,7 +140,7 @@ EventPluginHubInjection.injectEventPluginsByName({
 
 1. **在props初始化和更新时会进行事件绑定。** 首先React会判断元素是否是媒体类型，**媒体类型的事件是无法在Document监听的，所以会直接在元素上进行绑定**
 
-2. **在Document上绑定.**  这里面需要两个信息，一个就是上文提到的'事件依赖列表', 比如nMouseEnter`赖`ouseover/mouseout` 第二个是`eactBrowserEventEmitter`护的'已订阅事件表'。**处理器只需在Document订阅一次，所以相比在每个元素上订阅事件会节省很多资源.**
+2. **在Document上绑定.**  这里面需要两个信息，一个就是上文提到的'事件依赖列表', 比如`onMouseEnter`赖`mouseover/mouseout` 第二个是`reactBrowserEventEmitter`护的'已订阅事件表'。**处理器只需在Document订阅一次，所以相比在每个元素上订阅事件会节省很多资源.**
 
 代码大概如下:
 
@@ -214,8 +214,8 @@ function trapEventForPluginEventSystem(
 ![](https://pic2.zhimg.com/80/v2-fc1951960382e285155ced704dd7bfd5_720w.jpg)
 
 ### 事件触发调度
-### 插件是如何处理事件?
-通过上面的trapEventForPluginEventSystem函数可以知道，不同的事件类型有不同的事件处理器, 它们的区别是调度的优先级不一样
+
+通过上面的`trapEventForPluginEventSystem`函数可以知道，不同的事件类型有不同的事件处理器, 它们的区别是调度的优先级不一样
 
 ```js
 // 离散事件
@@ -247,10 +247,198 @@ function dispatchUserBlockingUpdate(
 // 可连续事件则直接同步调用dispatchEvent
 ```
 
-最终不同的事件类型都会调用dispatchEvent函数. dispatchEvent中会从DOM原生事件对象获取事件触发的target，再根据这个target获取关联的React节点实例.
+最终不同的事件类型都会调用`dispatchEvent`函数. `dispatchEvent`中会从DOM原生事件对象获取事件触发的target，再根据这个target获取关联的React节点实例.
+
+```js
+export function dispatchEvent(topLevelType: DOMTopLevelEventType, eventSystemFlags: EventSystemFlags, nativeEvent: AnyNativeEvent): void {
+  // 获取事件触发的目标DOM
+  const nativeEventTarget = getEventTarget(nativeEvent);
+  // 获取离该DOM最近的组件实例(只能是DOM元素组件)
+  let targetInst = getClosestInstanceFromNode(nativeEventTarget);
+  // ....
+  dispatchEventForPluginEventSystem(topLevelType, eventSystemFlags, nativeEvent, targetInst);
+}
+```
+
+接着(中间还有一些步骤，这里忽略)会调用`EventPluginHub`的`runExtractedPluginEventsInBatch`，这个方法遍历插件列表来处理事件，生成一个`SyntheticEvent`列表:
+
+```js
+export function runExtractedPluginEventsInBatch(
+  topLevelType: TopLevelType,
+  targetInst: null | Fiber,
+  nativeEvent: AnyNativeEvent,
+  nativeEventTarget: EventTarget,
+) {
+  // 遍历插件列表, 调用插件的extractEvents，生成SyntheticEvent列表
+  const events = extractPluginEvents(
+    topLevelType,
+    targetInst,
+    nativeEvent,
+    nativeEventTarget,
+  );
+
+  // 事件处理器执行, 见后文批量执行
+  runEventsInBatch(events);
+}
+```
+### 插件是如何处理事件?
+
+以`SimpleEventPlugin`为例:
+```js
+const SimpleEventPlugin: PluginModule<MouseEvent> & {
+  getEventPriority: (topLevelType: TopLevelType) => EventPriority,
+} = {
+  eventTypes: eventTypes,
+  // 抽取事件对象
+  extractEvents: function(
+    topLevelType: TopLevelType,
+    targetInst: null | Fiber,
+    nativeEvent: MouseEvent,
+    nativeEventTarget: EventTarget,
+  ): null | ReactSyntheticEvent {
+    // 事件配置
+    const dispatchConfig = topLevelEventsToDispatchConfig[topLevelType];
+
+    // 1️⃣ 根据事件类型获取SyntheticEvent子类事件构造器
+    let EventConstructor;
+    switch (topLevelType) {
+      // ...
+      case DOMTopLevelEventTypes.TOP_KEY_DOWN:
+      case DOMTopLevelEventTypes.TOP_KEY_UP:
+        EventConstructor = SyntheticKeyboardEvent;
+        break;
+      case DOMTopLevelEventTypes.TOP_BLUR:
+      case DOMTopLevelEventTypes.TOP_FOCUS:
+        EventConstructor = SyntheticFocusEvent;
+        break;
+      // ... 省略
+      case DOMTopLevelEventTypes.TOP_GOT_POINTER_CAPTURE:
+      // ...
+      case DOMTopLevelEventTypes.TOP_POINTER_UP:
+        EventConstructor = SyntheticPointerEvent;
+        break;
+      default:
+        EventConstructor = SyntheticEvent;
+        break;
+    }
+
+    // 2️⃣ 构造事件对象, 从对象池中获取
+    const event = EventConstructor.getPooled(
+      dispatchConfig,
+      targetInst,
+      nativeEvent,
+      nativeEventTarget,
+    );
+
+    // 3️⃣ 根据DOM事件传播的顺序获取用户事件处理器
+    accumulateTwoPhaseDispatches(event);
+    return event;
+  },
+};
+```
+SimpleEventPlugin的extractEvents主要做以下三个事情:
+
+1️⃣ 根据事件的类型确定SyntheticEvent构造器
+2️⃣ 构造SyntheticEvent对象。
+3️⃣ 根据DOM事件传播的顺序获取用户事件处理器列表
+
+**为了避免频繁创建和释放事件对象导致性能损耗(对象创建和垃圾回收)，React使用一个事件池来负责管理事件对象，使用完的事件对象会放回池中，以备后续的复用。**
+
+这也意味着，**在事件处理器同步执行完后，SyntheticEvent对象就会马上被回收**，所有属性都会无效。所以一般不会在异步操作中访问SyntheticEvent事件对象。你也可以通过以下方法来保持事件对象的引用：
+
+- 调用`SyntheticEvent#persist()`方法，告诉React不要回收到对象池
+- 直接引用`SyntheticEvent#nativeEvent`, nativeEvent是可以持久引用的，不过为了不打破抽象，建议不要直接引用nativeEvent
+
+构建完SyntheticEvent对象后，就需要**遍历组件树来获取订阅该事件的用户事件处理器了**:
+
+```js
+function accumulateTwoPhaseDispatchesSingle(event) {
+  // 以_targetInst为基点, 按照DOM事件传播的顺序遍历组件树
+  traverseTwoPhase(event._targetInst, accumulateDirectionalDispatches, event);
+}
+```
+
+```js
+export function traverseTwoPhase(inst, fn, arg) {
+  const path = [];
+  while (inst) {           // 从inst开始，向上级回溯
+    path.push(inst);
+    inst = getParent(inst);
+  }
+
+  let i;
+  // 捕获阶段，先从最顶层的父组件开始, 向下级传播
+  for (i = path.length; i-- > 0; ) {
+    fn(path[i], 'captured', arg);
+  }
+
+  // 冒泡阶段，从inst，即事件触发点开始, 向上级传播
+  for (i = 0; i < path.length; i++) {
+    fn(path[i], 'bubbled', arg);
+  }
+}
+```
+
+`accumulateDirectionalDispatches`函数则是简单查找当前节点是否有对应的事件处理器:
+
+```js
+function accumulateDirectionalDispatches(inst, phase, event) {
+  // 检查是否存在事件处理器
+  const listener = listenerAtPhase(inst, event, phase);
+  // 所有处理器都放入到_dispatchListeners队列中，后续批量执行这个队列
+  if (listener) {
+    event._dispatchListeners = accumulateInto(
+      event._dispatchListeners,
+      listener,
+    );
+    event._dispatchInstances = accumulateInto(event._dispatchInstances, inst);
+  }
+}
+```
+
+例如下面的组件树, 遍历过程是这样的：
+![](https://pic4.zhimg.com/80/v2-e02b64ca1a7196fc58e36594e0d42d7b_720w.jpg)
+
+最终计算出来的_dispatchListeners队列是这样的：`[handleB, handleC, handleA]`
 
 ### 批量执行
-# 未来
-## 初探Responder的创建
-## react-events意义何在?
+遍历执行插件后，会得到一个`SyntheticEvent`列表，`runEventsInBatch`就是批量执行这些事件中的`_dispatchListeners`事件队列
+
+```js
+export function runEventsInBatch(
+  events: Array<ReactSyntheticEvent> | ReactSyntheticEvent | null,
+) {
+  // ...
+  forEachAccumulated(processingEventQueue, executeDispatchesAndRelease);
+}
+
+//  
+
+const executeDispatchesAndRelease = function(event: ReactSyntheticEvent) {
+  if (event) {
+    // 按顺序执行_dispatchListeners
+    //  
+    executeDispatchesInOrder(event);
+
+    // 如果没有调用persist()方法则直接回收
+    if (!event.isPersistent()) {
+      event.constructor.release(event);
+    }
+  }
+};
+
+export function executeDispatchesInOrder(event) {
+  // 遍历dispatchListeners
+  for (let i = 0; i < dispatchListeners.length; i++) {
+    // 通过调用 stopPropagation 方法可以禁止执行下一个事件处理器
+    if (event.isPropagationStopped()) {
+      break;
+    }
+    // 执行事件处理器
+    executeDispatch(event, dispatchListeners[i], dispatchInstances[i]);
+  }
+}
+```
+![](https://pic1.zhimg.com/80/v2-97816326a41512598d906792c9f06a48_720w.jpg)
+
 
