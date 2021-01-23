@@ -339,7 +339,9 @@ const SimpleEventPlugin: PluginModule<MouseEvent> & {
 SimpleEventPlugin的extractEvents主要做以下三个事情:
 
 1️⃣ 根据事件的类型确定SyntheticEvent构造器
+
 2️⃣ 构造SyntheticEvent对象。
+
 3️⃣ 根据DOM事件传播的顺序获取用户事件处理器列表
 
 **为了避免频繁创建和释放事件对象导致性能损耗(对象创建和垃圾回收)，React使用一个事件池来负责管理事件对象，使用完的事件对象会放回池中，以备后续的复用。**
