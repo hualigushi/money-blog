@@ -1,4 +1,4 @@
-1. TypeScript 类型推导
+# 1. TypeScript 类型推导
 ```
 function add (a:number, b: number) {
     return a + b
@@ -8,7 +8,7 @@ function add (a:number, b: number) {
 
 借助类型推导和ReturnType就可以获取返回值类型 `type returnType = ReturnType<typeof add> // number`
 
-2. 元组
+# 2. 元组
 
 有时候我们可能需要批量的来获取参数，并且每一个参数的类型还不一样，我们可以声明一个元组如：
 ```
@@ -19,7 +19,7 @@ function query(...args:[string, number, boolean]){
 }
 ```
 
-3. Omit
+# 3. Omit
 有时候我们需要复用一个类型，但是又不需要此类型内的全部属性，因此需要剔除某些属性，这个时候Omit就派上用场了。
 ```
 interface User {
@@ -33,7 +33,7 @@ type UserWithoutToken = Omit<User, 'token'>
 ```
 这个方法在React中经常用到，当父组件通过props向下传递数据的时候，通常需要复用父组件的props类型，但是又需要剔除一些无用的类型。
 
-4. Record
+# 4. Record
 
 Record允许从Union类型中创建新类型，Union类型中的值用作新类型的属性。
 举个简单的例子，比如我们要实现一个简单的汽车品牌年龄表，一下写法貌似没有问题。
@@ -70,7 +70,7 @@ const cars: CarList = {
 
 在实战项目中尽量多用Record，它会帮助你规避很多错误，在vue或者react中有很多场景选择Record是更优解。
 
-5. 类型约束
+# 5. 类型约束
 在 `.jsx` 文件里，泛型可能会被当做 `jsx` 标签
 ```
 const toArray = <T>(element: T) => [element]; // Error in .jsx file.
@@ -80,7 +80,7 @@ const toArray = <T>(element: T) => [element]; // Error in .jsx file.
 const toArray = <T extends {}>(element: T) => [element]; // No errors.
 ```
 
-6.交叉类型
+# 6.交叉类型
 
 交叉类型是将多个类型合并为一个类型。 这让我们可以把现有的多种类型叠加到一起成为一种类型，它包含了所需的所有类型的特性。
 
@@ -88,7 +88,7 @@ const toArray = <T extends {}>(element: T) => [element]; // No errors.
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/Fq2ZIx64zaQnKAIsmhGRe5BXGhcRsKeBWIcASjXqtwJlkEtcOqOIbX7rgXfXEpVQRkO3kicfU1UShQbj5VSZ6ibw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-7. 联合类型
+# 7. 联合类型
 
 在 JavaScript 中，你希望属性为多种类型之一，如字符串或者数组。这就是联合类型所能派上用场的地方（它使用 | 作为标记，如 string | number）。
 ```
@@ -102,7 +102,7 @@ function formatCommandline(command: string[] | string) {
 }
 ```
 
-8. 类型别名
+# 8. 类型别名
 
 类型别名会给一个类型起个新名字，类型别名有时和接口很像，但是可以作用于原始值，联合类型，元组以及其它任何你需要手写的类型。
 
@@ -142,7 +142,9 @@ declare function interfaced(arg: Interface): Interface;
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/Fq2ZIx64zaQnKAIsmhGRe5BXGhcRsKeBpm7E5guNQzsWlyVU9NH2BgS7QPsyPCQNCSLFRmNNWfV0AMXdFIMQ8Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-## 1. 如果需要通过一系列对象构造出新对象，应尽量使用spread 操作， 可以保证生成的对象类型安全
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# 1. 如果需要通过一系列对象构造出新对象，应尽量使用spread 操作， 可以保证生成的对象类型安全
 ```js
 const pt = { x:3, y: 4}
 const id = { name: 'point'}
@@ -159,7 +161,7 @@ function merge<T extends object, U extends object>(x: T, y: U): T & Partial<U>  
 const p = merge(pt, id)
 p.name // 类型为string | undefined
 ```
-## 2. keyof
+# 2. keyof
 ```js
 interface Point {
     x: number;
@@ -186,7 +188,7 @@ function get<T extends object, K extends keyof T>(o: T, name: K): T[K] {
 }
 ```
 
-## 3. Partial & Pick
+# 3. Partial & Pick
 ```js
 type Partial<T> = {
   [P in keyof T]?: T[P];
@@ -209,7 +211,7 @@ type PartialUser = Partial<User>
 type PickUser = Pick<User, "id" | "age">
 ```
 
-## 4. Exclude
+# 4. Exclude
 ```js
 type Exclude<T, U> = T extends U ? never : T;
 
@@ -217,7 +219,7 @@ type Exclude<T, U> = T extends U ? never : T;
 type A = Exclude<'x' | 'a', 'x' | 'y' | 'z'>
 ```
 
-## 5. Dictionary & Many
+# 5. Dictionary & Many
 ```js
 interface Dictionary<T> {
   [index: string]: T;
@@ -233,7 +235,7 @@ const data:Dictionary<number> = {
 }
 ```
 
-## 6. 使用 const enum 维护常量表
+# 6. 使用 const enum 维护常量表
 相比使用字面量对象维护常量，const enum 可以提供更安全的类型检查
 ```js
 // 使用 object 维护常量
