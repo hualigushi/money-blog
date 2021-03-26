@@ -46,3 +46,7 @@ useEffect(() => {
 ```
 
 当我们第二个参数传一个空数组[]时，其实就相当于只在首次渲染的时候执行。也就是componentDidMount加componentWillUnmount的模式。
+
+useEffect 在视图更新之后才清理上一次的副作用。这么处理其实也是和 useEffect 的特性相契合的。
+
+React 只会在浏览器绘制后运行 useEffect。所以 Effect 的清除同样被延迟了。上一次的 Effect 会在重新渲染后被清除。
