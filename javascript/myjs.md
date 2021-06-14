@@ -362,4 +362,4 @@ console.log(1553 / 1000 | 0)  // Result: 1
 
 29. 可以在 indexOf(…) 函数前面加一个~ 来进行布尔检查，看看一个项是否存在于 String 或 Array 中。
 
-
+30. Object.fromEntries
