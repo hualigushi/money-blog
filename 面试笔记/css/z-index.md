@@ -2,6 +2,8 @@
 
 默认创建层叠上下文，只有 HTML 根元素，这里你可以理解为 body 标签。它属于根层叠上下文元素，不需要任何 CSS 属性来触发。
 
+
+
 # 二、需要配合 z-index 触发创建层叠上下文
 
 依赖 z-index 值创建层叠上下文的情况：
@@ -13,7 +15,9 @@
 
 前面我们提到，设置 position: relative 的时候 z-index 的值为 auto 会生效，但是这时候并没有创建层叠上下文，当设置 z-index 不为 auto，哪怕设置 z-index: 0 也会触发元素创建层叠上下文。
 
-三、不需要配合 z-index 触发创建层叠上下文
+
+
+# 三、不需要配合 z-index 触发创建层叠上下文
 
 这种情况下，基本上都是由 CSS3 中新增的属性来触发的，常见的有：
 
@@ -29,4 +33,5 @@
 - 元素的 -webkit-overflow-scrolling 属性为 touch
 - 元素的 will-change 属性具备会创建层叠上下文的值
 
-[css3中的z-index](https://blog.csdn.net/lhjuejiang/article/details/80924792)
+ 
+

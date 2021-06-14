@@ -13,14 +13,6 @@
 
 
 
-# canvas渲染较大画布的时候性能会较低：因为canvas依赖于像素，在绘制过程中是一个一个像素去绘制的，当画布足够大，像素点也就会足够多，那么想能就会足够低。
-
-
-
-# 前端如何实现图片剪裁
-
-canvas 的 drawImage 或 getImageData() 来截取
-
 
 
 # offsetWidth/offsetHeight,clientWidth/clientHeight与scrollWidth/scrollHeight的区别
@@ -53,42 +45,4 @@ canvas 的 drawImage 或 getImageData() 来截取
 ```
 
 
-
-# 文本省略
-
-```
-// 单行
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
-```
-
-```
-// 多行
-overflow : hidden;
-text-overflow: ellipsis;
-display: -webkit-box;
--webkit-line-clamp: 2;
--webkit-box-orient: vertical;
-```
-
-```
-// 多行
-p {
-    position:relative;
-    line-height:1.4em;
-    /* 3 times the line-height to show 3 lines */
-    height:4.2em;
-    overflow:hidden;
-}
-p::after {
-    content:"...";
-    font-weight:bold;
-    position:absolute;
-    bottom:0;
-    right:0;
-    padding:0 20px 1px 45px;
-    background:url(/newimg88/2014/09/ellipsis_bg.png) repeat-y;
-}
-```
 

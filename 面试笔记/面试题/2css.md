@@ -8,28 +8,30 @@
 
    用的是elementui组件，人家也是border-box
 
-3. flex
+3. flex布局，各个属性含义
 
-4. CSS 预处理器
+4. BFC 概念  如何触发  怎么应用
 
-5. z-index的工作原理，适用范围
+5. 清除浮动方法
 
-6. link import 区别
+6. CSS 预处理器
 
-7. rem em px  vw vh
+7. z-index的工作原理，适用范围
 
-8. dpr 的值会影响 rem 吗？该如何处理呢？
+8. link import 区别
 
-9. position属性
+9. rem em px  vw vh
 
-10. 伪类 伪元素区别
+10. dpr 的值会影响 rem 吗？该如何处理呢？
 
-   ::before和:after中的双冒号和单冒号的区别
+11. position属性
+
+12. 伪类 伪元素区别
+
+​        ::before和:after中的双冒号和单冒号的区别
 
 11. 选择器优先级(`！important > style > id > class > tag > * > 继承 > 默认`) 
 12. transition和animation的区别
-13. BFC 概念  如何触发  怎么应用
-14. 清除浮动方法
 15. nth-of-child和nth-of-type的区别
 16. canvas svg区别
 17. 为什么canvas的图片为什么有跨域问题(浏览器为了保护你的隐私会限制这样的请求)
@@ -62,3 +64,9 @@ a {
 ...
 }
 ```
+
+37. 简要介绍⼀下, 你如何在项⽬中管理样式的? 如何避免不同⻚⾯ / 模块中, 样式的互相影响 ?
+
+​       ⽬前项⽬中使⽤的是 BEM 规则，通过区分模块和元素来进⾏样式命名
+
+​       通过 css modules 将css进⾏分模块管理。

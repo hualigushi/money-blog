@@ -38,7 +38,10 @@ Proxy 支持13种拦截操作
 
 12. **setPrototypeOf(target, proto)**：拦截 Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
 
+
+
 # 2. Object.defineProperty
+
 ![](https://mmbiz.qpic.cn/mmbiz_png/VgnGRVJVoHFMTibiazjk7P11OFXrh6W9WHeMicTDC4F0rRUiaiaJNhic58CaJmlqgBtlu3VhrpQAB0hkAlWtuoBKhWJA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 ## 2.1  Object.defineProperty 不能监听所有属性
@@ -375,8 +378,8 @@ const MyClass = proxyTrack(Person);
 const myClass = new MyClass('tom', 21);
 myClass.say();
 myClass.name;
- ```
- 
+```
+
 ## 4.2 等不及可选链：深层取值（get）
 平时取数据的时候，经常会遇到深层数据结构，如果不做任何处理，很容易造成 JS 报错。
 

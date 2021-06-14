@@ -13,6 +13,7 @@
  - 无法使用return语句返回值，并且也不能使用throw关键字
 
 
+
 # 2. Promise
 
 promise的状态只能从pending变成fulfilled，和pending变成rejected，状态一旦改变，就不会再改变，且只有异步操作的结果才能改变promise的状态。
@@ -27,6 +28,8 @@ promise是一个容器，里面保存着某个未来才会结束的事件 (比�
   - 当处于Pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。当执行多个Promise时，一堆then看起来也很不友好。
   - promise一旦新建，就会立即执行，无法取消
 
+
+
 # 3. Generator
 
 Generator是es6提出的另一种异步编程解决方案，需要在函数名之前加一个*号，函数内部使用yield语句。
@@ -39,6 +42,8 @@ Generaotr函数会返回一个遍历器，可以进行遍历操作执行每个�
  - 错误可以被try catch
 
 缺点：不能自动执行异步操作，需要写多个next()方法，需要配合使用Thunk函数和Co模块才能做到自动执行。
+
+
 
 # 4. async/await
 
@@ -125,5 +130,4 @@ function _t() {
 1. try-catch去捕获generator执行过程中的错误。如果有报错，async函数直接是reject状态。
 
 2. 判断info中的done值，是否为true，为true就代表迭代器已经执行完毕了，可以将value值resolve出去。反之，则继续调用`_next`将值传递到下一个去。
-
 

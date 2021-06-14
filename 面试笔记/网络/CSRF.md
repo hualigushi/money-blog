@@ -9,6 +9,7 @@
 流程：
 1.用户登录、浏览并信任正规网站WebA，同时，WebA通过用户的验证并在用户的浏览器中产生Cookie。
 ![img](https://i.loli.net/2018/03/19/5aaf72e9147f0.png)
+
 2.攻击者WebB通过在WebA中添加图片链接等方式诱导用户User访问网站WebB。
 ![img](https://i.loli.net/2018/03/19/5aaf7332f2eec.png)
 3.在用户User被诱导访问WebB后，WebB会利用用户User的浏览器访问第三方网站WebA，并发出操作请求。
@@ -41,7 +42,7 @@
     通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。 
     在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
 
-3. 在请求地址中添加takon验证
+3. 在请求地址中添加tokon验证
 
    CSRF 攻击之所以能够成功，是因为黑客可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于      cookie 中，因此黑客可以在不知道这些验证信息的情况下直接利用用户自己的 cookie 来通过安全验证。要抵御 CSRF，关键在于在请求中放入黑客所不能伪造的信息，并且该信息不存在于 cookie 之中。可以在 HTTP 请求中以参数的形式加入一个随机产生的 token，并在服务器端建立一个拦截器来验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击而拒绝该请求。
 

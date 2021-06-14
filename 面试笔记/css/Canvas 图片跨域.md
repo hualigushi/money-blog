@@ -17,19 +17,10 @@ image.onload = function() {
 
 图片服务器需要配置Access-Control-Allow-Origin
 
+ 
 
+2. ajax和URL.createObjectURL()方法
 
-2.
-如果不想修改图片服务器的设置 可以用下面这种做法
-
-以php为例
-
-先用php加载图片 然后转换成base64编码 用来给img标签的src使用
-
-这样canvas加载img就不会有跨域的问题了
-
-3. 
-ajax和URL.createObjectURL()方法
 ```
 var xhr = new XMLHttpRequest();
 xhr.onload = function () {

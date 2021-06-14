@@ -72,9 +72,9 @@ Domain 和 Path 标识共同定义了 Cookie 的作用域：即 Cookie 应该发
 
 标记为 Secure 的 Cookie 只应通过被HTTPS协议加密过的请求发送给服务端。使用 HTTPS 安全协议，可以保护 Cookie 在浏览器和 Web 服务器间的传输过程中不被窃取和篡改。
 
-#### HTTP Only
+#### HTTPOnly
 
-设置 HTTP Only 属性可以防止客户端脚本通过 document.cookie 等方式访问 Cookie，有助于避免 XSS 攻击。
+设置 HTTPOnly 属性可以防止客户端脚本通过 document.cookie 等方式访问 Cookie，有助于避免 XSS 攻击。
 
 #### SameSite
 
@@ -91,20 +91,6 @@ SameSite 可以有下面三种值：
 3. **None** 无论是否跨站都会发送 Cookie
 
 之前默认是 None 的，Chrome80 后默认是 Lax。
-
-##### 跨域和跨站
-
-同源策略作为浏览器的安全基石，其「同源」判断是比较严格的，相对而言，Cookie中的「同站」判断就比较宽松：只要两个 URL 的 eTLD+1 相同即可，不需要考虑协议和端口。其中，eTLD 表示有效顶级域名，注册于 Mozilla 维护的公共后缀列表（Public Suffix List）中，例如，.com、.co.uk、.github.io 等。eTLD+1 则表示，有效顶级域名+二级域名，例如 taobao.com 等。
-
-举几个例子，www.taobao.com 和 www.baidu.com 是跨站，www.a.taobao.com 和 www.b.taobao.com 是同站，a.github.io 和 b.github.io 是跨站(注意是跨站)。
-
-##### 改变
-
-接下来看下从 None 改成 Lax 到底影响了哪些地方的 Cookies 的发送？直接来一个图表：
-
-![img](https://user-gold-cdn.xitu.io/2020/3/18/170eb95c97d98564?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
-
-从上图可以看出，对大部分 web 应用而言，Post 表单，iframe，AJAX，Image 这四种情况从以前的跨站会发送三方 Cookie，变成了不发送。
 
 
 
@@ -169,6 +155,8 @@ IOS 12 的 Safari 以及老版本的一些 Chrome 会把 SameSite=none 识别成
 3. CORS(跨域资源共享)：当我们需要让数据跨多台移动设备上使用时，跨域资源的共享会是一个让人头疼的问题。在使用Ajax抓取另一个域的资源，就可以会出现禁止请求的情况。
 
 4. CSRF(跨站请求伪造)：用户在访问银行网站时，他们很容易受到跨站请求伪造的攻击，并且能够被利用其访问其他的网站。
+
+   
 
 # Token
 

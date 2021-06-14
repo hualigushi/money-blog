@@ -88,31 +88,7 @@ outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的
 div后面和span前面存在间距，可以设置font-size:0
 &nbsp;
 
-## 8.文本省略
-单行文本省略
-```css
-div {
-  white-space:nowrap;/* 规定文本是否折行 */
-  overflow: hidden;/* 规定超出内容宽度的元素隐藏 */
-  text-overflow: ellipsis;
-  /* 规定超出的内容文本省略号显示，通常跟上面的属性连用，因为没有上面的属性不会触发超出规定的内容 */
-}
-```
 
-多行文本省略
-```css
-@mixin ellipsis2($line) {
-  display: -webkit-box; /* 将对象作为弹性伸缩盒子模型显示 */
-  -webkit-box-orient: vertical;  /* 设置或检索伸缩盒对象的子元素的排列方式 */
-  -webkit-line-clamp: $line;  /* 控制最多显示几行 */
-  word-break: keep-all;
-  white-space: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  overflow-wrap: break-word;
-}
-```
-&nbsp;
 
 ## 9.-webkit-overflow-scrolling: touch;
 

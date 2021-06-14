@@ -24,29 +24,7 @@ I am very happy
 
 # 解决方案
 
-**方法1:改变书写方式**
-
-元素间留白间距出现的原因就是标签段之间的空格，因此，去掉HTML中的空格，自然间距就消失了。
-
-
-
-![img](https:////upload-images.jianshu.io/upload_images/7995515-4b5c9fe115d2962c.png?imageMogr2/auto-orient/strip|imageView2/2/w/901/format/webp)
-
-
-
-![img](https:////upload-images.jianshu.io/upload_images/7995515-5e89c38469a71999.png?imageMogr2/auto-orient/strip|imageView2/2/w/776/format/webp)
-
-我们可以把inline-block元素写在同一行，这种方案是最直接的解决方案，但却也是最不靠谱的方案，存在很多不可控因素。 很多场景会让你崩溃：前后端协同；版本更迭；他人接手；自己忘了...，太多一不小心都可能让这个方案失效。
-
-考虑到代码可读性，显然连成一行的写法是不可取的，我们可以进行改进，还有下面**非人类**的写法：
-
-
-
-![img](https:////upload-images.jianshu.io/upload_images/7995515-1ebd9b80231bdfc0.png?imageMogr2/auto-orient/strip|imageView2/2/w/402/format/webp)
-
-![img](https:////upload-images.jianshu.io/upload_images/7995515-ddf97976e47bd8f9.png?imageMogr2/auto-orient/strip|imageView2/2/w/412/format/webp)
-
-**方法2：font-size**
+**方法1：font-size**
 
 这个方法，基本上可以解决大部分浏览器下inline-block元素之间的间距。
 
@@ -54,15 +32,11 @@ I am very happy
 
 ![img](https:////upload-images.jianshu.io/upload_images/7995515-8972e8ed8f1b0f7f.png?imageMogr2/auto-orient/strip|imageView2/2/w/353/format/webp)
 
-**方法3：使用margin负值**
-
-margin负值的大小与上下文的字体和文字大小相关，Arial字体的margin负值为-3像素，Tahoma和Verdana就是-4像素，而Geneva为-6像素。由于外部环境的不确定性，以及最后一个元素多出的父margin值等问题，这个方法不适合大规模使用。
 
 
+ 
 
-![img](https:////upload-images.jianshu.io/upload_images/7995515-fd8d08fcfc56982a.png?imageMogr2/auto-orient/strip|imageView2/2/w/321/format/webp)
-
-**方法4：使用word-spacing或letter-spacing**
+**方法2：使用word-spacing或letter-spacing**
 
 一个是字符间距(letter-spacing)一个是单词间距(word-spacing)，大同小异。
 
