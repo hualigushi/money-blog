@@ -1,8 +1,4 @@
- ## webpack打包原理解析
-
- webpack通过自定义了一个可以在node和浏览器环境都能执行`__webpack_require__`函数来模拟Node.js中的require语句，将源码中的所有require语句替换为`__webpack_require__·`，同时从入口文件开始遍历查找入口文件依赖，并且将入口文件及其依赖文件的路径和对应源码映射到一个modules对象上，当`__webpack_require__`执行的时候，首先传入的是入口文件的id，就会从这个modules对象上去取源码并执行，由于源码中的require语句都被替换为了`__webpack_require__`函数，所以每当遇到`__webpack_require__`函数的时候都会从modules对象上获取到对应的源码并执行，从而实现模块的打包并且保证源码执行顺序不变。
-
- ## webpack打包流程分析
+ # webpack打包流程分析
 
  #### webpack启动文件:
 
@@ -31,7 +27,7 @@ webpack首先会找到项目中的`webpack.config.js`配置文件，并以`requi
 
 
 
-## webpack 工作流程
+# webpack 工作流程
 
 1. 参数解析：从配置文件和 Shell 语句中读取与合并参数，得出最终的参数
 2. 找到入口文件：从 Entry 里配置的 Module 开始递归解析 Entry 依赖的所有 Module
@@ -54,7 +50,11 @@ webpack首先会找到项目中的`webpack.config.js`配置文件，并以`requi
 
 **「Plugin原理」**
 
-插件就像是一个插入到生产线中的一个功能，在特定的时机对生产线上的资源做处理。webpack 通过 Tapable 来组织这条复杂的生产线。 webpack 在编译过代码程中，会触发一系列 Tapable 钩子事件，插件所做的，就是找到相应的钩子，往上面挂上自己的任务，也就是注册事件，这样，当 webpack 构建的时候，插件注册的事件就会随着钩子的触发而执行了。
+插件就像是一个插入到生产线中的一个功能，在特定的时机对生产线上的资源做处理。
+
+webpack 通过 Tapable 来组织这条复杂的生产线。 
+
+webpack 在编译过代码程中，会触发一系列 Tapable 钩子事件，插件所做的，就是找到相应的钩子，往上面挂上自己的任务，也就是注册事件，这样，当 webpack 构建的时候，插件注册的事件就会随着钩子的触发而执行了。
 
 webpack 插件由以下组成：
 
@@ -64,33 +64,19 @@ webpack 插件由以下组成：
 - 处理 webpack 内部实例的特定数据。
 - 功能完成后调用 webpack 提供的回调
 
+
+
 **「自定义插件例子」**
 
-```
+```js
 // 一个 JavaScript 命名函数。 
 function MyExampleWebpackPlugin() { }; 
+
 // 在插件函数的 prototype 上定义一个 apply
 MyExampleWebpackPlugin.prototype.apply = function(compiler) { 
-// 指定一个挂载到 webpack 自身的事件钩子。 
-compiler.plugin('webpacksEventHook', function(compilation /* 处理 webpack 内部实例的特定数据。*/, callback) { 
-	console.log("This is an example plugin!!!"); // 功能完成后调用 webpack 提供的回调。 	callback(); 
+	// 指定一个挂载到 webpack 自身的事件钩子。 
+	compiler.plugin('webpacksEventHook', function(compilation /* 处理 webpack 内部实例的特定数据。*/, callback) { 
+	console.log("This is an example plugin!!!"); // 功能完成后调用 webpack 提供的回调。 		callback(); 
 }); 
 ```
 
-
-
- 
-
-
-
-[一看就懂之webpack原理解析与实现一个简单的webpack](https://segmentfault.com/a/1190000020353337)
-
-
-[深入理解webpack打包机制(二)](https://segmentfault.com/a/1190000018411480)
-
-[深入理解webpack打包机制(三)](https://segmentfault.com/a/1190000018424867)
-
-[深入理解webpack打包机制(四)](https://segmentfault.com/a/1190000018445745)
-
-
-[webpack4.0的学习配置](https://github.com/weikehang/webpack4.0-learn)
