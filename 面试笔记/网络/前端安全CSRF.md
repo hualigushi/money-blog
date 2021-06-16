@@ -10,6 +10,7 @@
 - 利用CSRF进行攻击的网站：WebB
 
 流程：
+
 1.用户登录、浏览并信任正规网站WebA，同时，WebA通过用户的验证并在用户的浏览器中产生Cookie。
 ![img](https://i.loli.net/2018/03/19/5aaf72e9147f0.png)
 
@@ -45,10 +46,10 @@
 
 ## 1. 尽量使用POST，限制GET
 
-## 2. 将cookie设置为HttpOnly
+## 2. 将cookie设置为`HttpOnly`
   
-    通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。 
-    在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
+  通过程序（如JavaScript脚本、Applet等）就无法读取到cookie信息，避免了攻击者伪造cookie的情况出现。 
+在Java的Servlet的API中设置cookie为HttpOnly的代码如下：`response.setHeader( "Set-Cookie", "cookiename=cookievalue;HttpOnly");`  
 
 ## 3. 在请求地址中添加tokon验证
 
