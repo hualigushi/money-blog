@@ -1,3 +1,7 @@
+[TOC]
+
+
+
 ## 1.尺寸单位使用rem
 
 ```
@@ -90,82 +94,47 @@ div后面和span前面存在间距，可以设置font-size:0
 
 
 
-## 9.-webkit-overflow-scrolling: touch;
-
-解决移动端滚动卡顿问题
-
-属性控制元素在移动设备上是否使用滚动回弹效果.
-
-auto: 使用普通滚动, 当手指从触摸屏上移开，滚动会立即停止。
-touch: 使用具有回弹效果的滚动,当手指从触摸屏上移开，内容会继续保持一段时间的滚动效果。继续滚动的速度和持续的时间和滚动手势的强烈程度成正比。同时也会创建一个新的堆栈上下文。
-
-原理：该属性开启了硬件加速
-
-缺点：耗内存
-
-引发的bug（仅ios）
-
-    3.1 在设置了该属性的滚动容器内手动设置scrollTop时容器会变空白，（内容绘制出错，应该是浏览器底层的问题）
-    
-    3.2 手动设置scrollTop,某些机型上的scrollTop值改变了，但是页面不滚动
-    
-    3.3 滑动时偶尔卡顿
-
-解决方案
-
-    3.1 & 3.2（规避问题）：在手动改变scrollTop前先将-webkit-overflow-scrolling属性设置为auto,scrollTop改变后再设置回touch
-    
-    3.1: 可先让页面延时100ms再滚动1px,空白可以恢复正常
-    
-    3.2：给容器的某个子元素高度加1px
-    
-    3.3：给容器设置position:static
-&nbsp;
-
-## 10.-webkit-tap-highlight-color
+## 8.-webkit-tap-highlight-color
 
 这个属性只用于iOS (iPhone和iPad)。
 当你点击一个链接或者通过Javascript定义的可点击元素的时候，它就会出现一个半透明的灰色背景。
 要重设这个表现，你可以设置-webkit-tap-highlight-color为任何颜色。
 想要禁用这个高亮，设置颜色的alpha值为0即可。
+
 &nbsp;
 
-## 11.修改输入框placeholder文字默认颜色  ::-webkit-input-placeholder
+## 9.修改输入框placeholder文字默认颜色  ::-webkit-input-placeholder
+&nbsp;
 &nbsp;
 
-## 12.animation-fill-mode
-动画的时间外属性，可设none，forwards，backwards，both。
-默认值none表示动画播完后，恢复到初始状态。
-forwards当动画播完后，保持@keyframes里最后一帧的属性。
-backwards表示开始播动画时，应用@keyframes里第一帧的属性，要看出效果，通常要设animation-delay延迟时间。
-both表示forwards和backforwards都应用。
-&nbsp;
-
-## 13.CSS3 box-pack box-align 属性
+## 10.CSS3 box-pack box-align 属性
 对 div 框的子元素进行居中
 ```css
 <style> 
 div
 {
-width:350px;
-height:100px;
-border:1px solid black;
+    width:350px;
+    height:100px;
+    border:1px solid black;
 
-/* W3C */
-display:box;
-box-pack:center;
-box-align:center;
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
 }
 </style>
 </head>
 <body>
 
 <div>
-<p>我是居中对齐的。</p>
+	<p>我是居中对齐的。</p>
 </div>
 ```
 
-## 14.图片引入 `image-set()`
+
+
+## 11.图片引入 `image-set()`
+
 ```css
 .logo {
     background-image: image-set(url(logo@1x.png);
@@ -174,7 +143,9 @@ box-align:center;
 ```
 根据不同的dpr显示不同的图像
 
-## 15. p 标签不能包含 div
+
+
+## 12. p 标签不能包含 div
 
 p 标签中的内容构成 `Phrasing content`, 如果包含则将div从p中提取出来
 
@@ -188,35 +159,23 @@ address,article,aside,base,blockquote,body,caption,col,colgroup,dd,
   title,tr,track
 ```
 
-## 16. 快速重置表单元素 unset
+
+
+## 13. 快速重置表单元素 unset
+
 `button { all: unset; }`
 
 
-## 17. 改变滚动条样式
-滚动条的组成分为三个部分，滚动条容器 `scrollbar`, 滚筒条轨道 `scrollbar-track`,滚动条滑块 `scrollbar-thumb`
-```css
-div::-webkit-scrollbar {
-  /* 这里的宽是指竖向滚动条的宽，高是指横向滚动条的高*/
-  width: 16px;
-  height: 16px;
-  background: pink;
-}
-div::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background:
-  linear-gradient(red,orange);
-}
-```
 
-## 18. 最后一个 div 不显示下边框
-`div:not(:last-child) /* 匹配非最后一个 div 元素的 div 元素 */`
+## 14. 规定图像展示方式
 
-## 19. 规定图像展示方式
 显示图片的时候会遇到这种问题，对面返回的图片宽高比例是不一样的。但是设置的容器大小是一样的，这个时候需要让图片保持比例最大填充容器。
 
 `object-fit：fill | contain | cover | none | scale-down`
 
-## 20. 模拟input的placeholder
+
+
+## 15. 模拟input的placeholder
 
 思路：利用伪类添加自定义属性 （在input为空并且失焦添加placeholder属性）
 

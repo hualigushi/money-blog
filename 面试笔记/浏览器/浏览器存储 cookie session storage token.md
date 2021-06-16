@@ -192,6 +192,8 @@ token 的认证方式类似于临时的证书签名, 并且是一种服务端无
 
 一般建议： 将登陆信息等重要信息存放为session, 其他信息如果需要保留，可以放在cookie中
 
+
+
 # Token和Session的区别
 
 Session是一种HTTP储存机制， 为无状态的HTTP提供持久机制;
