@@ -10,7 +10,11 @@ React 会自顶向下通过递归，遍历新数据生成新的 Virtual DOM，�
 
 遍历更新队列，通过调用宿主环境的API，实际更新渲染对应元素。宿主环境，比如 DOM、Native、WebGL 等。
 
-在协调阶段阶段，由于是采用的递归的遍历方式，这种也被成为 Stack Reconciler，主要是为了区别 Fiber Reconciler 取的一个名字。这种方式有一个特点：一旦任务开始进行，就无法中断，那么 js 将一直占用主线程， 一直要等到整棵 Virtual DOM 树计算完成之后，才能把执行权交给渲染引擎，那么这就会导致一些用户交互、动画等任务无法立即得到处理，就会有卡顿，非常的影响用户体验。
+在协调阶段阶段，由于是采用的递归的遍历方式，这种也被成为 Stack Reconciler，主要是为了区别 Fiber Reconciler 取的一个名字。
+
+这种方式有一个特点：一旦任务开始进行，就无法中断，那么 js 将一直占用主线程， 一直要等到整棵 Virtual DOM 树计算完成之后，才能把执行权交给渲染引擎，那么这就会导致一些用户交互、动画等任务无法立即得到处理，就会有卡顿，非常的影响用户体验。
+
+
 
 ## Fiber reconciler 优化思路
 
@@ -25,6 +29,22 @@ Fiber reconciler 使用了scheduling(调度)这一过程， 每次只做一个�
 
 
 
-[完全理解React Fiber](http://www.ayqy.net/blog/dive-into-react-fiber/#articleHeader7)
 
-[Deep In React之浅谈 React Fiber 架构](https://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&mid=2651556940&idx=1&sn=d40506db3d4d78da9a94ae6c7dc61af6&chksm=80255b8db752d29bbb8edc79eb40ce4122f3fddca121a53a5c3f859259cf4b1d7402ff676a84&scene=21#wechat_redirect)
+
+
+## React Fiber
+
+### 背景
+
+- 大量的同步计算任务阻塞了浏览器UI渲染，默认情况下JS运算，页面布局，和页面绘制都是运行在浏览器的主线程中
+- 假如JS元算持续占用主线程，页面就没办法得到及时的更新，使用setSate更新页面的时候，React会遍历所有的节点，与旧的dom节点惊醒diff算法对比，最小的代价更新页面，整个过程是不能被打断的，假如页面元素很多，整个过程的占用时间可能超过16毫秒，会出现掉帧的现象
+
+### 解决思路
+
+将运算切割为多个步骤，分批完成，在完成一部分任务后，将控制权交还给浏览器，让浏览器有时间对页面进行渲染 旧版的react通过递归的方式进行渲染，使用JS自身的函数调用栈，他会执行到栈空为止 Fiber实现了自己的组件调用栈，它以链表的形式遍历组件树，可以灵活的暂停、继续、丢弃执行的任务，实现的方式就是使用了浏览器的requestldleCallback 这个API
+
+### Fiber是一个执行单元
+
+每次执行完一个执行单元，React就会检查还剩下多少时间，如果没有时间就把控制权让出去
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c453035c37964453bc2c6d94a1005a45~tplv-k3u1fbpfcp-watermark.image)

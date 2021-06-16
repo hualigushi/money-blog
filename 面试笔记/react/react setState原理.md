@@ -104,3 +104,25 @@ lass Com extends React.Component{
 
 1. setState可能会引发不必要的渲染(renders)
 2. setState无法完全掌控应用中所有组件的状态
+
+
+
+
+
+当setState被调用时，新的state会进入一个状态队列，相同的操作被合并，这里的合并可以理解成是React做了一次浅拷贝合成的新值，
+
+```
+Object.assign(
+    previousState,
+    {count : state.count + 1},
+    {count : state.count + 1}
+)
+```
+
+之后调用**enqueueUpdate**方法决定是否采用批量更新方式更新组件，判断条件是**isBatchingUpdates**。
+ setState 并非真异步，只是看上去像异步。在源码中，通过 isBatchingUpdates 来判断 setState 是先存进 state 队列还是直接更新，如果值为 true 则执行异步操作，为 false 则直接更新。
+ 场景
+在 React 可以控制的地方，就为 true，比如在 React 生命周期事件和合成事件中，都会走合并操作，延迟更新的策略。 
+
+但在 React 无法控制的地方，比如原生事件，具体就是在 addEventListener、setTimeout、setInterval 等事件中，就只能同步更新。
+

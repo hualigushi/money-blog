@@ -1,0 +1,1 @@
+1. 写一个事件 Event 类，实现 on，off，emit，once 功能，同时 on 要支持 debounce。eg：on('click',function(){},500)
