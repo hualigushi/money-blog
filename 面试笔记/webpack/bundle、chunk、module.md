@@ -1,0 +1,3 @@
+- bundle是指webpack打包出来的文件
+- chunk是指webpack进行模块依赖分析的时候，代码分隔出来的代码块
+- module是开发中的单个模块

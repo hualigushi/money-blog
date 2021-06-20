@@ -87,8 +87,8 @@ SameSite 属性可以让 Cookie 在跨站请求时不会被发送，从而可以
 SameSite 可以有下面三种值：
 
 1. **Strict** 仅允许一方请求携带 Cookie，即浏览器将只发送相同站点请求的 Cookie，即当前网页 URL 与请求目标 URL 完全一致。
-2. **Lax** 允许部分第三方请求携带 Cookie
-3. **None** 无论是否跨站都会发送 Cookie
+2. **Lax** 大多数情况禁止第三方cookie，但是导航到目标网址的get请求除外（例如a标签，预加载请求，get表单）
+3. **None** 无论是否跨站都会发送 Cookie , 但必须设置`secure`才能生效
 
 之前默认是 None 的，Chrome80 后默认是 Lax。
 

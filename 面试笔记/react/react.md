@@ -17,3 +17,25 @@ getDriverStateFromProps替代componentWillReceiveProps，加上逻辑对比上�
 # componentWillReceiveProps的触发条件是什么
 
 [参考答案] componentWillReceiveProps会在接收到新的props的时候调用
+
+
+
+
+
+### 为什么使用jsx的组件中没有看到使用react却需要引入react？
+
+本质上来说JSX是`React.createElement(component, props, ...children)`方法的语法糖。在React 17之前，如果使用了JSX，其实就是在使用React， `babel` 会把组件转换为 `CreateElement` 形式。在React 17之后，就不再需要引入，因为 `babel` 已经可以帮我们自动引入react。
+
+
+
+
+
+### React.Children.map和js的map有什么区别？
+
+JavaScript中的map不会对为null或者undefined的数据进行处理，而React.Children.map中的map可以处理React.Children为null或者undefined的情况。
+
+
+作者：CUGGZ
+链接：https://juejin.cn/post/6940942549305524238
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

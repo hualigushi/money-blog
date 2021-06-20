@@ -48,3 +48,38 @@ Fiber reconciler 使用了scheduling(调度)这一过程， 每次只做一个�
 每次执行完一个执行单元，React就会检查还剩下多少时间，如果没有时间就把控制权让出去
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c453035c37964453bc2c6d94a1005a45~tplv-k3u1fbpfcp-watermark.image)
+
+## 任务拆分
+
+Fiber拆分的单位是按照虚拟dom节点来拆，因为fiber tree是根据虚拟dom来构造出来的
+
+## 任务暂停
+
+Fiber利用浏览器的api`requestIdleCallback`来让浏览器空闲的时候执行某种任务
+
+```
+function fiber(剩余时间) {
+ if (剩余时间 > 任务所需时间) {
+ 做任务;
+ } else {
+ requestIdleCallback(fiber);
+ }
+}
+复制代码
+```
+
+使用`requestAnimationFrame`来渲染动画
+
+## 优先级
+
+```
+{ 
+ Synchronous: 1, // 同步任务，优先级最高
+ Task: 2, // 当前调度正执行的任务
+ Animation 3, // 动画
+ High: 4, // 高优先级
+ Low: 5, // 低优先级
+ Offscreen: 6, // 当前屏幕外的更新，优先级最低
+}
+```
+
