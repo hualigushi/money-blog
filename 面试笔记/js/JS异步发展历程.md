@@ -1,3 +1,7 @@
+[TOC]
+
+
+
 # 1. 回调函数callback
 
 优点：解决了异步的问题。
@@ -55,79 +59,5 @@ async是es2017引入的异步操作解决方案，可以理解为Generator的语
 
 
 
-### babel实现async/await
 
-```
-async function t() {
-    const x = await getResult();
-  	const y = await getResult2();
-  	return x + y;
-}
-```
-
-babel转化代码
-
-```
-"use strict";
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-        var info = gen[key](arg);
-        var value = info.value;
-    } catch (error) {
-        reject(error);
-        return;
-    }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
-}
-
-function _asyncToGenerator(fn) {
-    return function () {
-        var self = this, args = arguments;
-        return new Promise(function (resolve, reject) {
-            var gen = fn.apply(self, args);
-            function _next(value) {
-                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-            }
-            function _throw(err) {
-                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-            }
-            _next(undefined);
-        });
-    };
-}
-
-function t() {
-  return _t.apply(this, arguments);
-}
-
-function _t() {
-  _t = _asyncToGenerator(function* () {
-    const x = yield getResult();
-    const y = yield getResult2();
-    return x + y;
-  });
-  return _t.apply(this, arguments);
-}
-```
-
-从代码中可以看出，babel将一个generator转化为async用了两步`_asyncToGenerator`和`asyncGeneratorStep`。
-
-#### `_asyncToGenerator`干了什么
-
-1、调用`_asyncToGenerator`返回了一个promise，刚好符合async函数可以接then的特性。
-
-2、定义了一个成功的方法`_next`，定义了一个失败的方法`_throw`。两个函数中是调用`asyncGeneratorStep`。看完`asyncGeneratorStep`就知道这其实是一个递归。
-
-3、执行`_next`。也就是上面说的自执行的generator。
-
-#### `asyncGeneratorStep`干了什么
-
-1. try-catch去捕获generator执行过程中的错误。如果有报错，async函数直接是reject状态。
-
-2. 判断info中的done值，是否为true，为true就代表迭代器已经执行完毕了，可以将value值resolve出去。反之，则继续调用`_next`将值传递到下一个去。
 
