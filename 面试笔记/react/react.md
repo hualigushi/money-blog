@@ -33,9 +33,3 @@ getDriverStateFromProps替代componentWillReceiveProps，加上逻辑对比上�
 ### React.Children.map和js的map有什么区别？
 
 JavaScript中的map不会对为null或者undefined的数据进行处理，而React.Children.map中的map可以处理React.Children为null或者undefined的情况。
-
-
-作者：CUGGZ
-链接：https://juejin.cn/post/6940942549305524238
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

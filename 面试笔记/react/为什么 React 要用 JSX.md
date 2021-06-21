@@ -16,7 +16,6 @@ ReactDOM.render(
   React.createElement(Hello, {toWhat: 'World'}, null),
   document.getElementById('root')
 );
-复制代码
 ```
 
 而 JSX 更像是一种语法糖，通过类似 XML 的描述方式，描写函数对象。在采用 JSX 之后，这段代码会这样写：
@@ -31,7 +30,6 @@ ReactDOM.render(
   <Hello toWhat="World" />,
   document.getElementById('root')
 );
-复制代码
 ```
 
 通过对比，可以清晰地发现，代码变得更为简洁，而且代码结构层次更为清晰。
@@ -44,5 +42,3 @@ ReactDOM.render(
 
 React 团队并不想引入 JavaScript 本身以外的开发体系。而是希望通过合理的关注点分离保持组件开发的纯粹性。
 
-
- 

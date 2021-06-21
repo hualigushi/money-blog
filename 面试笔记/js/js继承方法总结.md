@@ -1,4 +1,9 @@
+[TOC]
+
+
+
 # 1. 继承分类
+
 先来个整体印象。如图所示，JS中继承可以按照是否使用object函数（在下文中会提到），将继承分成两部分（Object.create是ES5新增的方法，用来规范化这个函数）。
 
 其中，原型链继承和原型式继承有一样的优缺点，构造函数继承与寄生式继承也相互对应。寄生组合继承基于Object.create, 同时优化了组合继承，成为了完美的继承方式。
@@ -23,6 +28,8 @@ SubType.prototype.constructor = SubType;
   - 父类的引用属性会被所有子类实例共享
   - 子类构建实例时不能向父类传递参数
 
+
+
  ## 2.2 构造函数继承
 
 核心：将父类构造函数的内容复制给了子类的构造函数。这是所有继承中唯一一个不涉及到prototype的继承。
@@ -35,6 +42,8 @@ SubType.prototype.constructor = SubType;
   - 子类构建实例时可以向父类传递参数
 
 缺点：父类的方法不能复用，子类实例的方法每次都是单独创建的。
+
+
 
 ## 2.3 组合继承
 
@@ -64,6 +73,8 @@ SubType.prototype = new SuperType() // 第一次调用SuperType
 缺点：
 
 调用了两次父类的构造函数，第一次给子类的原型添加了父类的name, arr属性，第二次又给子类的构造函数添加了父类的name, arr属性，从而覆盖了子类原型中的同名参数。这种被覆盖的情况造成了性能上的浪费。
+
+
 
 ## 2.4 原型式继承
 
@@ -101,6 +112,8 @@ alert(person.friends);   //"Shelby,Court,Van,Rob,Barbie"
 
 `var yetAnotherPerson = object(person); => var yetAnotherPerson = Object.create(person);`
 
+
+
 ## 2.5 寄生式继承
 
 核心：使用原型式继承获得一个目标对象的浅复制，然后增强这个浅复制的能力。
@@ -123,6 +136,8 @@ var person = {
 var anotherPerson = createAnother(person);
 anotherPerson.sayHi(); //"hi"
 ```
+
+
 
 ## 2.6 寄生组合继承
 
@@ -154,6 +169,8 @@ SubType.prototype.sayAge = function(){
 }
 ```
 优缺点：这是一种完美的继承方式。
+
+
 
 ## 2.7 ES6 Class extends
 
@@ -198,5 +215,3 @@ ES6继承与ES5继承的异同：
 
   - ES6继承中子类的构造函数的原型链指向父类的构造函数，ES5中使用的是构造函数复制，没有原型链指向。
   - ES6子类实例的构建，基于父类实例，ES5中不是。
-
-[「JavaScript」js中的继承方法总结](https://segmentfault.com/a/1190000015324440)

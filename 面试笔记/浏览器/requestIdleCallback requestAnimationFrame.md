@@ -50,6 +50,8 @@ var handle = window.requestIdleCallback(callback[, options])
 
 与 `setTimeout` 类似，返回一个唯一 id，可通过 `cancelIdleCallback` 来取消任务。
 
+
+
 ### 总结
 
 一些低优先级的任务可使用 `requestIdleCallback` 等浏览器不忙的时候来执行，同时因为时间有限，它所执行的任务应该尽量是能够量化，细分的微任务（micro task）。
