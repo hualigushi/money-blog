@@ -1,5 +1,7 @@
 # Loader
 
+模块转换器，将非js模块转化为webpack能识别的模块
+
 `Loader` 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。 因为 Webpack 只认识 JavaScript，所以 Loader 就成了翻译官，对其他类型的资源进行转译的预处理工作。
 
 `Loader` 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
@@ -21,3 +23,22 @@
  在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。
 
 在`plugins`中单独配置。 类型为数组，每一项是一个`plugin`的实例，参数都通过构造函数传入。
+
+
+
+ ```js
+ const pluginName = 'ConsoleLogOnBuildWebpackPlugin';
+ 
+ class ConsoleLogOnBuildWebpackPlugin {
+   apply(compiler) {
+     compiler.hooks.run.tap(pluginName, compilation => {
+       console.log('webpack 构建过程开始！');
+     });
+   }
+ }
+ 
+ module.exports = ConsoleLogOnBuildWebpackPlugin;
+ ```
+
+**webpack 插件是一个具有 apply方法的 JavaScript 对象。apply 方法会被 webpack compiler 调用，并且在整个编译生命周期都可以访问 compiler 对象。**
+

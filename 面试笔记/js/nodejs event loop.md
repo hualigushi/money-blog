@@ -7,6 +7,8 @@
  - 在回调中执行长时间任务会被阻塞
  - 在每次运行的事件循环之间，Node.js 检查它是否在等待任何异步 I/O 或计时器，如果没有的话，则关闭干净, 事件循环就结束了
 
+
+
  ## Event Loop 各阶段说明
 
   - timers 阶段：执行已经准备好的 setTimeout、setInterval 回调。
@@ -15,6 +17,8 @@
   - poll 阶段：取出新的 I/O 事件回调执行，除close 事件、setImmediate、timers 回调， node 程序将在这个阶段阻塞。
   - check 阶段：setImmediate() 将在这个阶段调用。
   - close callbacks 阶段：close 事件的回调将在这执行，如 socket.on('close', ...)
+
+
 
 ## setTimeout() 与 setImmediate() 对比
 
@@ -35,6 +39,8 @@ fs.readFile(__filename, () => {
   });
 });
 ```
+
+
 
 ## 理解 process.nextTick()
 
@@ -101,6 +107,8 @@ myEmitter.on('event', () => {
   console.log('an event occurred!');
 });
 ```
+
+
 
 ## process.nextTick() 与 setImmediate() 对比
 

@@ -23,3 +23,13 @@ rxjs
 
 [Alibaba Cloud Alfa](企业级的微前端解决方案)
 
+[AST Explorer](https://astexplorer.net/)
+
+[ dot-dom](https://github.com/wavesoft/dot-dom)  A tiny (512 byte) virtual DOM template engine for embedded projects
+
+ [**[ fastify](https://github.com/fastify/fastify)**]  Fast and low overhead web framework, for Node.js
+
+**[ polymer](https://github.com/Polymer/polymer)**  Our original Web Component library
+
+**[ workbox](https://github.com/GoogleChrome/workbox)**   JavaScript libraries for Progressive Web Apps
+
