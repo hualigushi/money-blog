@@ -24,3 +24,5 @@ rxjs
 [Alibaba Cloud Alfa](企业级的微前端解决方案)
 
 [CSS3剪贴路径（Clip-path）在线生成器工具](http://tools.jb51.net/code/css3path)
+
+[CSS3剪贴路径（Clip-path）在线生成器工具2](https://css-tricks.com/almanac/properties/c/clip-path/)
