@@ -1,6 +1,3 @@
-
-
-
 前端数据校验 schema-typed
 
 内存文件系统 memory-fs
@@ -33,3 +30,6 @@ rxjs
 
 **[ workbox](https://github.com/GoogleChrome/workbox)**   JavaScript libraries for Progressive Web Apps
 
+[CSS3剪贴路径（Clip-path）在线生成器工具](http://tools.jb51.net/code/css3path)
+
+[CSS3剪贴路径（Clip-path）在线生成器工具2](https://css-tricks.com/almanac/properties/c/clip-path/)
