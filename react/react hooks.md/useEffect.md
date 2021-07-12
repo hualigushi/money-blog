@@ -17,7 +17,10 @@ function Counter() {
 由于 useEffect 符合 Capture Value 的特性，拿到的 count 值永远是初始化的 0。
 **相当于 setInterval 永远在 count 为 0 的 Scope 中执行，后续的 setCount 操作并不会产生任何作用。**
 
+
+
 ## 2
+
 ```js
 useEffect(() => {
   const id = setInterval(() => {
@@ -33,8 +36,11 @@ useEffect(() => {
  - 计时器不准了，因为每次 count 变化时都会销毁并重新计时。
 
  - 频繁 生成/销毁 定时器带来了一定性能负担。
- 
+
+
+
  ## 3 在一个只想执行一次的 Effect 里依赖了外部变量,想办法不依赖外部变量
+
  ```js
  useEffect(() => {
   const id = setInterval(() => {
@@ -42,12 +48,15 @@ useEffect(() => {
   }, 1000);
   return () => clearInterval(id);
 }, []);
-```
+ ```
 setCount 还有一种函数回调模式，不需要关心当前值是什么，只要对 “旧的值” 进行修改即可。
 
 这样虽然代码永远运行在第一次 Render 中，但总是可以访问到最新的 state。
 
+
+
 ## 4 将更新与动作解耦
+
 利用 useEffect 的兄弟 useReducer 函数，将更新与动作解耦就可以了
 ```js
 const [state, dispatch] = useReducer(reducer, initialState);
@@ -64,7 +73,10 @@ useEffect(() => {
 
 **所以不管更新时需要依赖多少变量，在调用更新的动作里都不需要依赖任何变量。**
 
+
+
 ## 5 useCallback
+
 ```js
 function Parent() {
   const [query, setQuery] = useState("react");
@@ -95,6 +107,8 @@ useCallback 做的事情，就是在其依赖变化时，返回一个新的函�
 利用 useCallback 封装的取数函数，可以直接作为依赖传入 useEffect，
 
 **useEffect 只要关心取数函数是否变化，而取数参数的变化在 useCallback 时关心，再配合 eslint 插件的扫描，能做到 依赖不丢、逻辑内聚，从而容易维护。**
+
+
 
 ## 6 useEffect 优势
 

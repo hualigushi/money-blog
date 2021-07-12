@@ -33,3 +33,16 @@ rxjs
 [CSS3剪贴路径（Clip-path）在线生成器工具](http://tools.jb51.net/code/css3path)
 
 [CSS3剪贴路径（Clip-path）在线生成器工具2](https://css-tricks.com/almanac/properties/c/clip-path/)
+
+[Cytoscape.js]: https://js.cytoscape.org/
+
+这个用于可视化和图形分析的开源 JavaScript 库实现了丰富的交互功能。选择方形区域、平移、捏拉缩放等功能都是开箱即用。
+
+Cytoscape 可以用于 Node.js 服务端环境完成图形分析任务，也可以在命令行下使用。有兴趣转向数据科学的开发者可以选择参与 Cytoscape 的开发，它的贡献指南和文档都很棒。
+
+[SheetJS]: https://sheetjs.com/
+
+这个 Node.js 库可以处理 Excel 电子表格，以及其他相关功能。比如，导出表格、转换 HTML 表格和 JSON 数组为 xlsx 文件。
+
+
+svelte

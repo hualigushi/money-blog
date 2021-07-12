@@ -46,6 +46,7 @@ module.exports = {
 
    ```js
    loader1.js
+   
    module.exports = function (content, map, meta) {
        console.log('111');
        return content
@@ -57,6 +58,7 @@ module.exports = {
    }
    
    loader2.js
+   
    module.exports = function (content, map, meta) {
        console.log('222');
        return content
@@ -67,6 +69,7 @@ module.exports = {
    }
    
    loader3.js
+   
    module.exports = function (content, map, meta) {
        console.log('333');
        return content
@@ -100,6 +103,28 @@ module.exports = {
 
 
 
+pitch 方法共有三个参数：
+
+1. **remainingRequest**：loader 链中排在自己后面的 loader 以及资源文件的**绝对路径**以`!`作为连接符组成的字符串。
+2. **precedingRequest**：loader 链中排在自己前面的 loader 的**绝对路径**以`!`作为连接符组成的字符串。
+3. **data**：每个 loader 中存放在上下文中的固定字段，可用于 pitch 给 loader 传递数据。
+
+在 pitch 中传给 data 的数据，在后续的调用执行阶段，是可以在 `this.data` 中获取到的：
+
+```javascript
+module.exports = function (content) {
+  return someSyncOperation(content, this.data.value);// 这里的 this.data.value === 42
+};
+
+module.exports.pitch = function (remainingRequest, precedingRequest, data) {
+  data.value = 42;
+};
+```
+
+
+
+ 
+
 ## 同步loader
 
 ```js
@@ -110,18 +135,23 @@ module.exports = function (content, map, meta) {
   return content;
 }
 // 方式二
-module.exports = function (content, map, meta) {
-  console.log(111);
- 
-  // 第一个参数：有没有错误
-  //  二       处理的文件内容
-  //  三       可选
-  //  四       可选
-  this.callback(null, content, map, meta);
-  
-  // 没有返回值
+ /** this.callback(
+      err: Error | null, // 一个无法正常编译时的 Error 或者 直接给个 null
+      content: string | Buffer,// 我们处理后返回的内容 可以是 string 或者 Buffer（）
+      sourceMap?: SourceMap, // 可选 可以是一个被正常解析的 source map
+      meta?: any // 可选 可以是任何东西，比如一个公用的 AST 语法树
+    ); **/
+module.exports = function (content) {
+  // 获取到用户传给当前 loader 的参数
+  const options = this.getOptions()
+  const res = someSyncOperation(content, options)
+  this.callback(null, res, sourceMaps);
+  // 注意这里由于使用了 this.callback 直接 return 就行
+  return
 }
 ```
+
+> 从 webpack 5 开始，this.getOptions 可以获取到 loader 上下文对象。它用来替代来自[loader-utils](https://github.com/webpack/loader-utils#getoptions)中的 getOptions 方法。
 
 
 
@@ -129,16 +159,30 @@ module.exports = function (content, map, meta) {
 
 ```js
 // 异步loader（推荐使用，loader在异步加载的过程中可以执行其余的步骤）
-module.exports = function (content, map, meta) {
-  console.log(222);
 
-  const callback = this.async();
-
-  setTimeout(() => {
-    // 一定要等到callback调用，后面代码才会执行
-    callback(null, content);
-  }, 1000)
+module.exports = function (content) {
+  var callback = this.async()
+  someAsyncOperation(content, function (err, result) {
+    if (err) return callback(err)
+    callback(null, result, sourceMaps, meta)
+  })
 }
+```
+
+
+
+## "Raw" loader
+
+默认情况下，资源文件会被转化为 UTF-8 字符串，然后传给 loader。通过设置 raw 为 true，loader 可以接收原始的 Buffer。每一个 loader 都可以用 String 或者 Buffer 的形式传递它的处理结果。complier 将会把它们在 loader 之间相互转换。大家熟悉的 file-loader 就是用了这个。 **简而言之**：你加上 `module.exports.raw = true;` 传给你的就是 Buffer 了，处理返回的类型也并非一定要是 Buffer，webpack 并没有限制。
+
+
+```javascript
+module.exports = function (content) {
+  console.log(content instanceof Buffer); // true
+  return doSomeOperation(content)
+}
+// 划重点↓
+module.exports.raw = true;
 ```
 
 
@@ -320,6 +364,15 @@ class0610 jack 18
 end~~~
 ```
 
+
+
+ ## Compiler and Compilation
+
+`compiler` 对象可以理解为一个和 webpack 环境整体绑定的一个对象，它包含了所有的环境配置，包括 options，loader 和 plugin，当 webpack **启动**时，这个对象会被实例化，并且他是**全局唯一**的，上面我们说到的 `apply` 方法传入的参数就是它。
+
+`compilation` 在每次构建资源的过程中都会被创建出来，一个 compilation 对象表现了当前的模块资源、编译生成资源、变化的文件、以及被跟踪依赖的状态信息。它同样也提供了很多的 hook 。
+
+
  
 
 ## compiler的hooks使用
@@ -391,6 +444,7 @@ module.exports = {
 tapAsync 和 tapPromise表示异步
 
 
+
  ##  compilation钩子
 
 ```javascript
@@ -457,6 +511,8 @@ class Plugin2 {
 
 module.exports = Plugin2;
 ```
+
+
 
 ## 自定义CopyWebpackPlugin
 
