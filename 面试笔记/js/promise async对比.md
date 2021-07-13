@@ -1,7 +1,11 @@
+[TOC]
+
+
+
 ## 1. Async/Await让try/catch可以同时处理同步和异步错误
 
 在下面的promise示例中，try/catch不能处理JSON.parse的错误，因为它在Promise中。我们需要使用.catch
-```
+```javascript
 const makeRequest = () => {
   try {
     getJSON()
@@ -21,7 +25,7 @@ const makeRequest = () => {
 ```
 
 使用aync/await的话，catch能处理JSON.parse错误:
-```
+```js
 const makeRequest = async () => {
   try {
     // this parse may fail
@@ -33,10 +37,12 @@ const makeRequest = async () => {
 }
 ```
 
+
+
 ## 2. 条件语句
 
 下面示例中，需要获取数据，然后根据返回数据决定是直接返回，还是继续获取更多的数据。
-```
+```js
 const makeRequest = () => {
   return getJSON()
     .then(data => {
@@ -55,7 +61,7 @@ const makeRequest = () => {
 这些代码看着就头痛。嵌套（6层），括号，return语句很容易让人感到迷茫，而它们只是需要将最终结果传递到最外层的Promise。
 ```
 上面的代码使用async/await编写可以大大地提高可读性:
-```
+```js
 const makeRequest = async () => {
   const data = await getJSON()
   if (data.needsAnotherRequest) {
@@ -68,9 +74,12 @@ const makeRequest = async () => {
   }
 }
 ```
+
+
 ## 3. 中间值
+
 你很可能遇到过这样的场景，调用promise1，使用promise1返回的结果去调用promise2，然后使用两者的结果去调用promise3。你的代码很可能是这样的:
-```
+```javascript
 const makeRequest = () => {
   return promise1()
     .then(value1 => {
@@ -82,7 +91,7 @@ const makeRequest = () => {
 }
 ```
 如果promise3不需要value1，可以很简单地将promise嵌套铺平。如果你忍受不了嵌套，你可以将value 1 & 2 放进Promise.all来避免深层嵌套：
-```
+```javascript
 const makeRequest = () => {
   return promise1()
     .then(value1 => {
@@ -128,7 +137,7 @@ makeRequest()
 Promise链中返回的错误栈没有给出错误发生位置的线索。更糟糕的是，它会误导我们；错误栈中唯一的函数名为callAPromise，然而它和错误没有关系。(文件名和行号还是有用的)。
 
 然而，async/await中的错误栈会指向错误所在的函数:
-```
+```javascript
 const makeRequest = async () => {
   await callAPromise()
   await callAPromise()

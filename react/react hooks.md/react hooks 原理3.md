@@ -1,4 +1,4 @@
-人来了之后，我做了第一次技术分析。没别的，先把React Hooks原理搞懂。
+React Hooks原理
 
 - 函数组件执行函数
   - 执行函数组件 `renderWithHooks`
@@ -17,38 +17,9 @@
   - 通过 `updateMemo` 判断 `deps`，获取or更新缓存值
   - 通过 `update` 获取 `ref` 对象
 
-**先举个栗子：**
 
-```js
-import {useState,useEffect,memo} from 'react';
 
-const Com = React.memo(({name})=><div>{name}</div>)
-
-function App(){
-    const [ num , setNumber ] = useState(0);
-    const [ name , setName ] = useState('小白');
-    const handerClick=()=>{
-        for(let i=0; i<5;i++ ){
-           setTimeout(() => {
-                setNumber(num+1)
-                console.log(num)
-           }, 1000)
-        }
-    }
-    
-    useEffect(()=>{
-        setName(num % 2 ? '小白' : '小小白')
-    },[num])
-    return <div>
-        <Com name={name}/>
-        <button onClick={ handerClick } >{ num }</button>
-    </div>
-}
-
-复制代码
-```
-
-### Q1：当你使用了hooks（ 例如 useState）时，发生了什么？**
+### Q1：当你使用了hooks（ 例如 useState）时，发生了什么？
 
 我们去看 `useState` 的源码：` react/src/ReactHooks.js`
 
@@ -57,27 +28,28 @@ export function useState(initialState){
   const dispatcher = resolveDispatcher(); // 1
   return dispatcher.useState(initialState);
 }
-
-复制代码
 ```
 
-噢，`useState(initialState)` 等价于 `dispatcher.useState(initialState)`。 `dispatcher` 从中文意思上是 **调度员** 的意思。 也就是说你调用 `useState` 的时候只是通知了**调度员**去调度真正的 `useState`。
+`useState(initialState)` 等价于 `dispatcher.useState(initialState)`。
+
+ `dispatcher` 从中文意思上是 **调度员** 的意思。 也就是说你调用 `useState` 的时候只是通知了**调度员**去调度真正的 `useState`。
+
+
 
 ### Q2: 那**调度员** `dispatcher` 又是什么？
-
-看源码。
 
 ```js
 function resolveDispatcher() {
   const dispatcher = ReactCurrentDispatcher.current
   return dispatcher
 }
-复制代码
 ```
 
-噢，`dispatcher` 是从 `ReactCurrentDispatcher` 身上来。我们来把这个此分析一下，react 当前的（current）调度员（Dispatcher）。
+`dispatcher` 是从 `ReactCurrentDispatcher` 身上来。我们来把这个此分析一下，react 当前的（current）调度员（Dispatcher）。
 
 也就是说，到这里 `Dispatcher` 就已经安排好了。
+
+
 
 ### Q3: 函数组件是什么时候被调用的？
 
@@ -87,7 +59,9 @@ function resolveDispatcher() {
 - `Reconciler` (协调层)：构建 Fiber 数据结构，比对 Fiber 对象找出差异, 记录 Fiber 对象要进行的 DOM 操作
 - `Renderer` (渲染层)：负责将发生变化的部分渲染到页面上
 
-我们知道 `render` 一个组件 首先要构建 组件的 `Fiber 链表`。所以我们来看协调层的源码：`react-reconciler/src/ReactFiberBeginWork.js`
+我们知道 `render` 一个组件 首先要构建 组件的 `Fiber 链表`。
+
+所以我们来看协调层的源码：`react-reconciler/src/ReactFiberBeginWork.js`
 
 ```js
 renderWithHooks(
@@ -109,7 +83,6 @@ renderWithHooks(
     context,             // 上下文
     renderExpirationTime,// 渲染 ExpirationTime
 );
-复制代码
 ```
 
 我们先看 `renderWithHooks` 几个我们我们最熟悉的参数。`Component` 是函数本身，`props` 是我们传给函数组件的信息，`context` 代表当前的上下文。
@@ -154,19 +127,17 @@ function renderWithHooks(
 
   return children; // end
 }
-
-复制代码
 ```
 
-噢，`renderWithHooks` 的返回值是 children， 而 `children = Component(props, secondArg);`
+`renderWithHooks` 的返回值是 children， 而 `children = Component(props, secondArg);`
 
-破案了，我们的函数组件就是在 `renderWithHooks` 被调用且最终 `return` 回来。
+我们的函数组件就是在 `renderWithHooks` 被调用且最终 `return` 回来。
 
 我们再回到 3 ，`ReactCurrentDispatcher.current` 是不是前面没解释清楚的 **调度员** 的归宿？！ 解释一下这行代码： 当 `current` 为 `null` 或者 `current` 的 `memoizedState` 属性为 `null` 就把 `HooksDispatcherOnMount` 赋值给我们的**调度员**， 否则就把`HooksDispatcherOnUpdate` 赋值给我们的**调度员**。
 
 从这两名称上又能看出个大概来，一个是 `Mount` 的 调度员，一个是 `Update` 的调度员。那也就是说，初始化 `hooks` 的时候就是 `Mount` 调度员，要更新的时候就是 `Update` 调度员？！
 
-ok，案子到这算是破了80%了。
+
 
 ### Q4: workInProgress 是什么，workInProgress.memoizedState又是什么？
 
@@ -179,9 +150,9 @@ ok，案子到这算是破了80%了。
 - 使用 **`useMemo`** ， 保存`缓存的值`和 `deps`
 - 使用 **`useRef`** ， 保存 `ref` 对象。
 
-也就是说，workInProgress.memoizedState 存放的是 我们所使用的hooks 的信息。
+也就是说，`workInProgress.memoizedState` 存放的是 我们所使用的hooks 的信息。
 
-这里的 `workInProgress.updateQueue` 后面再提。
+
 
 ### Q5: 调用 `useState` 的时候发生了什么。
 
@@ -213,11 +184,9 @@ function mountState(
   )))
   return [hook.memoizedState, dispatch];
 }
-
-复制代码
 ```
 
-噢，这个代码明显要更容易分析一些。
+
 
 1. 先拿到 hook 的信息 也就是 `const hook = mountWorkInProgressHook();`
 2. 对入参 `initialState` 进行判别。接着将 `initialState` 赋值给 `hook.memoizedState` 和 `hook.baseState`
@@ -227,8 +196,9 @@ function mountState(
 
 ```js
 const [x,setX] = useState(initialState);
-复制代码
 ```
+
+
 
 #### 那 dispatchAction 又是什么？
 
@@ -238,12 +208,13 @@ function dispatchAction<S, A>(
   queue: UpdateQueue<S, A>,
   action: A,
 )
-复制代码
 ```
 
 对照上述代码，**S 代表 什么？ A 代表什么**？
 
 `setX` 就是调用了 `dispatchAction` 吧？  源码中显示 `dispatchAction` 已经有了 `currentlyRenderingFiber`, `queue` 两个参数了，那 `setX` 传入的参数应该就是第三个参数 `action` 了吧？
+
+
 
 ### Q6: `dispatchAction` 到底干了什么？
 
@@ -284,13 +255,11 @@ function dispatchAction(fiber, queue, action) {
     scheduleUpdateOnFiber(fiber, expirationTime);
   }
 }
-
-复制代码
 ```
 
-### Q7: Fiber 又是什么？ Fiber 链表又是什么？
 
-唉，大致看看Fiber对象上有哪些属性吧。
+
+### Q7: Fiber 又是什么？ Fiber 链表又是什么？
 
 ```js
 type Fiber = {
@@ -348,7 +317,6 @@ type Fiber = {
     // 当前组件及子组件处于何种渲染模式 详见 TypeOfMode
   mode: TypeOfMode,
 };
-复制代码
 ```
 
 **在 React 16 中，将整个任务拆分成了一个一个小的任务进行处理，每一个小的任务指的就是一个 Fiber 节点的构建。**
@@ -363,7 +331,7 @@ type Fiber = {
 - `子级节点`是谁，要知道他的
 - `下一个兄弟节点`是谁。
 
-上面已经把Fiber 对象 身上挂的属性挪列很详细了。**需要你去瞅瞅**。
+
 
 当所有DOM的Fiber对象生成完毕，那需要执行DOM操作的Fiber就会构建出Fiber链表。至于构建Fiber 链表的原理是什么，如下代码（**不是源码，只是为了看得更清晰，手动写了一波。希望你有空也手动写一遍**）：
 
@@ -511,7 +479,3 @@ requestIdleCallback(workLoop)
 ```
 
 
-作者：是渣男吧
-链接：https://juejin.cn/post/6982755396976902158
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

@@ -1,4 +1,4 @@
-```
+```javascript
 const ajaxPromise =  param => {
   return new Promise((resovle, reject) => {
     var xhr = new XMLHttpRequest();
@@ -19,3 +19,4 @@ const ajaxPromise =  param => {
   })
 }
 ```
+
