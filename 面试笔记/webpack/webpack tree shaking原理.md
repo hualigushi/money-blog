@@ -1,5 +1,7 @@
-### js ------tree-shaking
+# js ------tree-shaking
 tree-shaking的消除原理是依赖于ES6的模块特性,来分析js文件的import和export，把未引用代码(dead code)剔除掉。
+
+tree shaking只能在静态modules下工作。ECMAScript 6 模块加载是静态的,因此整个依赖树可以被静态地推导出解析语法树。
 
 ES6 module 特点：
 
@@ -10,7 +12,13 @@ ES6 module 特点：
 
 ES6模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，这就是tree-shaking的基础
 
-### css ------tree-shaking
+### tree shaking的原理
+
+ES6 Module引入进行静态分析，故而编译的时候正确判断到底加载了那些模块
+
+静态分析程序流，判断那些模块和变量未被使用或者引用，进而删除对应代码
+
+# css ------tree-shaking
 
 css的tree-shaking就是遍历选择器然后与dom结构的选择器和js中匹配，从而去除没有用到的样式代码。
 
@@ -20,11 +28,11 @@ css的tree-shaking就是遍历选择器然后与dom结构的选择器和js中匹
 
 PostCSS 提供了一个解析器，它能够将 CSS 解析成AST抽象语法树。然后我们能写各种插件，对抽象语法树做处理，最终生成新的css文件，以达到对css进行精确修改的目的。
 
-### 失效原因 --- 副作用
+# 失效原因 --- 副作用
 
 Babel--由于它的编译，一些原本看似没有副作用的代码，便转化为了(可能)有副作用的。
 
-### 避免方法
+# 避免方法
   - 对于 ES6 模块来说，会有 `defaut export` 和 `named export` 的区别。  
     有些开发者喜欢把所有东西都弄成一个对象塞到 default 里面。  
       `Default export` 在概念上来说并不仅仅一个名字叫做 default 的 export，虽然它会被这样转译。  
