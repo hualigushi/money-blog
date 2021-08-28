@@ -1,5 +1,11 @@
 ## 概念
-Intersection Observer API 允许你配置一个回调函数，每当目标(target)元素与设备视窗或者其他指定元素发生交集的时候执行。设备视窗或者其他元素我们称它为根元素或根(root)。通常，您需要关注文档最接近的可滚动祖先元素的交集更改，如果元素不是可滚动元素的后代，则默认为设备视窗。如果要观察相对于根(root)元素的交集，请指定根(root)元素为null。
+Intersection Observer API 允许你配置一个回调函数，每当目标(target)元素与设备视窗或者其他指定元素发生交集的时候执行。
+
+设备视窗或者其他元素我们称它为根元素或根(root)。
+
+通常，您需要关注文档最接近的可滚动祖先元素的交集更改，如果元素不是可滚动元素的后代，则默认为设备视窗。
+
+如果要观察相对于根(root)元素的交集，请指定根(root)元素为null。
 
 ## 用法
 创建一个 IntersectionObserver对象，并传入相应参数和回调用函数，该回调函数将会在目标(target)元素和根(root)元素的交集大小超过阈值(threshold)规定的大小时候被执行。
@@ -25,11 +31,35 @@ IntersectionObserver实例是一个异步的实例，它只有在浏览器空闲
 
 2. **rootMargin**
 
-root元素的外边距。类似于css中的 margin 属性，比如 "10px 20px 30px 40px" (top, right, bottom, left)。如果有指定root参数，则rootMargin也可以使用百分比来取值。该属性值是用作root元素和target发生交集时候的计算交集的区域范围，使用该属性可以控制root元素每一边的收缩或者扩张。默认值为0。
+root元素的外边距。类似于css中的 margin 属性，比如 "10px 20px 30px 40px" (top, right, bottom, left)。
+
+如果有指定root参数，则rootMargin也可以使用百分比来取值。
+
+该属性值是用作root元素和target发生交集时候的计算交集的区域范围，使用该属性可以控制root元素每一边的收缩或者扩张。
+
+默认值为0。
 
 3. **threshold**
 
-可以是单一的number也可以是number数组，target元素和root元素相交程度达到该值的时候IntersectionObserver注册的回调函数将会被执行。如果你只是想要探测当target元素的在root元素中的可见性超过50%的时候，你可以指定该属性值为0.5。如果你想要target元素在root元素的可见程度每多25%就执行一次回调，那么你可以指定一个数组[0, 0.25, 0.5, 0.75, 1]。默认值是0(意味着只要有一个target像素出现在root元素中，回调函数将会被执行)。该值为1.0含义是当target完全出现在root元素中时候 回调才会被执行。
+可以是单一的number也可以是number数组，target元素和root元素相交程度达到该值的时候IntersectionObserver注册的回调函数将会被执行。
+
+如果你只是想要探测当target元素的在root元素中的可见性超过50%的时候，你可以指定该属性值为0.5。
+
+如果你想要target元素在root元素的可见程度每多25%就执行一次回调，那么你可以指定一个数组[0, 0.25, 0.5, 0.75, 1]。
+
+默认值是0(意味着只要有一个target像素出现在root元素中，回调函数将会被执行)。
+
+该值为1.0含义是当target完全出现在root元素中时候 回调才会被执行。
+
+4. **trackVisibility**
+ 一个布尔值，指示当前观察器是否将跟踪目标可见性的更改，默认为 false ，注意，此处的可见性并非指目标元素和根元素是否相交，而是指视图上是否可见，
+ 
+ 如果此值设置为 false 或不设置，那么回调函数参数中 IntersectionObserverEntry 的 isVisible 属性将永远返回 false 。
+
+
+5. **delay**
+ 一个数字，也就是回调函数执行的延迟时间（毫秒）。如果 trackVisibility 设置为 true，则此值必须至少设置为 100 ，否则会报错
+
 
 为每个观察者配置一个目标
 ```
