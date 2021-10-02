@@ -50,3 +50,15 @@ Cytoscape 可以用于 Node.js 服务端环境完成图形分析任务，也可�
 
 
 svelte
+
+[Animate]: https://animate.style/	" 有趣的，跨浏览器css3动画库"
+
+Hover.css     http://ianlunn.github.io/Hover/    CSS动画集合库
+
+WickedCSS http://kristofferandreasen.github.io/wickedCSS/#  炫酷C SS3动画库
+Angrytools https://angrytools.com/css/animation/  css集合库并包含生成器
+CSSShake https://elrumordelaluz.github.io/cssshake/  魔性的css shake库 可用于广告、图像、按钮上等
+
+
+
+emotion   css-in-js 库

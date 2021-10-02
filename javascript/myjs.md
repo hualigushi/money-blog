@@ -1,21 +1,8 @@
 [TOC]
 
-# 1. img srcset sizes
-
-```html
-<img src="lighthouse-200.jpg" sizes="50vw"
-    srcset="lighthouse-100.jpg 100w, lighthouse-200.jpg 200w,
-            lighthouse-400.jpg 400w, lighthouse-800.jpg 800w,
-            lighthouse-1000.jpg 1000w, lighthouse-1400.jpg 1400w,
-            lighthouse-1800.jpg 1800w" alt="a lighthouse">
-```
-如果没有设置srcset属性，或者没值，那么sizes属性也将不起作用
-
-渲染了一张宽度为视窗宽度一半（sizes="50vw"）的图像，根据浏览器的宽度及其设备像素比，允许浏览器选择正确的图像，而不考虑浏览器窗口有多大。
 
 
-
-# 2. Promise值穿透
+# 1 Promise值穿透
 
 解释：.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透
 
@@ -47,7 +34,8 @@ Promise.resolve(1)
 ```
 
 
-# 3. 根据条件添加对象属性
+
+# 2 根据条件添加对象属性
 
 ```js
 const getUser = (emailIncluded) => {
@@ -67,14 +55,14 @@ console.log(userWithoutEmail); // 输出 { name: "John", surname: "Doe" }
 
 
 
-# 4. scrollIntoView
+# 3 scrollIntoView
 `Element.scrollIntoView()` 方法让当前的元素滚动到浏览器窗口的可视区域内。
 
 `document.querySelector(`[data-cate='${alpha}']`).scrollIntoView()`
 
 
 
-# 5. 快速幂运算
+# 4 快速幂运算
 可以使用位左移运算符<<来表示以 2 为底的幂运算
 
 ```js
@@ -86,7 +74,7 @@ Math.pow(2, n);
 
 
 
-# 6. 快速取整
+# 5 快速取整
 
 ```js
 console.log(23.9 | 0);  // Result: 23
@@ -107,17 +95,17 @@ console.log(1553 / 1000 | 0)  // Result: 1
 
 
 
-# 7. 可以在 indexOf(…) 函数前面加一个~ 来进行布尔检查，看看一个项是否存在于 String 或 Array 中。
+# 6 可以在 indexOf(…) 函数前面加一个~ 来进行布尔检查，看看一个项是否存在于 String 或 Array 中。
 
 
 
-# 8. 意外的全局变量
+# 9 意外的全局变量
 
 #### 问题
 
 在以下代码中，`typeof a`和`typeof b`的值分别是什么：
 
-```
+```js
 function foo() {
   let a = b = 0;
   a++;
@@ -142,7 +130,7 @@ typeof a; // => ???typeof b; // => ???
 
 在浏览器中，上述代码片段相当于:
 
-```
+```js
 function foo() {
   let a;  window.b = 0;  a = window.b;  a++;
   return a;
@@ -158,4 +146,8 @@ typeof window.b; // => 'number'
 `typeof b`等于`'number'`。`b`是一个值为 `0`的全局变量。
 
 
+
+# 10 `(a, b) => a.name.localeCompare(b.name)` 
+
+中文名排序
 
