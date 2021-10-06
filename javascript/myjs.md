@@ -151,3 +151,31 @@ typeof window.b; // => 'number'
 
 中文名排序
 
+
+
+# 11 生成随机UID
+
+```js
+const genUid = () => {
+  var length = 20
+  var soupLength = genUid.soup_.length
+  var id = []
+  for (var i = 0; i < length; i++) {
+    id[i] = genUid.soup_.charAt(Math.random() * soupLength)
+  }
+  return id.join('')
+}
+genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+genUid() // ;l`yCPc9A8IuK}?N6,%}
+
+```
+
+
+
+# 12 无loop生成指定长度的数组
+
+```js
+const List = len => [...new Array(len).keys()]
+const list = List(10) // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
