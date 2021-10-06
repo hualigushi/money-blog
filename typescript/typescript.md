@@ -1,4 +1,9 @@
+[TOC]
+
+
+
 # 1. TypeScript 类型推导
+
 ```
 function add (a:number, b: number) {
     return a + b
