@@ -2,27 +2,8 @@
 
  第二届缤纷·滨江前端技术沙龙  https://live.dxy.cn/front/live/DC202009070077280#/
 
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hualigushi)](https://github.com/anuraghazra/github-readme-stats)
 
-
-
-
-数据结构
-
-设计模式
-
-graphql
-
-node kafaka
-
-webgl
-
-canvas
-
-threejs
-
-webgpu
-
-react源码
 
 
 
