@@ -38,9 +38,6 @@ Alibaba Cloud Alfa 企业级的微前端解决方案
 
 [React Image Gallery](https://github.com/xiaolin/react-image-gallery) 图片轮播
 
-[WebSlides](https://github.com/webslides/WebSlides)
-WebSlides 是一个开源的 HTML 幻灯片项目，能够帮助熟悉前端语言的开发者快速制作出效果精美的幻灯片。页面中的每个 <section> 都是一个独立的幻灯片，只需要很少的 CSS 代码装饰即可。
-
 [SVG.js](https://github.com/svgdotjs/svg.js)
 SVG.js是一个轻量级的JavaScript库，允许你轻松操作SVG和定义动画。
 
@@ -52,4 +49,6 @@ Reveal.js 做 PPT 的优点是可以使用 markdown 语言直接写静态的文�
 
 [Zdog](https://github.com/metafizzy/zdog)
 zdog 是一个圆形、扁平、设计师友好的伪3D引擎，通过这个库，可以创建伪3D元素，不需要知道几何或代数来创建几何图形。。
+
+[React TypeScript Cheatsheets]: https://react-typescript-cheatsheet.netlify.app/
 

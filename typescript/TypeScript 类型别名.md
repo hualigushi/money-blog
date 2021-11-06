@@ -1,4 +1,9 @@
+[TOC]
+
+
+
 # 一些关键字
+
 ## extends
 extends 可以用来继承一个类，也可以用来继承一个 interface，但还可以用来判断有条件类型：
 `T extends U ? X : Y;`
@@ -134,7 +139,7 @@ type Exclude<T, U> = T extends U ? never : T;
 
 可以看到 T 是 `'a' | 'b' | 'c' | 'd'` ，然后 U 是 `'a' | 'c' | 'f'` ，返回的新类型就可以将 U 中的类型给移除掉，也就是 `'b' | 'd'` 了
 
-# Extract
+## Extract
 Extract 的作用是提取出 T 包含在 U 中的元素，换种更加贴近语义的说法就是从 T 中提取出 U，源码如下：
 ```js
 // node_modules/typescript/lib/lib.es5.d.ts
