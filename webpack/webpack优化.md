@@ -13,6 +13,8 @@
 
 ## 量化
 
+### 打包速度
+
 有时，我们以为的优化是负优化，这时，如果有一个量化的指标可以看出前后对比，那将会是再好不过的一件事。
 
 `speed-measure-webpack-plugin` 插件可以测量各个插件和`loader`所花费的时间，使用之后，构建时，会得到类似下面这样的信息：
@@ -38,6 +40,79 @@ const config = {
 
 module.exports = smp.wrap(config);
 ```
+
+
+
+### 文件体积
+
+`webpack-bundle-analyzer`，这个插件的功能是生成代码分析报告，帮助提升代码质量和网站性能
+
+它可以只管分析打包出的文件包含哪些，大小占比如何，模块包含关系，依赖项，文件是否重复，压缩后大小如何，针对这些，可以进行文件分割等操作
+
+```js
+npm i webpack-bundle-analyzer -D
+
+const {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer'
+
+module.exports = {
+    plugins: [
+    	new BundleAnalyzerPlugin({
+            analyzerMode: 'disabled',
+            generateStatsFile: true
+        })
+    ]
+}
+
+"dev":"webpack --progress"
+"analyzer":"webpack-bundle-analyzer --port 8888 ./dist/stats.json"
+```
+
+`npm run build` 构建，会默认打开： `http://127.0.0.1:8888/`，可以看到各个包的体积：
+
+
+
+![W1.jpeg](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/14/170d9bf330fb2a0b~tplv-t2oaga2asx-watermark.awebp)
+
+
+
+进一步对 `vendor` 进行拆分，将 `vendor` 拆分成了4个(使用 `splitChunks` 进行拆分即可)。
+
+```javascript
+module.exports = {
+    optimization: {
+    concatenateModules: false,
+    splitChunks: {//分割代码块
+      maxInitialRequests:6, //默认是5
+      cacheGroups: {
+        vendor: {
+          //第三方依赖
+          priority: 1,
+          name: 'vendor',
+          test: /node_modules/,
+          chunks: 'initial',
+          minSize: 100,
+          minChunks: 1 //重复引入了几次
+        },
+        'lottie-web': {
+          name: "lottie-web", // 单独将 react-lottie 拆包
+          priority: 5, // 权重需大于`vendor`
+          test: /[\/]node_modules[\/]lottie-web[\/]/,
+          chunks: 'initial',
+          minSize: 100,
+          minChunks: 1 //重复引入了几次
+        },
+        //...
+      }
+    },
+  },
+}
+```
+
+重新构建，结果如下所示：
+
+
+
+![W2.jpeg](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/14/170d9bf36fcad19c~tplv-t2oaga2asx-watermark.awebp)
 
 
 
@@ -77,7 +152,7 @@ JS 压缩是发布编译的最后阶段，通常 webpack 需要卡好一会，�
 
 
 
-## 优化搜索时间- 缩小文件搜索范围 减小不必要的编译工作
+## 优化搜索时间 - 缩小文件搜索范围 减小不必要的编译工作
 
 webpack 打包时，会从配置的 `entry` 触发，解析入口文件的导入语句，再递归的解析，在遇到导入语句时 webpack 会做两件事情：
 
@@ -90,7 +165,9 @@ webpack 打包时，会从配置的 `entry` 触发，解析入口文件的导入
 
 ### 1.exclude/include
 
-我们可以通过 `exclude`、`include` 配置来确保转译尽可能少的文件。顾名思义，`exclude` 指定要排除的文件，`include` 指定要包含的文件。
+我们可以通过 `exclude`、`include` 配置来确保转译尽可能少的文件。
+
+顾名思义，`exclude` 指定要排除的文件，`include` 指定要包含的文件。
 
 `exclude` 的优先级高于 `include`，在 `include` 和 `exclude` 中使用绝对路径数组，尽量避免 `exclude`，更倾向于使用 `include`。
 
@@ -148,9 +225,13 @@ module.exports = {
 
 ### 3.noParse
 
-如果一些第三方模块没有AMD/CommonJS规范版本，可以使用 `noParse` 来标识这个模块，这样 `Webpack` 会引入这些模块，但是不进行转化和解析，从而提升 `Webpack` 的构建性能 ，例如：`jquery` 、`lodash`。
+如果一些第三方模块没有AMD/CommonJS规范版本，不需要解析依赖的第三方大型类库，可以使用 `noParse` 来标识这个模块，这样 `Webpack` 会引入这些模块，但是不进行转化和解析，从而提升 `Webpack` 的构建性能 ，例如：`jquery` 、`lodash`。
 
 [noParse](https://link.juejin.cn?target=http%3A%2F%2Fwebpack.html.cn%2Fconfiguration%2Fmodule.html) 属性的值是一个正则表达式或者是一个 `function`。
+
+`noParse:/title.js/`如果模块的路径匹配此正则的话，就不需要去查找里面的依赖
+
+注意，使用noParse 进行忽略的模块文件不能使用 import  require 语法
 
 ```javascript
 // 编译代码的基础配置
@@ -196,6 +277,10 @@ module.exports = {
 因此新建一个项目测试，只引入 `jquery` 和 `loadsh`，然后配置 `noParse` 和不配置 `noParse`，分别构建比对时间。
 
 配置`noParse` 前，构建需要 `2392ms`。配置了 `noParse` 之后，构建需要 `1613ms`。 如果你使用到了不需要解析的第三方依赖，那么配置 `noParse` 很显然是一定会起到优化作用的。
+
+
+
+### 4.oneof
 
 
 
@@ -249,7 +334,7 @@ module.exports = {
 
 开启 `babel-loader`的缓存和配置 `cache-loader`，我比对了下，构建时间很接近。
 
-### 2.HardSourceWebpackPlugin （代替DLL）（webpack 5已废弃）
+### 2.HardSourceWebpackPlugin （代替DLL）（webpack 5已内置）
 
 `HardSourceWebpackPlugin` 为模块提供中间缓存，缓存默认的存放路径是: `node_modules/.cache/hard-source`。
 
@@ -325,7 +410,7 @@ const clientWebpackConfig = {
 
 ## 优化解析时间 - 开启多进程打包
 
-### 1.happypack
+### 1.happypack （废弃）
 
 由于有大量文件需要解析和处理，构建是文件读写和计算密集型的操作，特别是当文件数量变多后，`Webpack` 构建慢的问题会显得严重。
 
@@ -411,8 +496,6 @@ module.exports = {
 
 一个worker 就是一个nodeJS 进程【node.js proces】，每个单独进程处理时间上限为600ms，各个进程的数据交换也会限制在这个时间内。
 
-
-
 在 worker 池(worker pool)中运行的 loader 是受到限制的。例如：
 
 - 这些 `loader` 不能产生新的文件。
@@ -427,7 +510,7 @@ npm install thread-loader -D
 
 修改配置:
 
-```
+```js
 module.exports = {
     module: {
         //我的项目中,babel-loader耗时比较长，所以我给它配置 thread-loader
@@ -524,9 +607,85 @@ module.exports = {
 
 ## 优化压缩时间
 
-### 2.开启 JS 多进程压缩
+### 1.开启 JS 多进程压缩
 
 当前 `Webpack` 默认使用的是 `TerserWebpackPlugin`，默认就开启了多进程和缓存，构建时，你的项目中可以看到 `terser` 的缓存文件 `node_modules/.cache/terser-webpack-plugin`。
+
+
+
+## 编译体积优化
+
+`optimize-css-assets-webpack-plugin` 优化和压缩CSS资源
+
+`terser-webpack-plugin` 优化和压缩JS资源
+
+`image-webpack-loader`  优化和压缩图片
+
+`purgecss-webpack-plugin` 清除无用CSS
+
+
+
+```js
+const TerserPlugin = require('terser-webpack-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PurgeCssPlugin = reuqire('purgecss-webpack-plugin')
+const glob = require('glob')
+const PATHS = {
+	src: path.resolve(__dirname, 'src')
+}
+
+modules.exports = {
+	optimation:{
+		minimize: true, // 开启最小化
+		minimizer: [
+			new TerserPlugin()
+		]
+	},
+	loader:[
+		{
+			test: /\.css$/,
+			use:[
+				MiniCssExtractPlugin.loader,
+				'css-loader'
+			]
+		},
+		{
+			test: /\.less$/,
+			use:[
+				MiniCssExtractPlugin.loader,
+				'css-loader',
+				'less-loader'
+			]
+		},
+		{
+			test: /\.(jpg|png|gif|bmp)$/,
+			use: [
+				{
+					loader: 'image-webpack-loader'
+				}
+			]
+		}
+	],
+	plugins:[
+		new HtmlWebpackPlugin({
+			template: './src/index.html',
+			minify:{
+				collapseWhitespace: true, // 去除空格
+				removeComments: true // 去除注释
+			}
+		}),
+		new MiniCssExtractPlugin({
+			filename: '[name].css'
+		}),
+		new PurgeCssPlugin({
+			paths: glob.sync(`${PATHS.src}/**/*`,{nodir:true})
+		}),
+		new OptimizeCssAssetsWebpackPlugin(),
+		new miniCssExtractPlugin()
+	]
+}
+```
 
 
 
@@ -538,7 +697,7 @@ module.exports = {
 
 例如: `moment` (2.24.0版本) 会将所有本地化内容和核心功能一起打包，我们就可以使用 `IgnorePlugin` 在打包时忽略本地化内容。
 
-```
+```js
 //webpack.config.js
 module.exports = {
     //...
@@ -551,7 +710,7 @@ module.exports = {
 
 在使用的时候，如果我们需要指定语言，那么需要我们手动的去引入语言包，例如，引入中文语言包:
 
-```
+```js
 import moment from 'moment';
 import 'moment/locale/zh-cn';// 手动引入
 ```
@@ -595,11 +754,13 @@ module.exports = {
 
 ### 3.抽离公共代码
 
-抽离公共代码是对于多页应用来说的，如果多个页面引入了一些公共模块，那么可以把这些公共的模块抽离出来，单独打包。公共代码只需要下载一次就缓存起来了，避免了重复下载。
+抽离公共代码是对于多页应用来说的，如果多个页面引入了一些公共模块，那么可以把这些公共的模块抽离出来，单独打包。
+
+公共代码只需要下载一次就缓存起来了，避免了重复下载。
 
 抽离公共代码对于单页应用和多页应该在配置上没有什么区别，都是配置在 `optimization.splitChunks` 中。
 
-```
+```js
 //webpack.config.js
 module.exports = {
     optimization: {
@@ -655,78 +816,37 @@ module.exports = {
 
 最终构建出来的文件中会生成一个 `manifest.js`。
 
-#### 借助 webpack-bundle-analyzer 进一步优化
 
-在做 `webpack` 构建优化的时候，`vendor` 打出来超过了1M，`react` 和 `react-dom` 已经打包成了DLL。
 
-因此需要借助 `webpack-bundle-analyzer` 查看一下是哪些包的体积较大。
+### 4 import
 
-首先安装依赖：
+import语句是一个天然的代码分割点，webpack遇到import就会单独分割成一个代码块，可以单独加载
 
-```
-npm install webpack-bundle-analyzer -D
-```
+```js
+示例：video 视频懒加载,点击后才加载
 
-使用也很简单，修改下我们的配置：
-
-```javascript
-//webpack.config.prod.js
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const merge = require('webpack-merge');
-const baseWebpackConfig = require('./webpack.config.base');
-module.exports = merge(baseWebpackConfig, {
-    //....
-    plugins: [
-        //...
-        new BundleAnalyzerPlugin(),
-    ]
+play.addEventListener('click',()=>{
+	import('./video').then(result=>{
+		console.log(result)
+	})
 })
 ```
 
-`npm run build` 构建，会默认打开： `http://127.0.0.1:8888/`，可以看到各个包的体积：
 
 
+### 5 prefetch
 
-![W1.jpeg](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/14/170d9bf330fb2a0b~tplv-t2oaga2asx-watermark.awebp)
+prefetch: 先加载页面，等浏览器空闲的时候再去加载该模块
 
+​                 实际的页面<head>中会出现`<link rel="prefetch" href=""></link>`
 
+```js
+示例：video 视频浏览器空闲后就加载
 
-进一步对 `vendor` 进行拆分，将 `vendor` 拆分成了4个(使用 `splitChunks` 进行拆分即可)。
-
-```javascript
-module.exports = {
-    optimization: {
-    concatenateModules: false,
-    splitChunks: {//分割代码块
-      maxInitialRequests:6, //默认是5
-      cacheGroups: {
-        vendor: {
-          //第三方依赖
-          priority: 1,
-          name: 'vendor',
-          test: /node_modules/,
-          chunks: 'initial',
-          minSize: 100,
-          minChunks: 1 //重复引入了几次
-        },
-        'lottie-web': {
-          name: "lottie-web", // 单独将 react-lottie 拆包
-          priority: 5, // 权重需大于`vendor`
-          test: /[\/]node_modules[\/]lottie-web[\/]/,
-          chunks: 'initial',
-          minSize: 100,
-          minChunks: 1 //重复引入了几次
-        },
-        //...
-      }
-    },
-  },
-}
+play.addEventListener('click',()=>{
+	import(/* webpackChunkName: 'video', webpackPrefetch: true */ './video').then(result=>{
+		console.log(result)
+	})
+})
 ```
-
-重新构建，结果如下所示：
-
-
-
-![W2.jpeg](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/14/170d9bf36fcad19c~tplv-t2oaga2asx-watermark.awebp)
 

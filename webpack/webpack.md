@@ -18,7 +18,7 @@
   - 5、最后，根据 Output 把文件内容一一写入到指定的文件夹中，完成整个过程；
 - **模块包装**:
 
-```
+```js
 (function(modules) {
 	// 模拟 require 函数，从内存中加载模块；
 	function __webpack_require__(moduleId) {
@@ -71,7 +71,7 @@
 
 由于 Webpack 是基于 Node，因此 Webpack 其实是只能识别 js 模块，比如 css / html / 图片等类型的文件并无法加载，因此就需要一个对 **不同格式文件转换器**。其实 Loader 做的事，也并不难理解: **对 Webpack 传入的字符串进行按需修改**。例如一个最简单的 Loader:
 
-```
+```js
 // html-loader/index.js
 module.exports = function(htmlSource) {
 	// 返回处理后的代码字符串
