@@ -1,7 +1,21 @@
 记录自己的一些学习笔记 
 
+awesome-typescript-loader
+
+{ "compilerOptions": { "incremental": true } }
+
+```
+{
+  "compilerOptions": {...},
+   "exclude": [
+     "node_modules"
+     ""
+   ]
+}
+```
+
  第二届缤纷·滨江前端技术沙龙  https://live.dxy.cn/front/live/DC202009070077280#/
- 
+
  第三届缤纷·滨江前端技术沙 https://www.yuque.com/binfe/pase7s/ynvlor
 
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hualigushi)](https://github.com/anuraghazra/github-readme-stats)
@@ -32,7 +46,7 @@ import { ConfigProvider } from 'antd';
 ```
 
 
- 
+
 本地调试
 调试方式与 1.0 大体没有变化，只是 2.0 的架构变成了 monorepo 的形式，当然我们不需要管其他的 package，只需要调试 Vite 即可。
 ```
