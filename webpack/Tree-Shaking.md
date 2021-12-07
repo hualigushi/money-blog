@@ -1,6 +1,6 @@
 [TOC]
 
-# tree-shaking的原理
+# Tree-shaking的原理
 
 ES6 module 特点：
 - 只能作为模块顶层的语句出现
@@ -10,6 +10,7 @@ ES6 module 特点：
 ES6模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，这就是tree-shaking的基础。
 
 所谓静态分析就是不执行代码，从字面量上对代码进行分析，ES6之前的模块化，比如我们可以动态require一个模块，只有执行后才知道引用的什么模块，这个就不能通过静态分析去做优化。
+
 
 
 # Tree-shaking 实现流程
@@ -49,7 +50,7 @@ ES6模块依赖关系是确定的，和运行时的状态无关，可以进行�
 显然，对代码的语句标记就发生在依赖收集的过程中。
 
 在运行时环境标记所有 import：
-```
+```javascript
 const exportsType = module.getExportsType(
 	chunkGraph.moduleGraph,
 	originModule.buildMeta.strictHarmonyModule
@@ -68,7 +69,7 @@ if (exportsType === "dynamic") {
 ```
 
 在运行时环境标记所有被使用过的和未被使用的 export：
-```
+```js
 	// 在运行时状态定义 property getters
   generate() {
 		const { runtimeTemplate } = this.compilation;
@@ -120,3 +121,4 @@ if (exportsType === "dynamic") {
 	}
 }
 ```
+

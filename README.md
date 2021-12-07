@@ -1,12 +1,16 @@
 记录自己的一些学习笔记 
 
-awesome-typescript-loader
 
-{ "compilerOptions": { "incremental": true } }
+
+
+
+`awesome-typescript-loader`
 
 ```
 {
-  "compilerOptions": {...},
+  "compilerOptions": {
+  	 "incremental": true 
+  },
    "exclude": [
      "node_modules"
      ""
@@ -14,7 +18,13 @@ awesome-typescript-loader
 }
 ```
 
- 第二届缤纷·滨江前端技术沙龙  https://live.dxy.cn/front/live/DC202009070077280#/
+ 
+
+
+
+
+
+第二届缤纷·滨江前端技术沙龙  https://live.dxy.cn/front/live/DC202009070077280#/
 
  第三届缤纷·滨江前端技术沙 https://www.yuque.com/binfe/pase7s/ynvlor
 

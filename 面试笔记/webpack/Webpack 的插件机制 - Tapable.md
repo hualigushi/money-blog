@@ -62,7 +62,7 @@ hook.call('ahonn');
 | 9    | AsyncSeriesWaterfallHook | 异步串行 | 上一个监听函数的中的 callback(err, data)的第二个参数,可以作为下一个监听函数的参数 |
 
 
- 
+
 
 # 注册事件回调
 
@@ -156,7 +156,7 @@ if (options.plugins && Array.isArray(options.plugins)) {
 那监听事件是如何、何时被触发的呢，理论上应该是先注册完毕，后触发，这样监听事件才有意义，我们接着发现，在`lib/Compiler.js`中的`Compiler`类的`run`函数里有这样一段代码
 
 
-```
+```js
 const onCompiled = (err, compilation) => {
 	if (err) return finalCallback(err);
 
@@ -203,7 +203,7 @@ const onCompiled = (err, compilation) => {
 接着我们再向上追溯，包裹了`onCompiled`函数的`run`函数是在`lib/Webpack.js`中被执行的
 
 
- ```
+ ```js
  if (Array.isArray(options)) {
      ...
  } else if (typeof options === "object") {

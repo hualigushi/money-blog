@@ -238,5 +238,15 @@ window.addEventListener('removeItemEvent',function(e){
 ```
 
 
- 
+
+# 14 a标签安全问题
+
+使用a标签打开一个新窗口过程中的安全问题。新页面中可以使用window.opener来控制原始页面。如果新老页面同域，那么在新页面中可以任意操作原始页面。如果是不同域，新页面中依然可以通过window.opener.location，访问到原始页面的location对象
+
+在带有target="_blank"的a标签中，加上rel="noopener"属性。如果使用window.open的方式打开页面，将opener对象置为空。
+
+```
+var newWindow = window.open();
+newWindow.opener = null;
+```
 
