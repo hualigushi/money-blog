@@ -72,3 +72,11 @@ function todos (status:keyof typeof TODO_STATUS): string｛
     return TODO_STATUS[status as keyof typeof TODO_STATUS]
 ｝
 ```
+# 数组方法
+`type Unshift<Tuple extends any[], Added> = [Added, ...Tuple];`
+
+`type Shift<Tuple extends any[]> = Tuple extends [first: any, ...args: infer R] ? R : never;`
+
+`type Push<Tuple extends any[], Added> = [...Tuple, Added];`
+
+`type Pop<Tuple extends any[]> = Tuple extends [...args: infer R, last: any] ? R : never;`
