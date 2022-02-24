@@ -72,7 +72,10 @@ function todos (status:keyof typeof TODO_STATUS): string｛
     return TODO_STATUS[status as keyof typeof TODO_STATUS]
 ｝
 ```
-# 数组方法
+
+
+# 6. ts数组方法定义
+
 `type Unshift<Tuple extends any[], Added> = [Added, ...Tuple];`
 
 `type Shift<Tuple extends any[]> = Tuple extends [first: any, ...args: infer R] ? R : never;`
@@ -80,3 +83,108 @@ function todos (status:keyof typeof TODO_STATUS): string｛
 `type Push<Tuple extends any[], Added> = [...Tuple, Added];`
 
 `type Pop<Tuple extends any[]> = Tuple extends [...args: infer R, last: any] ? R : never;`
+
+
+
+# 7.  Narrow the unknown Type with TypeScript's Assertion Functions
+
+```js
+function assertIsNumber (
+	value: unknown,
+	name: string
+): asserts value is number {
+	if(typeof value !== 'number'){
+		throw Error(`Expected "${name}" to be a number`)
+	}
+}
+
+function range(from: unknown, to: unknown): number[] {
+	assertIsNumber(from,' from')
+	assertIsNumber(to, 'to')
+
+	const values: number[] = []
+	for(let i=from; i< to; i++){
+		values.push(i)
+	}
+
+	return values
+}
+console.log(range(1,5))
+```
+
+from to 被推断了为 number 类型
+
+
+
+# 8. Perform null Checks with Assertion Functions
+
+```js
+function assertIsNonNullish<T>(
+	value: T,
+	message: string
+): asserts value is NonNullable<T> {
+	if(value === null || value === undefined) {
+		throw Error(message)
+	}
+}
+
+const root = document.getElementById('root')
+assertIsNonNullish(root, "Could't find DOM element #root")
+
+root.addEventListener('click', e=>{
+	// ...
+})
+```
+
+获取到的root 类型是 `HTMLElement|null`
+
+经过`assertIsNonNullish`方法后变成了 `HTMLElement`类型
+
+
+
+# 9. as const
+
+
+
+# 10. Statically Type String Literals with Template Literal
+
+```js
+type Dimension = "block"|"inline"
+type Direction = "start" | 'end'
+type MarginProperty = `margin-${Dimension}-${Direction}`
+
+// type MarginProperty = "margin-block-start" | "margin-block-end" | "margin-inline-start" | "margin-inline-end"
+
+type MarginValue = number
+type MarginDeclaration = [MarginDeclaration, MarginValue]
+
+type MarginValue = `${number}px`
+type MarginValue = `${number}${"px" | "vh" | "vw"}`
+```
+
+
+
+```js
+function crateGetterObject<TObj extends Record<string, any>>(obj: TObj): PropGetters<TObj> {
+	const newObj: any = {}
+	for (const key of Object.keys(obj)){
+		const capitalizedKey = key[0].toUpperCase() + key.substr(1)
+		const getterKey = `get${capitalizedKey}`
+		newObj[getterKey] = () => obj[key]
+	}
+	return newObj
+}
+type PropGetters<TObj extends Record<string, any>> ={
+	[TKey in string & keyof TObj as `get${Capitalize<TKey>}`]: () => TObj[TKey]
+}
+
+const user = crateGetterObject({
+	name: 'name1',
+	twitter: 'twitter1'
+})
+// user对象自动推导出 getName  getTwitter f
+console.log(user)
+console.log(user.getName())
+console.log(user.getTwitter())
+```
+

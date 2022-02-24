@@ -207,11 +207,15 @@ module.exports = {
     //...
     resolve: {
         modules: [path.resolve(__dirname, 'node_modules')],
+        fallback: {
+          crypto: false,
+          stream: false,
+        },
     }
 }
 ```
 
-需要记住的是，如果你配置了上述的 `resolve.moudles` ，可能会出现问题，
+需要记住的是，如果你配置了上述的 `resolve.modules` ，可能会出现问题，
 
 例如，你的依赖中还存在 `node_modules` 目录，那么就会出现，对应的文件明明在，但是却提示找不到。
 
@@ -639,7 +643,7 @@ modules.exports = {
 	optimation:{
 		minimize: true, // 开启最小化
 		minimizer: [
-			new TerserPlugin()
+			new TerserPlugin({parallel: true}) // b
 		]
 	},
 	loader:[
@@ -739,7 +743,7 @@ import 'moment/locale/zh-cn';// 手动引入
 
 我们希望在使用时，仍然可以通过 `import` 的方式去引用(如 `import $ from 'jquery'`)，并且希望 `webpack` 不会对其进行打包，此时就可以配置 `externals`。
 
-```
+```js
 //webpack.config.js
 module.exports = {
     //...
