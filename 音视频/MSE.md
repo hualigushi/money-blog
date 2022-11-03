@@ -6,7 +6,7 @@
 
 这可以参考 google 的 [MSE 简介](https://developers.google.com/web/fundamentals/getting-started/primers/media-source-extensions)
 
-```
+```js
 var vidElement = document.querySelector('video');
 
 if (window.MediaSource) {
