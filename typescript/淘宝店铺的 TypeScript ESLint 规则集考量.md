@@ -198,7 +198,7 @@ function foo(a: number = 5, b: boolean = true) {
 declare const someCondition: boolean;
 if (someCondition === true) {
 }
-	```
+```
 为什么：首先，记住我们是在写 TypeScript，所以不要想着你的变量值还有可能是 null 所以需要这样判断，如果真的发生了，那么说明你的 TS 类型标注不对哦。
 而且，此规则的配置项最多允许 boolean | null 这样的值与 true/false 进行比较，所以还是让你的类型更精确一点吧。
 
