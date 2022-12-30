@@ -30,30 +30,32 @@ TypeScript 中支持使用 Array<T> 与 T[] 的形式声明数组类型，此规
 
 为什么：如果说乱写 any 叫 AnyScript，那么乱写 @ts-ignore 就可以叫 IgnoreScript 了。
 
-ban-types
+## ban-types
 禁止部分值被作为类型标注，此规则能够对每一种被禁用的类型提供特定的说明来在触发此规则报错时给到良好的提示，场景如禁用 {}、Function、object 这一类被作为类型标注，
 
 为什么？使用 {} 会让你寸步难行：类型 {} 上不存在属性 'foo'，所以用了 {} 你大概率在下面还需要类型断言回去或者变 any，使用 object Function 毫无意义。
 
-对于未知的对象类型，应使用 Record<string, unknown>
-对于函数类型，应使用入参、返回值被标注出来的具体类型：type SomeFunc = (arg1: string) => void ，或在未知的场景下使用 type SomeFunc = (...args: any[]) => any。
-consistent-type-assertions
+- 对于未知的对象类型，应使用 Record<string, unknown>
+- 对于函数类型，应使用入参、返回值被标注出来的具体类型：`type SomeFunc = (arg1: string) => void` ，或在未知的场景下使用 `type SomeFunc = (...args: any[]) => any`。
+	
+## consistent-type-assertions
 TypeScript 支持通过 as 与 <> 两种不同的语法进行类型断言，如：
-
+```
 const foo = {} as Foo;
 const foo = <Foo>{};
 // 类似的还有常量断言
 const foo = <const>[1, 2];
 const foo = [1, 2, 3] as const;
+```
 这一规则约束使用统一的类型断言语法，我个人一般在 Tsx 中使用 as ，在其他时候尽可能的使用 <>，原因则是 <> 更加简洁。
 
-为什么：类似于 array-type，做语法统一，但需要注意的是在 Tsx 项目中使用 <> 断言会导致报错，因为不像泛型可以通过 <T extends Foo> 来显式告知编译器这里是泛型语法而非组件。
+为什么：类似于 `array-type`，做语法统一，但需要注意的是在 Tsx 项目中使用 <> 断言会导致报错，因为不像泛型可以通过 `<T extends Foo>` 来显式告知编译器这里是泛型语法而非组件。
 
-consistent-type-definitions
+## consistent-type-definitions
 TypeScript 支持通过 type 与 interface 声明对象类型，此规则可将其收束到统一的声明方式，即仅使用其中的一种。
 
-为什么：先说我是怎么做得：在绝大部分场景下，使用 interface 来声明对象类型，type 应当用于声明联合类型、函数类型、工具类型等，如：
-
+为什么：先说我是怎么做得：在绝大部分场景下，使用 `interface` 来声明对象类型，`type` 应当用于声明联合类型、函数类型、工具类型等，如：
+```
 interface IFoo {}
 
 type Partial<T> = {
@@ -61,16 +63,19 @@ type Partial<T> = {
 };
 
 type LiteralBool = "true" | "false";
+```
 原因主要有这么几点：
 
-配合 naming-convention 规则（能够用于检查接口是否按照规范命名），我们能够在看见 IFoo 时立刻知道它是一个 接口，看见 Bar 时立刻知道它是一个类型别名，配置：
-{ "@typescript-eslint/naming-convention": [ "error", { selector: "interface", format: ["PascalCase"], custom: { regex: "^I[A-Z]", match: true, }, }, ], }
-接口在类型编程中的作用非常局限，仅支持 extends、泛型 等简单的能力，也应当只被用于定义确定的结构体。而 Type Alias 能够使用除 extends 以外所有常见的映射类型、条件类型等类型编程语法。同时，“类型别名”的含义也意味着你实际上是使用它来归类类型（联合类型）、抽象类型（函数类型、类类型）。
-explicit-module-boundary-types
+- 配合 `naming-convention` 规则（能够用于检查接口是否按照规范命名），我们能够在看见 IFoo 时立刻知道它是一个 接口，看见 Bar 时立刻知道它是一个类型别名，配置：
+```{ "@typescript-eslint/naming-convention": [ "error", { selector: "interface", format: ["PascalCase"], custom: { regex: "^I[A-Z]", match: true, }, }, ], }```
+- 接口在类型编程中的作用非常局限，仅支持 extends、泛型 等简单的能力，也应当只被用于定义确定的结构体。而 Type Alias 能够使用除 extends 以外所有常见的映射类型、条件类型等类型编程语法。同时，“类型别名”的含义也意味着你实际上是使用它来归类类型（联合类型）、抽象类型（函数类型、类类型）。
+	
+## explicit-module-boundary-types
 函数与类方法的返回值需要被显式的指定，而不是依赖类型推导，如：
 
-const foo = (): Foo => {}
-为什么：通过显式指定来直观的区分函数的功能，如副作用等，同时显式指定的函数返回值也能在一定程度上提升 TypeScript Compiler 性能。
+`const foo = (): Foo => {}`
+	
+为什么：通过显式指定来直观的区分函数的功能，如副作用等，同时显式指定的函数返回值也能在一定程度上提升 `TypeScript Compiler` 性能。
 
 method-signature-style
 方法签名的声明方式有 method 与 property 两种，区别如下：
