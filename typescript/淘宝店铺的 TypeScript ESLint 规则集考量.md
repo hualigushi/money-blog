@@ -1,5 +1,3 @@
-[TOC]
-
 # 基础约束
 为了适应读者可能有的不同的约束严格程度，这里将规则拆分为基础约束与严格约束部分，基础约束的规则以语法统一（包括实际代码与类型部分）为主，推荐所有人在所有项目中使用
 
@@ -77,9 +75,9 @@ type LiteralBool = "true" | "false";
 	
 为什么：通过显式指定来直观的区分函数的功能，如副作用等，同时显式指定的函数返回值也能在一定程度上提升 `TypeScript Compiler` 性能。
 
-method-signature-style
+## method-signature-style
 方法签名的声明方式有 method 与 property 两种，区别如下：
-
+```
 // method
 interface T1 {
 	func(arg: string): number;
@@ -89,38 +87,45 @@ interface T1 {
 interface T2 {
   func: (arg: string) => number;
 }
+```
 此规则将声明方式进行约束，推荐使用第二种的 property 方式。
 
-为什么：首先，这两种方式被称为 method 与 property 很明显是因为其对应的写法，method 方式类似于在 Class 中定义方法，而 property 则是就像定义普通的接口属性，只不过它的值是函数类型。推荐使用 property 的最重要原因是，通过使用 属性 + 函数值 的方式定义，作为值的函数的类型能享受到更严格的类型校验（ strictFunctionTypes），此配置会使用逆变（contravariance）而非协变（covariance）的方式进行函数参数的检查，关于协变与逆变我后续会单独的写一篇文章，这里暂时不做展开，如果你有兴趣，可以阅读 TypeScript类型中的逆变协变。
+为什么：首先，这两种方式被称为 method 与 property 很明显是因为其对应的写法，
 
-no-extra-non-null-assertion
+	method 方式类似于在 Class 中定义方法，而 property 则是就像定义普通的接口属性，只不过它的值是函数类型。
+	
+	推荐使用 property 的最重要原因是，通过使用 属性 + 函数值 的方式定义，作为值的函数的类型能享受到更严格的类型校验（ strictFunctionTypes），此配置会使用逆变（contravariance）而非协变（covariance）的方式进行函数参数的检查，关于协变与逆变我后续会单独的写一篇文章，这里暂时不做展开，如果你有兴趣，可以阅读 TypeScript类型中的逆变协变。
+
+## no-extra-non-null-assertion
 不允许额外的重复非空断言：
-
+```
 // x
 function foo(bar: number | undefined) {
   const bar: number = bar!!!;
 }
+```
 为什么：额，why not？
 
-prefer-for-of
-在你使用 for 循环遍历数组时，如果索引仅仅用来访问数组成员，则应该替换为 for...of。
+## prefer-for-of
+在你使用 for 循环遍历数组时，如果索引仅仅用来访问数组成员，则应该替换为 `for...of`。
 
 为什么：如果不是为了兼容性场景，在这种场景下的确没有必要使用 for 循环。
 
-prefer-nullish-coalescing && prefer-optional-chain
-使用 ?? 而不是 ||，使用 a?.b 而不是 a && a.b。
+## prefer-nullish-coalescing && prefer-optional-chain
+使用 `??` 而不是 `||`，使用 `a?.b` 而不是 `a && a.b`。
 
-为什么：逻辑或 || 会将 0 与 "" 视为 false 而导致错误的应用默认值，而可选链相比于逻辑与 && 则能够带来更简洁的语法（尤其是在属性访问嵌套多层，或值来自于一个函数时，如 document.querySelector），以及与 ?? 更好的协作：const foo = a?.b?.c?.d ?? 'default';。
+为什么：逻辑或 `||` 会将 0 与 "" 视为 false 而导致错误的应用默认值，而可选链相比于逻辑与 && 则能够带来更简洁的语法（尤其是在属性访问嵌套多层，或值来自于一个函数时，如 `document.querySelector`），以及与 `??` 更好的协作：`const foo = a?.b?.c?.d ?? 'default'`;。
 
-consistent-type-imports
+## consistent-type-imports
 约束使用 import type {} 进行类型的导入，如：
-
+```
 // √
 import type { CompilerOptions } from 'typescript';
 
 // x
 import { CompilerOptions } from 'typescript';
-为什么：import type 能够帮助你更好的组织你的项目头部的导入结构（虽然 TypeScript 4.5 支持了类型与值的混合导入：import { foo, type Foo }，但还是推荐通过拆分值导入与类型导入语句来获得更清晰地项目结构）。 值导入与类型导入在 TypeScript 中使用不同的堆空间来存放，因此无须担心循环依赖（所以你可以父组件导入子组件，子组件导入定义在父组件中的类型这样）。
+```
+为什么：`import type` 能够帮助你更好的组织你的项目头部的导入结构（虽然 TypeScript 4.5 支持了类型与值的混合导入：import { foo, type Foo }，但还是推荐通过拆分值导入与类型导入语句来获得更清晰地项目结构）。 值导入与类型导入在 TypeScript 中使用不同的堆空间来存放，因此无须担心循环依赖（所以你可以父组件导入子组件，子组件导入定义在父组件中的类型这样）。
 
 一个简单的、良好组织了导入语句的示例：
 
