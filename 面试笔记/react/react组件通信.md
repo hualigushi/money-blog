@@ -7,10 +7,12 @@
 
 # 1. 父组件向子组件通信
 
-React数据流动是单向的,父组件向子组件通信也是最常见的;父组件通过props向子组件传递需要的信息
+React数据流动是单向的,父组件向子组件通信也是最常见的;
+
+父组件通过props向子组件传递需要的信息
 
 Child.jsx
-```
+```jsx
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -23,7 +25,7 @@ Child.propTypes = {
 };
 ```
 Parent.jsx
-```
+```jsx
 import React, { Component } from 'react';
 
 import Child from './Child';
@@ -47,7 +49,7 @@ export default Parent;
 - 利用自定义事件机制
 
 List3.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -68,7 +70,7 @@ class List3 extends Component {
 export default List3;
 ```
 App.jsx
-```
+```jsx
 import React, { Component } from 'react';
 
 import List3 from './components/List3';
@@ -105,7 +107,9 @@ export default class App extends Component {
     }
 }
 ```
-观察一下实现方法,可以发现它与传统回调函数的实现方法一样.而且setState一般与回调函数均会成对出现,因为回调函数即是转换内部状态是的函数传统;
+观察一下实现方法,可以发现它与传统回调函数的实现方法一样.
+
+而且setState一般与回调函数均会成对出现,因为回调函数即是转换内部状态是的函数传统;
 
 # 3. 跨级组件通信
 
@@ -117,10 +121,12 @@ export default class App extends Component {
 
 context是一个全局变量,像是一个大容器,在任何地方都可以访问到,我们可以把要通信的信息放在context上,然后在其他组件中可以随意取到;
 但是React官方不建议使用大量context,尽管他可以减少逐层传递,但是当组件结构复杂的时候,
-我们并不知道context是从哪里传过来的;而且context是一个全局变量,全局变量正是导致应用走向混乱的罪魁祸首.
+我们并不知道context是从哪里传过来的;context存储的变量难以追溯数据源以及确认变动点，当组件依赖context时，会增加组件耦合度，不利于组件的复用与测试
+
+而且context是一个全局变量,全局变量正是导致应用走向混乱的罪魁祸首.
 
 ListItem.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -145,7 +151,7 @@ class ListItem extends Component {
 export default ListItem;
 ```
 List.jsx
-```
+```jsx
 import ListItem from './ListItem';
 
 class List extends Component {
@@ -181,7 +187,7 @@ class List extends Component {
 export default List;
 ```
 App.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import List from './components/List';
 
@@ -210,7 +216,9 @@ export default class App extends Component {
 
 - 使用自定义事件机制
 
-在componentDidMount事件中,如果组件挂载完成,再订阅事件;在组件卸载的时候,在componentWillUnmount事件中取消事件的订阅;
+在`componentDidMount`事件中,如果组件挂载完成,再订阅事件;
+
+在组件卸载的时候,在`componentWillUnmount`事件中取消事件的订阅;
 以常用的发布/订阅模式举例,借用Node.js Events模块的浏览器版实现
 
 首先需要项目中安装events 包：
@@ -219,14 +227,14 @@ export default class App extends Component {
 
 在src下新建一个util目录里面建一个events.js
 
-```
+```js
 import { EventEmitter } from 'events';
 
 export default new EventEmitter();
 ```
 
 list1.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import emitter from '../util/events';
 
@@ -260,7 +268,7 @@ class List extends Component {
 export default List;
 ```
 List2.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import emitter from '../util/events';
 
@@ -278,7 +286,7 @@ class List2 extends Component {
 }
 ```
 APP.jsx
-```
+```jsx
 import React, { Component } from 'react';
 import List1 from './components/List1';
 import List2 from './components/List2';

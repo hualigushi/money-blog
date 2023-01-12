@@ -19,3 +19,23 @@
 # 6. monitorEvents(el,eventType)方法来追踪事件
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/emhicHiajiaiat3DWxn6ORjPykSicxl4BYcvXHuFjYLpAB8KooRe8bicW5lMNAFQTxhNVibSFA7tibFldcnmYWBNGQsexA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+
+
+# 7. 复制对象
+
+复制对象 copy(obj)
+
+# 8. 请求重发
+
+RePlay XHR
+
+# 9. 网站长截图
+
+command+shift+p  
+
+Capture full size screeenshot
+
+# 10. debug条件断点
+
+Add conditional breakpoint

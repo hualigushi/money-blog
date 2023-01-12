@@ -12,3 +12,8 @@ Redirect组件匹配context里的location决定是否调用history.push(to)，
 
 Switch组件会匹配location和from决定是否发起Redirect。
 
+
+
+基础原理
+
+现在的网页大部分以单页应用方案完成交付的，路由完全由前端开发者在网页层自行控制

@@ -42,3 +42,8 @@ ReactDOM.render(
 
 React 团队并不想引入 JavaScript 本身以外的开发体系。而是希望通过合理的关注点分离保持组件开发的纯粹性。
 
+
+
+# 进阶问题：Babel 插件如何实现JSX 到 JS 的编译
+
+实现原理： Babel读取代码并解析成AST，再将AST传入插件并进行转换，而转换时就可以将JSX的结构转换为react.cteateElement的函数

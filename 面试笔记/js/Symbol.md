@@ -1,8 +1,10 @@
+
+
 ## 介绍
 
 **每个Symbol实例都是唯一的**
 
-```
+```js
 let s1 = Symbol()
 let s2 = Symbol('another symbol')
 let s3 = Symbol('another symbol')
@@ -15,14 +17,14 @@ s2 === s3 // false
 
 使用给定的key搜索现有的symbol，如果找到则返回该symbol。否则将使用给定的key在全局symbol注册表中创建一个新的symbol
 
-```
+```js
 var sym1 = Symbol.for('ConardLi');
 var sym2 = Symbol.for('ConardLi');
 console.log(sym1 === sym2); // true
 ```
 `Symbol.keyFor()` 方法，可以获取到一个symbol 在全局注册中心中注册的唯一标识key
 
-```
+```js
 let uid1 = Symbol.for('uid');
 let symbolKey = Symbol.keyFor(uid1);
 console.log(symbolKey)  // 'uid'
@@ -48,7 +50,7 @@ s.toString(); // => Symbol(s)
 s.toString() + ' is a Symbol!' // => Symbol(s) is a Symbol!
 ```
 ##### 3. Symbol 值也可以转为布尔值，但是不能转为数值
-```
+```js
 let s = Symbol();
 Boolean(s); // => true
 !s // => false
@@ -71,7 +73,7 @@ s.description // => this is a Symbol
 
 ##### 1. 使用Symbol来作为对象属性名(key)
 
-```
+```js
 const PROP_NAME = Symbol()
 const PROP_AGE = Symbol()
 
@@ -99,10 +101,10 @@ Object.getOwnPropertyNames(obj)   // ['age', 'title']
 
 JSON.stringify(obj)  // {"age":18,"title":"Engineer"}
 
-// 使用Object的API
+// 使用Object的API，只获取Symbol类型属性
 Object.getOwnPropertySymbols(obj) // [Symbol(name)]
 
-// 使用新增的反射API
+// 使用新增的反射API，获取对象所有属性
 Reflect.ownKeys(obj) // [Symbol(name), 'age', 'title']
 ```
 Symbol 值作为对象属性名时，不能用点运算符
@@ -115,7 +117,7 @@ Symbol类型的key是不能通过`Object.keys()`或者`for...in`来枚举的，�
 
 ##### 2. 使用Symbol来替代常量
 
-```
+```js
 const TYPE_AUDIO = 'AUDIO'
 const TYPE_VIDEO = 'VIDEO'
 const TYPE_IMAGE = 'IMAGE'
@@ -144,7 +146,7 @@ const TYPE_IMAGE = Symbol()
 ##### 3. 使用Symbol定义类的私有属性/方法
 
 借助Symbol类型的不可枚举，我们可以在类中模拟私有属性，控制变量读写：
-```
+```js
 a.js
 
 const PASSWORD = Symbol()
@@ -194,7 +196,7 @@ ReactElement.isValidElement = function (object) {
 
 如果你的服务器有一个漏洞，允许用户存储任意JSON对象， 而客户端代码需要一个字符串，这可能会成为一个问题：
 
-```
+```js
 // JSON
 let expectedTextButGotJSON = {
   type: 'div',
@@ -215,7 +217,7 @@ let message = { text: expectedTextButGotJSON };
 ##### 5. Symbol.iterator
 
 ES6有一个Symbol.iterator，能够指定对象的默认iterator：
-```
+```js
 var arr = [11,12,13];
 var itr = arr[Symbol.iterator]();    
 itr.next(); // { value: 11, done: false }  

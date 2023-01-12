@@ -1,6 +1,6 @@
 # 需求
 在组件中一次性引入十张图片
-```
+```js
 // 就是这么任性，下标从0开始~
 import frame0 from './assets/frame_0.png'
 import frame1 from './assets/frame_1.png'
@@ -39,11 +39,11 @@ context.keys().forEach(k => {
  - 第二个参数指定是否需要包含子目录，由于没有子目录，所以传 false
 
  - 第三个参数指定需要包含的文件的匹配规则，我们用一个正则表示
- 
+
  然后使用 context.keys() 就能拿到该上下文的文件路径列表，而 context 本身也是一个方法，
- 
+
  相当于设置过上下文的 require，我们将 require 后的文件放入数组中，数组中的路径其实是带 hash 值的
- 
+
  ## 重构一下
  公共模块：
 ```js
