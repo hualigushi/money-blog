@@ -95,6 +95,11 @@ let blob = new Blob([hello, ' ', 'semlinker'], {type: 'text/plain'});
 
 File 对象是特殊类型的 Blob，且可以用在任意的 Blob 类型的上下文中。
 
+主要有两种方法获取File对象
+
+1. <input> 元素上选择文件后返回FileList 对象
+2. 文件拖放操作生成的DataTransfer对象
+
 所以针对大文件传输的场景，我们可以使用 slice 方法对大文件进行切割，然后分片进行上传，具体示例如下：
 
 ```javascript

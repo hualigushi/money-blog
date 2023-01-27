@@ -20,9 +20,11 @@ type WD = W<'d'>; // -> false
 ```
 a 可以赋值给 Words 类型，所以 WA 为 true，而 d 不能赋值给 Words 类型，所以 WD 为 false。
 
+
+
 ## typeof
 在 JS 中 typeof 可以判断一个变量的基础数据类型，在 TS 中，它还有一个作用，就是获取一个变量的声明类型，如果不存在，则获取该类型的推论类型。
-```
+```js
 interface Person {
   name: string;
   age: number;

@@ -64,6 +64,8 @@ module.exports = {
 5、执行方法 compiler.run()，启动编译
 6、执行方法 compiler.compile()，完成编译，输出文件
 
+![https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/11/12/16e6020bf133fb9d~tplv-t2oaga2asx-zoom-in-crop-mark:4536:0:0:0.awebp]()
+
 #### 4. 核心函数功能（待补充）
 
 ```js

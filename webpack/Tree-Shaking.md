@@ -24,12 +24,30 @@ ES6模块依赖关系是确定的，和运行时的状态无关，可以进行�
 - rollup()阶段，解析源码，生成 AST tree，对 AST tree 上的每个节点进行遍历，判断出是否 include(标记避免重复打包)，是的话标记，然后生成 chunks，最后导出。
 - generate()/write()阶段，根据 rollup()阶段做的标记，进行代码收集，最后生成真正用到的代码。
 
+
+
+# 副作用
+
+相对于 Webpack，rollup 在消除副作用方面有很大优势。但对于下列情况下的副作用，rollup 也无能为力：
+
+1）模块中类的方法未被引用
+
+![https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7c5c6b3c6a78460eb79b3f7f770c2b36~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image]()
+
+ 2）模块中定义的变量影响了全局变量
+
+![https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/80bf667e03bd4fd78288f601dea6ed10~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image]()
+
+
+
 # Tree-shaking -- rollup VS Webpack
 
 - rollup 是在编译打包过程中分析程序流，得益于于 ES6 静态模块（exports 和 imports 不能在运行时修改），我们在打包时就可以确定哪些代码时我们需要的。
 
 - webpack 本身在打包时只能标记未使用的代码而不移除，而识别代码未使用标记并完成 tree-shaking 的 其实是 UglifyJS、babili、terser 这类压缩代码的工具。
   简单来说，就是压缩工具读取 webpack 打包结果，在压缩之前移除 bundle 中未使用的代码
+
+
 
 # Webpack 的 Tree-shaking 流程
 

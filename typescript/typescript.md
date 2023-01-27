@@ -144,6 +144,11 @@ root.addEventListener('click', e=>{
 
 # 9. as const
 
+```
+const Charts = ['pie', 'line','radar','scatter'] as const;
+type ChartType = typeof Charts[number]; // 'pie'|'line'|'radar'|'scatter'
+```
+
 
 
 # 10. Statically Type String Literals with Template Literal

@@ -115,6 +115,8 @@ rollup 中有不同的构建钩子函数：
 
 **1.hookFirst：**
 
+异步串行，出现第一个返回值不为空的插件，就停止执行
+
 > 加载 `first` 类型的钩子函数，场景有 `resolveId`、`resolveAssetUrl` 等
 
 ```js
@@ -143,6 +145,8 @@ function hookFirst<H extends keyof PluginHooks, R = ReturnType<PluginHooks[H]>>(
 ```
 
 **2.hookFirstSync**：
+
+同步串行，出现第一个返回值不为空的插件，就停止执行
 
 > hookFirst 的同步版本，使用场景有 `resolveFileUrl`、`resolveImportMeta` 等
 
@@ -201,6 +205,8 @@ hookSeqSync<H extends SyncPluginHooks & SequentialPluginHooks>(
 
 **5.hookReduceArg0**
 
+异步串行，把上一个hook的返回值作为下一个hook的参数，如果返回为空就停止执行，并返回最后的值,
+
 > 对 arg 第一项进行 reduce 操作。使用场景: `options`、`renderChunk` 等
 
 ```js
@@ -229,6 +235,8 @@ function hookReduceArg0<H extends keyof PluginHooks, V, R = ReturnType<PluginHoo
 ```
 
 **6.hookReduceArg0Sync**
+
+同步串行，把上一个hook的返回值作为下一个hook的参数，如果返回为空就停止执行，并返回最后的值
 
 `hookReduceArg0` 同步版本，使用场景 `transform`、`generateBundle` 等
 
