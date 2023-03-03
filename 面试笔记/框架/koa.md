@@ -1,5 +1,5 @@
 # 1 koa洋葱模型怎么实现的
-```
+```js
 // 这样就可能更好理解了。
 // simpleKoaCompose
 const [fn1, fn2, fn3] = this.middleware;
@@ -28,7 +28,7 @@ fnMiddleware(ctx).then(handleResponse).catch(onerror);
 
 # 2 如果中间件中的next()方法报错了怎么办
 
-```
+```js
 ctx.onerror = function {  
   this.app.emit('error', err, this);
 };  
@@ -51,7 +51,7 @@ listen(){
 
 # 3 Compose
 
-```
+```js
 function compose (middleware) {
   // 传入的必须是数组
   if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
@@ -110,7 +110,7 @@ function compose (middleware) {
 
 
 
-```
+```js
 var index = -1;
 function compose() {
     return dispatch(0)
