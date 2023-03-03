@@ -19,22 +19,29 @@
 程序设计, 接口中定义了类必须实现的方法和属性, 以达到规范和具体实现分离, 增强系统的可拓展性和可维护性.
 
 
+
 #### 什么时候使用class
+
 - 是否需要创建多个实例
 - 是否需要使用继承
 - 是否需要特定的单例对象
 
+
+
 #### 什么时候使用interface
+
 对于从服务器端获取或者业务场景中模拟的数据，提倡使用interface去定义，这些数据通常是不会经常变化和调整的，这些数据可能仅仅只表示某些状态，或者是UI上的文本。
 
 在实际场景中，我们可以给class的参数指定好interface类型用来初始化class中的属性
+
+
 
 # type interface
 
 ##### 相同点
 
 都可以用来描述一个函数或对象, 如:
-```
+```ts
 // TypeAndInterface.ts
 interface Person{
   name: string;
@@ -48,7 +55,7 @@ type Person1 = {
 }
 ```
 可以使用extends继承
-```
+```ts
 // TypeAndInterface.ts
 interface Person {
   name: string
@@ -140,43 +147,3 @@ interface Man {
 
 在不确定使用type/interface时, 请优先考虑使用interface, 若interface无法满足需求时, 才考虑使用type.
 
-
-# 类Interface
-
-Interface 也可以用来定义一个类的形状。需要注意的是类 Interface 只会检查实例的属性，静态属性是需要额外定义一个 Interface
-
-```
-// Person.ts
-// PersonConstructor => 用以检查静态属性或方法
-interface PersonConstructor {
-  new (name: string, age: number): void
-  typename: string // 静态属性
-  getType(): string // 静态方法
-}
-
-interface PersonInterface {
-  log(msg: string): void
-}
-
-// 不可写成:  class Person implements PersonInterface, PersonInterface
-const Person: PersonConstructor = class Person implements PersonInterface {
-  name: string
-  age: number
-  static typename = 'Person type'
-  static getType(): string {
-    return this.typename
-  }
-
-  constructor(name: string, age: number) {
-    this.name = name
-    this.age = age
-  }
-
-  log(msg: string): void {
-    window.console.log(msg)
-  }
-}
-
-export default Person
-```
-> 需要注意的是: 静态属性和方法的检查, 与实例属性和方法的检查应使用不同的interface.

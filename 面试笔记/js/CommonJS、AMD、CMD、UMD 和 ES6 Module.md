@@ -206,30 +206,6 @@ var exports = load(module);
 
   
 
-##### CommonJS require
-
-> `CommonJS` 中 `require` 的基本功能，是读入并执行一个 JavaScript 文件，然后返回该模块的 `exports` 对象，如果没有发现指定模块则报错。
-
-- require 加载文件时，默认后缀为 `.js` 后缀。
-
-- 如果 `require` 中的路径字符串参数以 `'/'` 开头，则会按照这个绝对路径查找文件。
-
-- 如果 `require` 中的路径字符串参数以 `'./'` 开头，则会以当前执行脚本位置为起点，寻找对应的相对路径下的文件。
-
-- 如果参数字符串不以 `/`  `./ `开头，则会去寻找一个默认提供的核心模块（位于 Node 系统安装目录中），或者一个位于各级 `node_modules` 目录中的已安装模块（全局安装或者局部安装），举例来说，如果脚本 
-
-  `/home/user/projects/foo.js`  执行了 `require('bar.js')` 命令，Node 会依次搜索以下文件：
-
-  - `/usr/local/lib/node/bar.js`（Node 的核心模块）
-  - `/home/user/projects/node_modules/bar.js`（当前执行脚本所在目录下的 node_modules 文件）
-  - `/home/user/node_modules/bar.js`（执行脚本所在目录下没有 node_modules ，则继续查找上层文件夹的 node_modules）
-  - `/home/node_modules/bar.js`（继续查找上层的 node_modules）
-  - `/node_modules/bar.js`（最后查找全局的 node_modules）
-
-- 如果参数字符串不以`./`或`/`开头，而且是一个路径，比如`require('example-module/path/to/file')`，则将先找到`example-module`的位置，然后再以它为参数，找到后续路径。
-
-- 如果指定的文件没有找到，Node 会为文件名添加 `.js / .json / .node` 后缀再次尝试匹配，`.json` 文件会以 JSON 格式的文本文件解析，`.node` 文件会以编译后的二进制文件解析。
-
 ## 5. ES6 Module
 
 在 ES6 中， 我们可以通过 import 引入模块，通过 export 导出模块，功能比前几个方案更强大，也是我们推荐使用的，但是由于浏览器对 ES6 的支持程度不同，目前都是使用 babel 或 traceur 把 ES6 代码转化为 ES5 代码，然后再在浏览器环境中执行。
@@ -304,8 +280,28 @@ export func;
 
     
 
-
 ### CommonJS和ES6模块化的区别
+
+CommonJs
+
+- 所有代码都运行在模块作用域，不会污染全局作用域。
+- 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。
+
+​      这种缓存方式是经过文件路径定位的，即使两个完全相同的文件，但是位于不同的路径下，会在缓存中维持两份。
+
+- 模块加载的顺序，按照其在代码中出现的顺序。
+
+- CommonJs规范加载模块是同步的，即只有加载完成，才能执行后面的操作
+
+- CommonJs模块的加载机制是，输入的是被输出的值的拷贝，即，一旦输出一个值，模块内部的变化影响不到这个值
+
+- 对于基本数据类型，属于复制。即会被模块缓存。同时，在另一个模块可以对该模块输出的变量重新赋值。对于复杂数据类型，属于浅拷贝。由于两个模块引用的对象指向同一个内存空间，因此对该模块的值做修改时会影响另一个模块。
+
+- 当使用require命令加载某个模块时，就会运行整个模块的代码。
+
+- 循环加载时，属于加载时执行。即脚本代码在require的时候，就会全部执行。一旦出现某个模块被"循环加载"，就只输出已经执行的部分，还未执行的部分不会输出。
+
+  
 
 ES6 模块化
 - import只会导入一次，无论你引入多少次
@@ -316,80 +312,9 @@ ES6 模块化
 JavaScript 引擎该模块的位置。
 - 循环加载时，ES6模块是动态引用。只要两个模块之间存在某个引用，代码就能够执行。
 
-CommonJs
-- 所有代码都运行在模块作用域，不会污染全局作用域。
-- 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。
-
-​      这种缓存方式是经过文件路径定位的，即使两个完全相同的文件，但是位于不同的路径下，会在缓存中维持两份。
-
-- 模块加载的顺序，按照其在代码中出现的顺序。
-- CommonJs规范加载模块是同步的，即只有加载完成，才能执行后面的操作
-- CommonJs模块的加载机制是，输入的是被输出的值的拷贝，即，一旦输出一个值，模块内部的变化影响不到这个值
-- 对于基本数据类型，属于复制。即会被模块缓存。同时，在另一个模块可以对该模块输出的变量重新赋值。对于复杂数据类型，属于浅拷贝。由于两个模块引用的对象指向同一个内存空间，因此对该模块的值做修改时会影响另一个模块。
-- 当使用require命令加载某个模块时，就会运行整个模块的代码。
-- 循环加载时，属于加载时执行。即脚本代码在require的时候，就会全部执行。一旦出现某个模块被"循环加载"，就只输出已经执行的部分，还未执行的部分不会输出。
-```
-// lib.js
-var counter = 3;
-function incCounter() {
-  counter++;
-}
-module.exports = {
-  counter: counter,
-  incCounter: incCounter,
-};
-// main.js
-var mod = require('./lib');
- 
-console.log(mod.counter);  // 3
-mod.incCounter();
-console.log(mod.counter); // 3
-```
-lib.js模块加载以后，它的内部变化就影响不到输出的mod.counter了。这是因为mod.counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值
-```
-var counter = 3;
-function incCounter() {
-    counter++;
-}
-module.exports = {
-    get counter() {
-        return counter
-    },
-    incCounter: incCounter,
-};
-```
-```
-// lib.js
-export let counter = 3;
-export function incCounter() {
-  counter++;
-}
- 
-// main.js
-import { counter, incCounter } from './lib';
-console.log(counter); // 3
-incCounter();
-console.log(counter); // 4
-```
-可以对外暴露一个对象，`CommonJS` 导出的是对象引用的值的复制，那么这种情况 ，也是能够得到内部变动的值的。
-
-```
-// lib.js
-let obj = {a: 1};
-function changeA() {
-    obj.a = 2;
-}
-module.exports = {
-    obj,
-    changeA
-};
 
 
-//  main.js
-const mod = require('./lib.js');
-console.log(JSON.stringify(mod.obj)); // {"a":1}
-target.changeA();
-console.log(JSON.stringify(mod.obj)); // {"a":2}
-```
 
-CommonJS 模块输出的是值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。而ES6 模块是动态地去被加载的模块取值，并且变量总是绑定其所在的模块。
+
+
+

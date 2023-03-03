@@ -25,7 +25,9 @@ null instanceof Object  //false
 
 null 不是对象
 
-不同的对象在底层原理的存储是用二进制表示的，在 javaScript中，如果二进制的前三位都为 0 的话，系统会判定为是 Object类型。null的存储二进制是 000，也是前三位，所以系统判定 null为 Object类型。
+不同的对象在底层原理的存储是用二进制表示的，在 javaScript中，如果二进制的前三位都为 0 的话，系统会判定为是 Object类型。
+
+null的存储二进制是 000，也是前三位，所以系统判定 null为 Object类型。
 
 扩展：
 

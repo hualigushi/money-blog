@@ -1,12 +1,6 @@
 1. js基础类型，引用类型
 
-2. 隐式转换   装箱 拆箱
-
-3. == 和 === 有什么区别
-
 4. Object.is和===的区别
-
-5. [] == ![]结果是什么？为什么？
 
 6. 判断对象的数据类型(instanceOf、isPrototypeof、Object.prototype.toString.call())
 
@@ -16,15 +10,11 @@
 
 9. 如何判断Symbol类型，作用(getOwnPropertySymbols, Reflect.ownKeys)
 
-10. 自己实现symbol
-
 11. null 和 undefined
 
 12. let var const 区别
 
 13. let/const声明的变量在windows上面吗
-
-14. 如何理解BigInt
 
 15. 作用域是指什么
 
@@ -34,13 +24,9 @@
 
     如何对闭包进行垃圾回收
 
-18. this
-
 19. class 方法中的this 指向 与 普通方法中的this指向
 
 20. 普通函数和箭头函数的区别
-
-21. Proxy
 
 22. map中的键值会不会被回收（weakMap，weakSet等）
 
@@ -48,35 +34,15 @@
 
 23. new操作符干了什么
 
-24. es6 class 的new实例和es5的new实例有什么区别
-
-25. es6的class如何实现私有变量（symbol + 闭包）
-
 26. es6  class 的 super 是如何实现的
 
-27. JS继承的方式，优缺点
-
-28. 如何实现原型替换
-
 29. 数组去重
-
-30. 数组打平
-
-31. 数组乱序
 
 32. forEach, for of 区别
 
 33. 深浅拷贝原理和实现，  深拷贝循环引用如何处理
 
-34. call apply bind 的使用和区别 
-
-35. 事件流
-
 36. 事件委托
-
-37. DOM事件的绑定的几种方式
-
-38. mouseover和mouseenter的区别
 
 39. Event对象中，target和currentTarget的区别
 
@@ -90,11 +56,7 @@
 
 44. CommonJS 中的 require/exports 和 ES6 中的 import/export 区别
 
-    设计一个方法，让CommonJS导出的模块也能改变其内部变量
-
 45. 模块在同一个页面引入两次，会引起几次js渲染？为什么？
-
-46. require 的解析规则
 
 47. require 的运行机制和缓存策略你了解吗？
 
@@ -118,18 +80,7 @@
 
 55. 如何统一管理promise的错误处理函数？
 
-56. 如何判断`Promise`类型
-
-    ```
-    function isPromise(obj) {
-      return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
-    
-    }
-    ```
-
 57. async await 和 promise 的关系(async await 是 promise 和 generator 函数组合的一个语法糖)
-
-58. 说说async和await的es5实现
 
 59. 描述二叉树的几种遍历方式
 
@@ -139,64 +90,21 @@
 
 62. NodeJS 是单线程还是多线程，都有哪些线程，JS 为什么是单线程的
 
-63. node中cluster是怎样开启多进程的，并且一个端口可以被多个进程监听吗
-
 64. NodeJS的eventEmitter的实现
-
-65. Node.js 哪里应用到了发布/订阅模式
-
-66. NodeJS 中存在哪些流，怎么理解 pipe() 及其优点
-
-67. 介绍一下负载均衡，NodeJS 的 cluster 和 child_process 是什么
-
-68. 说说node文件查找的优先级
 
 69. Events 监听函数的执行顺序是异步还是同步的？
 
-70. 说几个 Events 模块的常用函数吧？
-
-71. 说几个 fs模块的常用函数？什么情况下使用 fs.open的方式读取文件？用 fs模块写一个大文件拷贝的例子(注意大文件)？
-
 72. 单例模式、原型模式、工厂模式、观察者模式、策略模式、代理模式   功能、代码实现、使用场景
-
-73. 怎么理解ts
 
 74. ts 的泛型是什么作用(泛型决定了一个类型在不同的场景下能够在每个场景下从始至终的保持类型一致)
 
-75. ts的type和interface什么区别
+47. ts的type和interface什么区别
 
-76. deffer 和 async 的区别
+48. 保持socket连接，如何保持当前socket连接正常的
 
-77. 执行下面的异步函数大约需要消耗多长时间?
+做一个定时的ping操作，这里成为：“心跳响应”，每隔一定的时间使用ws.send()发送一个无意义的ping消息。告诉后台我还在连接。后台收到后，也就继续推送消息。而如果ping 消息错误了。那么就说明ws可能意外的中断了，那么会走onerror()方法，这时候，我可以从新开始唤醒它。这样就能对webSocket保持一个相对的连接持久化了。
 
-```
-// @promise function
-function speed() {
-  return new Promise(resolve => {
-    setTimeout(resolve, 3000)
-  })
-}
-
-// @async function
-async function foo() {
-  let mySpeed = speed()
-  await mySpeed
-  await mySpeed
-  await mySpeed
-  await speed()
-  await speed()
-  await speed()
-}
-
-foo()
-答：约等于12S，但是时间超出12S。
-```
-
-74. 保持socket连接，如何保持当前socket连接正常的
-
-    做一个定时的ping操作，这里成为：“心跳响应”，每隔一定的时间使用ws.send()发送一个无意义的ping消息。告诉后台我还在连接。后台收到后，也就继续推送消息。而如果ping 消息错误了。那么就说明ws可能意外的中断了，那么会走onerror()方法，这时候，我可以从新开始唤醒它。这样就能对webSocket保持一个相对的连接持久化了。
-
-75. 图片懒加载
+74. 图片懒加载
 
 
 81. babel 原理
@@ -204,8 +112,6 @@ foo()
 83. 内存泄露如何发现，如何解决
 
 84. setTimeout是否准时，如果不是则应该提前还是延迟
-
-82. 假如说你的富文本编辑器内部要显示脚本，该怎么办呢？
 
 85. 大型文件上传
 
@@ -215,12 +121,7 @@ foo()
     - 进度条
     - 对于已经传过的文件进行跳过秒传，对于失败做失败重传处理
     - 然后有说了一下感觉还能改进的地方
-    - 要发挥 electron 能使用 node 的优势，文件切片，hash 计算和上传都可以用 node 实现，并且开不同的进程处理。由于上传是用 node 模块，不会有浏览器同一域名下 6 个连接的限制。为何没做，因为在写别的更加紧急的东西。。。。
-
-86. 最近的chrome80版本默认屏蔽第三方cookie
-
-87. 数组和链表在计算机中存储的方式？计算机中增加一个数组元素的方式？
-
-88. 
+    
+85. 数组和链表在计算机中存储的方式？计算机中增加一个数组元素的方式？
 
     

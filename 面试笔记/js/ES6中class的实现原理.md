@@ -78,11 +78,17 @@ var Parent = function () {
 
 在ES5中，构造函数是可以直接运行的，比如`Parent()`。但是在ES6就不行。
 
-可以看到转码的构造函数中有`_classCallCheck(this, Parent)`语句,这句话是防止你通过构造函数直接运行的。你直接在ES6运行`Parent()`,这是不允许的,ES6中抛出`Class constructor Parent cannot be invoked without 'new'`错误。转码后的会抛出`Cannot call a class as a function.`能够规范化类的使用方式。
+可以看到转码的构造函数中有`_classCallCheck(this, Parent)`语句,这句话是防止你通过构造函数直接运行的。
+
+你直接在ES6运行`Parent()`,这是不允许的,ES6中抛出`Class constructor Parent cannot be invoked without 'new'`错误。
+
+转码后的会抛出`Cannot call a class as a function.`能够规范化类的使用方式。
 
 转码中`_createClass`方法，它调用`Object.defineProperty`方法去给新创建的Parent添加各种属性。`defineProperties(Constructor.prototype, protoProps)`是给原型添加属性。
 
 如果有静态属性，会直接添加到构造函数`defineProperties(Constructor, staticProps)`上。
+
+
 
 # 三、ES6实现继承
 
@@ -116,7 +122,7 @@ class Child extends Parent {
 
 经过babel转码之后
 
-```
+```js
 var _createClass = function () {
     function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {

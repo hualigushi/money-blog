@@ -32,8 +32,6 @@ PS:防止CSRF:就是让你的每个请求都带一个从cookie中拿到的key, �
 
 Fetch是基于promise设计的。是原生js，没有使用XMLHttpRequest对象。
 
-
-
 - fetch API提供了js接口，用于替代XMLHttpRequest方式的网络请求，fetch()全局方法使用起来比XHR更加方便
 - fetch方法接受2个参数，参数1为请求url或 Request 对象，参数2为可选配置对象
 

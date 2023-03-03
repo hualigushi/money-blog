@@ -1,19 +1,3 @@
-# ES5 实现块级作用域
-
-```
-function outputNumbers(count){
-  (function(){
-    for(var i = 0; i < count; ++i){
-      console.log(i);
-    }  
-  })();
-  console.log(i);//Uncaught ReferenceError: i is not defined
-}
-outputNumbers(5);
-```
-
-
-
 # instanceof 和 Array.isArray 是如何实现的
 
 instanceof
@@ -35,7 +19,7 @@ Array.isArray
 
 
 
-## new/字面量 与 Object.create(null) 创建对象的区别
+## new字面量 与 Object.create(null) 创建对象的区别
 
 - new 和 字面量创建的对象的原型指向 Object.prototype，会继承 Object 的属性和方法。
 - 而通过 Object.create(null) 创建的对象，其原型指向 null，null 作为原型链的顶端，没有也不会继承任何属性和方法。
@@ -52,12 +36,6 @@ Array.isArray
 
 - 通过 visibilityState 的值检测页面当前是否可见，以及打开网页的时间等;
 - 在页面被切换到其他后台进程的时候，自动暂停音乐或视频的播放；
-
-
-
-## [] == []  false
-
-两个操作数都是空数组，都是Object对象,存放在不同的堆中
 
 
 
@@ -84,7 +62,7 @@ Array.isArray
 
 一个最简单的方法是判断除以1的余数是否为0.
 
-```
+```js
 function isInt(num) {
   return num % 1 === 0;
 }
@@ -101,20 +79,6 @@ console.log(isInt(0.3)); // false
 ## Javascript中，有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
 
 Object.hasOwnProperty(name),返回布尔值，不会去寻找原型链上的属性
-
-
-
-
-
-# 去除字符串里面的重复字符
-
-```javascript
-[...new Set('ababbc')].join('')
-```
-
-
-
-
 
 
 

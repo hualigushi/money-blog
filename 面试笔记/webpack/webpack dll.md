@@ -18,7 +18,7 @@
 
 `DllPlugin`是`webpack`内置的插件，不需要额外安装，直接配置`webpack.dll.config.js`文件：
 
-```
+```js
 module.exports = {=
   entry: {
     // 第三方库
