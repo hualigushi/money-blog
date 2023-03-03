@@ -4,17 +4,6 @@
 
 
 
-# 如果需要手动写动画，你认为最小时间间隔是多久，为什么？
-多数显示屏默认频率是60hz，所以理论上最小间隔1/60*1000ms = 16.7ms
-
-
-
-# 在css中，padding-top或padding-bottom的百分比值是根据容器的width来计算的。
-
-
-
-
-
 # offsetWidth/offsetHeight,clientWidth/clientHeight与scrollWidth/scrollHeight的区别
 
 - `offsetWidth/offsetHeight`返回值包含**content + padding + border**，效果与e.getBoundingClientRect()相同
@@ -25,7 +14,7 @@
 
 # 如何给一组列表首尾之外的元素添加样式
 
-```
+```css
 // 考察了css伪类的使用
 
 // DOM

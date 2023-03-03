@@ -34,6 +34,43 @@ Promise的调用流程：
 
 
 
+## Promise.then参数
+
+```js
+const newPromise = new Promise((resolve,reject)=>{
+
+})
+
+// 该 promise 状态由 newPromise 决定，相当于状态进行了移交
+new Promise((resolve,reject)=>{
+	resolve(newPromise)
+}).then(res=>{
+
+}, err=>{
+
+})
+```
+
+```js
+传入一个对象，并且这个对象有实现then方法（并且这个对象是实现了thenable）
+那么会执行该then方法，并且由该then方法决定后续状态
+new Promise((resolve,reject)=>{
+	const obj ={
+		then: function(resolve, reject){
+			// resolve('success')
+			reject('error')
+		}
+	}
+	resolve(newPromise)
+}).then(res=>{
+
+}, err=>{
+
+})
+```
+
+
+
 ## Promise.all 缺陷
 
 都知道 Promise.all 具有并发执行异步任务的能力。但它的最大问题就是如果其中某个任务出现异常(reject)，所有任务都会挂掉，Promise直接进入reject 状态。

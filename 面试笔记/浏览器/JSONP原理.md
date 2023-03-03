@@ -55,7 +55,7 @@ jsonp的本质是利用script标签的src属性进行跨域请求，只能用于
 
 2. jsonp 在jquery ajax中的实现, 只支持GET
 
-```
+```js
 $.ajax({
      url:'//www.bejson.com/test/userinfop.php',
      type:"GET",
@@ -73,7 +73,7 @@ $.ajax({
 ```
 
 
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>

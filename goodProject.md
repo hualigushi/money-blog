@@ -25,7 +25,7 @@ Cytoscape 可以用于 Node.js 服务端环境完成图形分析任务，也可�
 
 Alibaba Cloud Alfa 企业级的微前端解决方案
 
-[WickedCSS](http://kristofferandreasen.github.io/wickedCSS/#)  炫酷C SS3动画库
+[WickedCSS](http://kristofferandreasen.github.io/wickedCSS/#)  炫酷CSS3动画库
 
 [Angrytools](https://angrytools.com/css/animation/)  css集合库并包含生成器
 
@@ -70,6 +70,18 @@ zdog 是一个圆形、扁平、设计师友好的伪3D引擎，通过这个库�
 
 
 
-
-
 GreenSock  动画库
+
+
+
+Pixi.js. canvas 动画
+
+Tweenmax.js
+
+
+
+[SVG 路径编辑器](https://yqnn.github.io/svg-path-editor/)
+
+
+
+[CSS 波浪形发生器](https://css-generators.com/wavy-shapes/)

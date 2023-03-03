@@ -5,7 +5,7 @@
  * 给跟标签加上 data-dpr 属性
  */
 function setDpr() {
-    dpr = window.devicePixelRatio || 1;
+  dpr = window.devicePixelRatio || 1;
 	var docEl = document.documentElement;
 	docEl.setAttribute('data-dpr', dpr);
 }
@@ -47,7 +47,7 @@ $design-doc-dpr:2; //视觉稿采用的基准dpr
 
 针对 媒体查询（@media）无法确定 问题，由于页面缩放后，原来媒体查询限定的max-width、min-width 也会跟着被缩放，所以 @media 的媒体参数是不能写死的，但是可以根据处理字体缩放的问题的思路，针对不同的dpr设备，通过属性选择器为其加载不同的 css 即可：
 
-```
+```css
 @mixin mediaQuery($minWidth, $maxWidth) {
     @each $dpr in (1, 2, 2.5, 2.75, 3, 4) {
         @media screen #{if($minWidth,"and (min-width:" + ($minWidth * $dpr) ")","") +             
@@ -62,7 +62,7 @@ $design-doc-dpr:2; //视觉稿采用的基准dpr
 
 需要时这样使用：
 
-```
+```css
 @include mediaQuery(512px, null) {
         .image {
             float: left;

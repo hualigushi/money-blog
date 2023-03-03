@@ -6,10 +6,6 @@ GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和
 
 
 
-GET与POST都有自己的语义，不能随便混用
-
-
-
 # 区别
 
 - GET在浏览器回退时是无害的，而POST会再次提交请求。
@@ -31,10 +27,6 @@ GET与POST都有自己的语义，不能随便混用
 - GET参数通过URL传递，POST放在Request body中。
 
 - POST请求头中有Content-Type Content-Length字段
-
-
-
-
 
 
 

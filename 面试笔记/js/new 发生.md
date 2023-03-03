@@ -12,7 +12,7 @@
 
 模拟
 
-```
+```js
 function _new(func) {
     // 第一步 创建新对象
     let obj= {}; 

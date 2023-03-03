@@ -6,7 +6,7 @@
 
 我们用一个`nodejs`服务器来模拟一下:
 
-```
+```js
 const http = require('http');
 
 const server = http.createServer();
@@ -81,7 +81,7 @@ Transfer-Encoding: chunked
 
 我们依然以一个实际的例子来模拟分块传输，nodejs 程序如下:
 
-```
+```js
 const http = require('http');
 
 const server = http.createServer();

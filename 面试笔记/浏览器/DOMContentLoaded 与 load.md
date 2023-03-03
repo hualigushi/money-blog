@@ -6,7 +6,7 @@
    2. 所有节点从栈里弹出。
    3. 将静态的script执行完毕，动态script不会阻塞DOMContentLoaded 事件的触发。
    4. 然后就是触发 DOMContentLoaded 事件。
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,13 +21,13 @@
   <script>
     setTimeout(function() {
        document.querySelector(".demo").style.color = "red";
-    console.log("element painting and the state is "+document.readyState);
+    		console.log("element painting and the state is "+document.readyState);
     },2000)
   </script>
 </body>
 </html>
 ```
-```
+```js
 // js file
 document.addEventListener("DOMContentLoaded", function (){
   console.log("DOMContentLoaded event");

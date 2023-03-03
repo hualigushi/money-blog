@@ -1,6 +1,6 @@
 ## 写代码：css div 垂直水平居中，并完成 div 高度永远是宽度的一半（宽度可以不指定）
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
   <head>

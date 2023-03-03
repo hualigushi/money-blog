@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>
+            Peer Connection
+        </title>
+    </head>
+    <body>
+        <div>
+            <button id="start">Start</button>
+            <button id="call">Call</button>
+            <button id="hangup">Hangup</button>
+        </div>
+        <div>
+            <h2>Local</h2>
+            <video id="localvideo" autoplay></video>
+            <h2>Offer SDP</h2>
+            <textarea id="offer" rows="20" cols="90">
+            </textarea>
+        </div>
+        <div>
+            <h2>Remote</h2>
+            <video id="remotevideo" autoplay></video>
+            <h2>Answer SDP</h2>
+            <textarea id="answer" rows="20" cols="90">
+            </textarea>
+        </div>
+        
+        <script src="./index.js"></script>
+    </body>
+</html>

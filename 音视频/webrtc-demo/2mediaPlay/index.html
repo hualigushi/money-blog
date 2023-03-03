@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>视频播放  音频播放 视频特效 视频截图</title>
+        <style>
+            /* 支持的特效 */
+            .special{
+                /* 模糊 */
+                filter: blur(10px); 
+                /* 灰度 */
+                /* filter: grayscale(1);  */
+                /* 反色 */
+                /* filter: invert(1);  */
+                /* 褐色 */
+                /* filter: sepia(1)  */
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <video id="player" autoplay class="special"></video>
+        </section>
+        <section>
+            <audio controls autoplay id="audioplayer"></audio>
+        </section>
+        <div>
+            <button id="snapshot">take snapshot</button>
+        </div>
+        <div>
+            <canvas id="picture"></canvas>
+        </div>
+        <script src="./client.js"></script>
+    </body>
+</html>
