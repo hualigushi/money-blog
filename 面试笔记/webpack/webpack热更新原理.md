@@ -59,9 +59,7 @@ webpack-dev-server启动了一个使用express的Http服务器，这个服务器
 
 3. 默认情况下: webpack-dev-server会在content-base路径下寻找index.html作为首页
 
-4. webpack-dev-server不是一个插件，而是一个web服务器，所以不要想当然地将其引入
-
-content-base 用于设定生成的文件所在目录
+4. webpack-dev-server不是一个插件，而是一个web服务器，所以不要想当然地将其引入content-base 用于设定生成的文件所在目录
 
 
 

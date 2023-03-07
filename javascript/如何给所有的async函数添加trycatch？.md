@@ -140,7 +140,6 @@ function demo(n) {
   ],
   "sourceType": "module"
 }
-复制代码
 ```
 
 ## 常用的 AST 节点类型对照表
@@ -252,7 +251,7 @@ module.exports = function (babel) {
 
 通过`findParent`方法，在父节点中搜寻 async 节点
 
-```vbnet
+```js
 // async节点的属性为true
 const asyncPath = path.findParent(p => p.node.async)
 ```

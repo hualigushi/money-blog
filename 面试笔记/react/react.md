@@ -8,12 +8,6 @@ getDriverStateFromProps替代componentWillReceiveProps，加上逻辑对比上�
 
 
 
-# componentWillReceiveProps用到了this，getDriverStateFromProps也要用，怎么办
-
-
-
-
-
 # componentWillReceiveProps的触发条件是什么
 
 [参考答案] componentWillReceiveProps会在接收到新的props的时候调用
