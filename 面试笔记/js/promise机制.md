@@ -71,14 +71,25 @@ new Promise((resolve,reject)=>{
 
 
 
-## Promise.all 缺陷
+## Promise.all 
 
-都知道 Promise.all 具有并发执行异步任务的能力。
+`Promise.all(iterable)` 返回一个新的 Promise 实例。
 
-但它的最大问题就是如果其中某个任务出现异常(reject)，所有任务都会挂掉，Promise直接进入reject 状态。
+此实例在 `iterable` 参数内所有的 `promise` 都 `fulfilled` 或者参数中不包含 `promise` 时，状态变成 `fulfilled`；
+
+如果参数中 `promise` 有一个失败 `rejected`，此实例回调失败，失败原因的是第一个失败 `promise` 的返回结果。
+
+
+
+Promise.all 实现
+
+![图片](https://mmbiz.qpic.cn/mmbiz_png/nnic7Ckj9Nq0zXqZ0Q1e2sUkKsRLQcwn5F3OQOAFicggwrrWTHRTUEPIjES9VlwEzYlEwhtia52TlDl8G1yUaIXxw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=)
+
+### 
+
+它的最大问题就是如果其中某个任务出现异常(reject)，所有任务都会挂掉，Promise直接进入reject 状态。
 
 **但是其他的promise还是会执行**
 
 解决：es 2020 `Promise.allSettled`
-
 

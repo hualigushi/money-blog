@@ -29,13 +29,18 @@ XSS的攻击过程都是在浏览器通过执行javascript脚本自动进行，�
 可以从两方面入手：
 
 - 想办法阻止恶意代码的注入和执行；
+
 - 用更安全的方法校验和保护用户的身份凭证，以降低XSS攻击之后带来的危害；
+
+  
 
 1、使用HTML转义。对外部插入的内容要永远保持警惕。
 
 对所有外部插入的代码都应该做一次转义，将script,& < > " ' /等危险字符做过滤和转义替换，同时尽量避免使用innerHTML,document.write,outerHTML,eval等方法，用安全性更高的textContent,setAttribute等方法做替代；
 
-2、开启CSP防护。内容安全策略（CSP）的设计就是为了防御XSS攻击的，通过在HTTP头部中设置Content-Security-Policy,就可以配置该策略，如果将CSP设置成一下模式：
+2、开启CSP防护。
+
+内容安全策略（CSP）的设计就是为了防御XSS攻击的，通过在HTTP头部中设置Content-Security-Policy,就可以配置该策略，如果将CSP设置成一下模式：
 `Content-Security-Policy: script-src 'self'`
 
 那么该网站将：
