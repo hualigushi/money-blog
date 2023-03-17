@@ -93,3 +93,12 @@ Promise.all 实现
 
 解决：es 2020 `Promise.allSettled`
 
+
+
+
+
+### Promise 是如何实现链式调用的
+
+.then().then().then()
+
+then 方法必须返回一个**新的 promise 对象**（实现链式调用的关键）

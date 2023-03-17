@@ -22,11 +22,9 @@
 
 Node 中 有 vm 模块，来实现类似的能力，在浏览器中我们可以利用了闭包的能力，利用变量作用域去模拟一个沙箱上下文环境，比如下面的代码:
 
-```
+```js
 function sandbox(global) {
-
  console.log(global.document);
-
 }
 foo({   document: '我是自定义属性'; });
 ```
@@ -43,7 +41,7 @@ foo({   document: '我是自定义属性'; });
 
 同时浏览器提供了`postmessage`等方式让主环境与`iframe`环境可以实现通信，这就让基于`iframe`的沙箱环境成为可能。
 
-```
+```js
 const iframe = document.createElement('iframe',{url:'about:blank'});
 
 const sandboxGlobal = iframe.contentWindow; foo(sandboxGlobal);

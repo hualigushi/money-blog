@@ -1,1 +1,0 @@
-useReducer 的 hooks 借鉴了 redux 的思想，提供了 dispatch 变更的方式，但和 redux 的 reducer 一样，这种方式没法处理异步，且没法互相调用，一旦遇上就容易捉襟见肘。 

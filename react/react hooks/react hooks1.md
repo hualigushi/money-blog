@@ -55,24 +55,3 @@ Hooks 是一个 React 函数组件内一类特殊的函数（通常以 “use”
 
 
 
-# useEffect怎么解绑一些副作用
-
-让我们传给useEffect的副作用函数返回一个新的函数即可。这个新的函数将会在组件下一次重新渲染之后执行。
-
-这种解绑的模式跟componentWillUnmount不一样。componentWillUnmount只会在组件被销毁前执行一次而已，而useEffect里的函数，每次组件渲染后都会执行一遍，包括副作用函数返回的这个清理函数也会重新执行一遍。
-
-## 怎么跳过一些不必要的副作用函数
-
-每次重新渲染都要执行一遍这些副作用函数，显然是不经济的。怎么跳过一些不必要的计算呢？我们只需要给useEffect传第二个参数即可。用第二个参数来告诉react只有当这个参数的值发生改变时，才执行我们传的副作用函数（第一个参数）。
-
-```
-useEffect(() => {
-  document.title = `You clicked ${count} times`;
-}, [count]); // 只有当count的值发生变化时，才会重新执行`document.title`这一句
-```
-
-当我们第二个参数传一个空数组[]时，其实就相当于只在首次渲染的时候执行。也就是componentDidMount加componentWillUnmount的模式。
-
-useEffect 在视图更新之后才清理上一次的副作用。这么处理其实也是和 useEffect 的特性相契合的。
-
-React 只会在浏览器绘制后运行 useEffect。所以 Effect 的清除同样被延迟了。上一次的 Effect 会在重新渲染后被清除。

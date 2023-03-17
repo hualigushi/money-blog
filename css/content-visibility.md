@@ -82,7 +82,7 @@ content-visibility属性有三个可选值:
 
 在class为card中添加 `content-visibility: auto;`：
 
-```html
+```css
      .card {
         position: relative;
         overflow: hidden;
@@ -171,7 +171,6 @@ content-visibility是chrome85今年新增的特性，所以目前兼容性还不
         contain-intrinsic-size: 312px; // 添加此行
       }
     </style>
-复制代码
 ```
 
 再次看滚动条就没有问题了：
