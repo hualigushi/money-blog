@@ -50,6 +50,7 @@ export default{
 </script>
 ```
 
+```html
 <template>
     <div v-if="init">
         <Modal v-model="show" title="添加" @on-cancel="handleClose"></Modal>
@@ -86,6 +87,9 @@ export default{
     }
 }
 </script>
+```
+
+
 
 **原理：**
 
@@ -123,7 +127,9 @@ export default{
         <div v-for="item in userList" :key="item.id" v-if="item.age > 18">{{ item.name }}</div>
     </div>
 </template>
-复制代码
+```
+
+```js
 //userList.vue
 <template>
     <div>
@@ -139,7 +145,6 @@ export default {
         }
     }
 }
-复制代码
 ```
 
 也许面试官还会为什么`v-for`比`v-if`具有更高的优先级？这个问题已经涉及到原理层次，如果这个也会回答，会给面试加分不少。
@@ -152,7 +157,6 @@ export default {
 import userList from './userList'
 console.log(userList.render)
 </script>
-复制代码
 ```
 
 打印出来的内容如下所示
@@ -190,12 +194,11 @@ Vue提供了2个版本，一个是Runtime + Compiler 的，一个是 Runtime onl
 const vm = new Vue({
     render: h => h(App)
 }).$mount('#app')
-复制代码
 ```
 
 Vue实例是通过`$mount`挂载到DOM上。在入口文件中寻找`$mount`方法，在其方法中再找`render`字段，发现以下代码
 
-```arduino
+```js
 const { render, staticRenderFns } = compileToFunctions(template, {
     outputSourceRange: process.env.NODE_ENV !== 'production',
     shouldDecodeNewlines,
@@ -205,7 +208,6 @@ const { render, staticRenderFns } = compileToFunctions(template, {
 }, this)
 options.render = render
 options.staticRenderFns = staticRenderFns
-复制代码
 ```
 
 说明render函数是通过compileToFunctions方法生成，再去寻找compileToFunctions方法在哪里。
@@ -215,7 +217,6 @@ compileToFunctions方法在*src/platforms/web/compiler/index.js*中定义。
 ```arduino
 const { compile, compileToFunctions } = createCompiler(baseOptions)
 export { compile, compileToFunctions }
-复制代码
 ```
 
 compileToFunctions方法又是createCompiler方法生成的，继续寻找createCompiler方法。
@@ -236,7 +237,6 @@ export const createCompiler = createCompilerCreator(
             staticRenderFns: code.staticRenderFns
         }
 })
-复制代码
 ```
 
 在上面代码中可以看到，render是code中的render，而code是generate方法生成的。
@@ -258,7 +258,6 @@ export function generate (ast,options){
         staticRenderFns: state.staticRenderFns
     }
 }
-复制代码
 ```
 
 发现code是genElement方法生成的，继续寻找genElement方法，其实这里已经解决根本原因了，给出几行关键代码。
@@ -273,7 +272,6 @@ export function genElement(el,state){
         return genIf(el, state)
     } 
 }
-复制代码
 ```
 
 由上述代码可以看出，el.for就是`v-for`，el.if就是`v-if`，el.for先于el.if判断执行，所以`v-for`比`v-if`具有更高的优先级。
@@ -285,7 +283,6 @@ return `${altHelper || '_l'}((${exp}),` +
     `function(${alias}${iterator1}${iterator2}){` +
     `return ${(altGen || genElement)(el, state)}` +
 '})'
-复制代码
 ```
 
 > 把寻找原因的整个思路都写出来，就是让小伙伴在看面试题时不要死记硬背，要去理解，可以按照上面的思路，自己去阅读源码找一下原因。毕竟阅读源码能力也是可以为面试加分的。
@@ -359,7 +356,6 @@ return `${altHelper || '_l'}((${exp}),` +
 else if (el.once && !el.onceProcessed) {若设置v-once，则调用genOnce()函数
     return genOnce(el, state)
  } 
-复制代码
 ```
 
 再看genOnce方法
@@ -376,7 +372,6 @@ function genOnce(el, state){
         return genStatic(el, state)
     }
 }
-复制代码
 ```
 
 如果有定义`v-if`指令，如果`v-if`指令的值不存在，最后还是会调用genStatic方法。再看genStatic方法
@@ -387,7 +382,6 @@ function genStatic(el, state) {
     state.staticRenderFns.push(`with(this){return ${genElement(el, state)}}`)
     return `_m(${state.staticRenderFns.length - 1}${el.staticInFor ? ',true' : ''})`
 }
-复制代码
 ```
 
 其中_m方法就是*src\core\instance\render-helpers\render-static.js*中的renderStatic方法，这个方法就是`v-once`实现只渲染一次元素或组件的关键所在。
@@ -402,7 +396,6 @@ function renderStatic(index,isInFor){
     tree = cached[index] = this.$options.staticRenderFns[index].call(this._renderProxy,null,this)
  	return tree
 }
-复制代码
 ```
 
 其中`cached`是带`v-once`的元素或组件渲染生成的虚拟DOM节点的缓存，如果某个虚拟DOM节点的缓存存在，且虚拟DOM节点不是在`v-for`中直接返回该虚拟DOM节点缓存，如果该虚拟DOM节点没有缓存，则调用`genStatic`方法中存在`staticRenderFns`数组中的渲染函数，渲染出虚拟DOM节点且存在`cached`，以便下次不用重新渲染直接返回该虚拟DOM节点，并同时调用`markOnce`方法在该虚拟DOM节点上加上`isOnce`标志，值为`true`。
@@ -413,7 +406,6 @@ function renderStatic(index,isInFor){
 
 ```!
 Vue初始化过程中，会把data传入observe函数中进行数据劫持，把data中的数据都转换成响应式的。
-复制代码
 ```
 
 在observe函数内部调用defineReactive函数处理数据，配置getter/setter属性，转成响应式，如果使用`Object.freeze()`将data中某些数据冻结了，也就是将其configurable属性（可配置）设置为false。
@@ -429,7 +421,6 @@ export function defineReactive(obj,key,val,customSetter,shallow){
     }
     //...
 }
-复制代码
 ```
 
 在项目中如果遇到不需要响应式变化的数据，可以用`Object.freeze()`把该数据冻结了，可以跳过初始化时数据劫持的步骤，大大提高初次渲染速度。
@@ -444,7 +435,6 @@ initData(vm){
     //...
     observe(data, true)
 }
-复制代码
 ```
 
 在observe函数会调用
@@ -454,7 +444,6 @@ observe(value,asRootData){
    //...
    ob = new Observer(value);
 }
-复制代码
 ```
 
 在Observer原型中defineReactive函数处理数据，配置getter/setter属性，转成响应式
@@ -466,7 +455,6 @@ walk (obj) {
         defineReactive(obj, keys[i])
     }
 }
-复制代码
 ```
 
 defineReactive函数中,会将数据的值再次传入observe函数中
@@ -480,7 +468,6 @@ export function defineReactive(obj,key,val,customSetter,shallow){
     let childOb = observe(val);
     //...
 }
-复制代码
 ```
 
 observe函数中有段代码，将数据传入，Observer类中。
@@ -492,7 +479,6 @@ export function observe(value,asRootData){
   //...
   return ob
 }
-复制代码
 ```
 
 以上构成了一个递归调用。
@@ -546,7 +532,6 @@ export function observe (value, asRootData){
   	}
   	//...
 }
-复制代码
 ```
 
 为什么要避免在v-for循环中读取data中数组类型的数据，因为在数据劫持中会调用defineReactive函数中。由于 getter是函数，并且引用了 `dep`、`childOb`，形成了闭包，所以 `dep`、`childOb` 一直存在于内存（每个数据的getter函数）中，`dep`是每个数据的依赖收集容器，`childOb`是经过响应式处理后的数据。
@@ -578,7 +563,6 @@ export function observe (value, asRootData){
         </el-table>
     </div>
 </template>
-复制代码
 ```
 
 假设表格有500条数据，那么读取driverList共500次，每次都读取driverList都会进入`dependArray(value)`中，总共要循环500*500=25万次，若有分页，每次切换页码，都会至少循环25万次。
@@ -590,7 +574,6 @@ res.data.forEach(item =>{
     item.name='';
     item.phone='';
 })
-复制代码
 ```
 
 模板这样实现
@@ -614,7 +597,6 @@ res.data.forEach(item =>{
         </el-table>
     </div>
 </template>
-复制代码
 ```
 
 也可以实现需求，渲染过程中求值时也不会进入`dependArray(value)`中,也不会造成25万次的不必要的循环。大大提高了性能。
@@ -648,7 +630,6 @@ export default{
         })
     }
 }
-复制代码
 ```
 
 - `debounce(func, [wait=0], [options={}])` 创建一个防抖函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。返回一个防抖函数debounceFn，`debounce.cancel`取消防抖，`debounce.flush` 立即调用该func。
@@ -676,14 +657,12 @@ Vue.use(VueLazyload, {
   loading: 'dist/loading.gif',//加载过程中显示图片
   attempt: 1,//尝试次数
 })
-复制代码
 ```
 
 在项目中使用
 
 ```ini
 <img v-lazy="/static/img/1.png">
-复制代码
 ```
 
 #### 11、利用挂载节点会被替换的特性优化白屏问题
@@ -694,7 +673,6 @@ import App from './App.vue'
 new Vue({
     render: h => h(App)
 }).$mount('#app')
-复制代码
 ```
 
 > Vue 选项中的 render 函数若存在，则 Vue 构造函数不会从 template 选项或通过 el 选项指定的挂载元素中提取出的 HTML 模板编译渲染函数。
@@ -728,7 +706,6 @@ Vue项目有个缺点，首次渲染会有一段时间的白屏原因是首次�
     ]
   ]
 }
-复制代码
 ```
 
 其中`libraryName`为组件库的名称，`styleLibraryName`为组件库打包后样式存放的文件夹名称。 在main.js中就可以按需引入。
@@ -738,7 +715,6 @@ import Vue from 'vue';
 import { Button, Select } from 'element-ui';
 Vue.use(Button)
 Vue.use(Select)
-复制代码
 ```
 
 其实babel-plugin-component插件是element用babel-plugin-import插件改造后特定给element UI使用。一般的组件库还是babel-plugin-import插件实现按需引入。
@@ -757,7 +733,6 @@ Vue.use(Select)
     }]
   ]
 }
-复制代码
 ```
 
 其中`libraryName`为组件库的名称，`libraryDirectory`表示从库的package.json的main入口文件或者module入口文件所在文件夹名称，否则默认为lib。
@@ -799,7 +774,6 @@ less.js文件内容如下所示
 
 ```css
 npm install webpack-bundle-analyzer --save-dev
-复制代码
 ```
 
 在*vue.config.js*中引入这插件
@@ -815,7 +789,6 @@ module.exports={
         }
     }
 }
-复制代码
 ```
 
 执行命令`npm run build`，会在浏览器打开一份打包分析图，如下图所示。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cbebd7b867534f6f947bc626b6725960~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
@@ -829,7 +802,6 @@ module.exports={
 ```javascript
 component: () =>import('views/home.vue'),
 component: resolve =>require(['views/home.vue'],resolve)
-复制代码
 ```
 
 但是用`resolve =>require(['需要加载组件的地址'],resolve)`来异步引入组件，通过Webpack4打包后，发现所有组件的代码被打包成一个js文件这和预期的不符，预期应该是每个组件的代码都被打包成对应的js文件，加载组件时会对应加载js文件，这才是懒加载。
@@ -848,12 +820,13 @@ component: resolve =>require(['views/home.vue'],resolve)
 function load(component) {
     return () => import(/* webpackChunkName: "[request]" */ `views/${component}`)
 }
-复制代码
 ```
 
 执行命令`npm run build`，看一下打包分析图。
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/19ff6bb406cc4b24ad68218fb56dbb91~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 如图中红框的js文件是views/flow_card_manage/flow_card_list/index.vue这个组件打包出来的。
+![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/19ff6bb406cc4b24ad68218fb56dbb91~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 
+
+如图中红框的js文件是views/flow_card_manage/flow_card_list/index.vue这个组件打包出来的。
 
 在浏览器上打开项目，用F12抓包看一下，搜一下`flow_card_manage-flow_card_list.67de1ef8.js`这个文件。在首页时，还没加载到这个路由组件时。这个js文件是有被加载，只是预取（prefetch）一下，没有返回内容的。目的是告诉浏览器，空闲的时候给我加载这个js文件。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b65fb0b253dd4091ae5dacfa2de8e512~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/669a7734e900429a81005d5d9b4de352~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 直到真正加载这个路由组件时，这个js文件再次被加载，如果浏览器已经加载好了直接返回内容，如果浏览器还没加载好，就去服务器请求这个js文件，再返回内容。这样就是懒加载，按需加载。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/090ca9ab658c4a00abc861782e9cd11e~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) **原理：** 可以看一下我的另一篇文章[🚩四年前端带你理解路由懒加载的原理](https://juejin.cn/post/6844904180285456398)
 
@@ -865,7 +838,9 @@ function load(component) {
 
 具体操作可以看一下我的另一篇文章[Webpack之externals用法详解](https://juejin.cn/post/6844904190083350542)。
 
-执行命令`npm run build`，看一下打包分析图。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0d59b4dafd304e92af593ee72a4de5f6~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) chunk-vendors.js和chunk-80f6b79a.js的文件大小和之前相比，有大幅度的减小。
+执行命令`npm run build`，看一下打包分析图。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0d59b4dafd304e92af593ee72a4de5f6~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 
+
+chunk-vendors.js和chunk-80f6b79a.js的文件大小和之前相比，有大幅度的减小。
 
 > 用externals提取第三方依赖时，需切记中庸之道。虽然我们的最终目的是减少http请求资源大小，但是过犹不及，提取的过细将会增加http请求数量。
 
@@ -893,7 +868,6 @@ function load(component) {
 
 ```css
 cnpm install --save-dev @intervolga/optimize-cssnano-plugin
-复制代码
 ```
 
 在*vue.config.js*中这么配置
@@ -920,7 +894,6 @@ module.exports={
         }
     }
 }
-复制代码
 ```
 
 其中cssnanoOptions的配置可以看[这里](https://link.juejin.cn?target=https%3A%2F%2Fcssnano.co%2Fguides%2Foptimisations)。
@@ -938,7 +911,6 @@ module.exports={
 .box {
     margin: 10px 20px;
 }
-复制代码
 ```
 
 `cssDeclarationSorter:false`，表示关闭根据CSS的属性名称对CSS进行排序。
@@ -955,7 +927,6 @@ body {
    border: 0;
    color: #C55;
 }
-复制代码
 ```
 
 #### 6、开启optimization.minimize来压缩js代码
@@ -978,7 +949,6 @@ module.exports={
         }
     }
 }
-复制代码
 ```
 
 在Vue Cli3中默认用TerserPlugin插件来压缩js代码，其中配置已经是最优了。
@@ -996,7 +966,6 @@ module.exports = {
             .use(WebpackPlugin, args)
     },
 }
-复制代码
 ```
 
 #### 7、利用image-webpack-loader进行压缩图片
@@ -1013,7 +982,6 @@ module.exports = {
 
 ```arduino
 cnpm install image-webpack-loader --save-dev
-复制代码
 ```
 
 然后在*vue.config.js*中这么配置
@@ -1027,7 +995,6 @@ module.exports = {
             .loader('image-webpack-loader')
     },
 }
-复制代码
 ```
 
 添加image-webpack-loader前，打包后 homeBg.png 图片 如下所示 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8e45a80d6b544a09aaac542ecdea6961~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
@@ -1054,7 +1021,6 @@ module.exports = {
               })
       },
   }
-  复制代码
   ```
 
 - mozjpeg：  控制压缩JPEG图像的配置，默认启用。参数值为对象，常用的子参数有：
@@ -1110,7 +1076,6 @@ module.exports = {
             })
     },
 }
-复制代码
 ```
 
 ### 四、项目部署的优化
@@ -1137,7 +1102,6 @@ http {
     gzip_http_version 1.1;
     gzip_vary on;
 }
-复制代码
 ```
 
 - `gzip`：on | off ，默认为off，on为开启gzip，off为关闭gzip。
@@ -1162,7 +1126,6 @@ http {
 
 ```css
 npm install compression-webpack-plugin --save-dev
-复制代码
 ```
 
 然后在*vue.config.js*中这么配置
@@ -1178,7 +1141,6 @@ module.exports = {
         }
     }
 }
-复制代码
 ```
 
 执行`npm run build`命令后，打开*dist*文件，会发现多出很多名字相同的文件，只是其中一个文件后缀为`.gz`，这就是用gzip压缩后的文件。 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/52c0d290451147229d0bb6d81eb9f671~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
@@ -1198,10 +1160,8 @@ module.exports = {
 #### 5、CompressionPlugin插件的参数详细详解
 
 - ```
-  test
+  test：String|RegExp|Array<String|RegExp>，
   ```
-
-  ：String|RegExp|Array<String|RegExp>，
 
   资源的名称
 
@@ -1213,7 +1173,6 @@ module.exports = {
           test: /\.js(\?.*)?$/i,
       })
   ],
-  复制代码
   ```
 
 - `include`：String|RegExp|Array<String|RegExp>，**资源的名称**符合条件的才会被压缩，默认为undefined，是在`test`参数的范围内在进行筛选，满足`test`参数的条件，且满足`include`参数的条件的资源才会被压缩。
@@ -1240,7 +1199,6 @@ module.exports = {
           compressionOptions: { level: 1 },
       })
   ],
-  复制代码
   ```
 
 - `threshold`：Number，设置被压缩资源的最小大小，单位为字节。默认为0。
@@ -1256,7 +1214,6 @@ module.exports = {
         return `${info.path}.gz${info.query}`;
     },
 })
-复制代码
 ```
 
 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b24d3455d8364959bf7468a89b628207~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
@@ -1268,30 +1225,5 @@ module.exports = {
 new CompressionPlugin({
       cache: 'path/to/cache',
 }),
-复制代码
 ```
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d5764eff66884583a833ad6fd59c7ee6~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
-
-分类：
-
-[前端]()
-
-标签：
-
-[面试]()[Vue.js]()
-
-文章被收录于专栏：
-
-![cover](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/95414745836549ce9143753e2a30facd~tplv-k3u1fbpfcp-no-mark:160:160:160:120.awebp)
-
-​      前端优化    
-
-​      作为一个前端怎能不懂优化，如何升职加薪。
-
-
-
-作者：红尘炼心
-链接：https://juejin.cn/post/6857856269488193549
-来源：稀土掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

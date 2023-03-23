@@ -4,7 +4,7 @@
 
 v-model本身是一个指令语法糖，来为input 和 指定的变量做一个双向绑定的过程
 
-```
+```js
 // model 函数
 function model (
   el,
