@@ -193,3 +193,8 @@ console.log(user.getName())
 console.log(user.getTwitter())
 ```
 
+
+
+# 11.  "typeRoots": ["./node_modules/@types", "./src/typings"]
+
+tsconfig.json 文件中指定路径寻找types文件

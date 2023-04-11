@@ -40,94 +40,9 @@ Proxy 支持13种拦截操作
 
 
 
-# 2. Object.defineProperty
+# 2. 语法
 
-![](https://mmbiz.qpic.cn/mmbiz_png/VgnGRVJVoHFMTibiazjk7P11OFXrh6W9WHeMicTDC4F0rRUiaiaJNhic58CaJmlqgBtlu3VhrpQAB0hkAlWtuoBKhWJA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
-
-## 2.1  Object.defineProperty 不能监听所有属性
-`Object.defineProperty` 无法一次性监听对象所有属性，必须遍历或者递归来实现。
-```js
-let girl = {
-     name: "marry",
-     age: 22
-   }
-   /* Proxy 监听整个对象*/
-   girl = new Proxy(girl, {
-     get() {}
-     set() {}
-   })
-   /* Object.defineProperty */
-   Object.keys(girl).forEach(key => {
-     Object.defineProperty(girl, key, {
-       set() {},
-       get() {}
-     })
-   })
-```
-
-## 2.2 Object.defineProperty 无法监听新增加的属性
-
-## 2.3. Object.defineProperty 无法响应数组操作
-
-`Object.defineProperty` 可以监听数组的变化，`Object.defineProperty` 无法对 push、shift、pop、unshift 等方法进行响应。
-
-```js
-const arr = [1, 2, 3];
-   /* Proxy 监听数组*/
-   arr = new Proxy(arr, {
-     get() {},
-     set() {}
-   })
-   /* Object.defineProperty */
-   arr.forEach((item, index) => {
-     Object.defineProperty(arr, `${index}`, {
-       set() {},
-       get() {}
-     })
-   })
-
-   arr[0] = 10; // 都生效
-   arr[3] = 10; // 只有 Proxy 生效
-   arr.push(10); // 只有 Proxy 生效
-```
-
-对于新增加的数组项，`Object.defineProperty` 依旧无法监听到。因此，在 Mobx 中为了监听数组的变化，默认将数组长度设置为1000，监听 0-999 的属性变化。
-```js
-const arr = [1, 2, 3];
-   /* Object.defineProperty */
-   [...Array(1000)].forEach((item, index) => {
-     Object.defineProperty(arr, `${index}`, {
-       set() {},
-       get() {}
-     })
-   });
-   arr[3] = 10; // 生效
-   arr[4] = 10; // 生效
-```
-
-在 Vue 和 Mobx 中都是通过重写原型实现的。
-
-在定义变量的时候，判断其是否为数组，如果是数组，那么就修改它的 `__proto__`，将其指向 `subArrProto`，从而实现重写原型链。
-```js
-const arrayProto = Array.prototype;
-   const subArrProto = Object.create(arrayProto);
-   const methods = ['pop', 'shift', 'unshift', 'sort', 'reverse', 'splice', 'push'];
-   methods.forEach(method => {
-     /* 重写原型方法 */
-     subArrProto[method] = function() {
-       arrayProto[method].call(this, ...arguments);
-     };
-     /* 监听这些方法 */
-     Object.defineProperty(subArrProto, method, {
-       set() {},
-       get() {}
-     })
-   })
-```
-
-# 3. 语法
-
-## 3.1 get
+## 2.1 get
 
 get 方法用来拦截对目标对象属性的读取，它接收三个参数，分别是目标对象、属性名和 Proxy 实例本身。
 基于 get 方法的特性，可以实现很多实用的功能，比如在对象里面设置私有属性（一般定义属性我们以 _ 开头表明是私有属性） ，实现禁止访问私有属性的功能。
@@ -173,7 +88,7 @@ person = defaults(person, null);
 person.sex // null
 ```
 
-## 3.2 set
+## 2.2 set
 
 set 方法可以拦截对属性的赋值操作，一般来说接收四个参数，分别是目标对象、属性名、属性值、Proxy 实例。
 下面是一个 set 方法的用法，在对属性进行赋值的时候打印出当前状态。
@@ -268,7 +183,7 @@ const proxy = new Proxy(person, {
 proxy.name = '';
 ```
 
-## 3.3. apply
+## 2.3. apply
 
 `apply` 一般是用来拦截函数的调用，它接收三个参数，分别是目标对象、上下文对象（this）、参数数组。
 ```js
@@ -297,7 +212,7 @@ const func = new Proxy(log, {
 func()
 ```
 
-## 3.4. construct
+## 2.4. construct
 
 `construct` 方法用来拦截 `new` 操作符。它接收三个参数，分别是目标对象、构造函数的参数列表、`Proxy` 对象，最后需要返回一个对象。
 
@@ -331,9 +246,9 @@ const Person = new Proxy(noop, {
 const person = new Person('tom', 21); // { name: 'tom', age: 21 }
 ```
 
-# 4. Proxy 可以做哪些有意思的事情？
+# 3. Proxy 可以做哪些有意思的事情？
 
-## 4.1 骚操作：代理类
+## 3.1 骚操作：代理类
 使用 `construct` 可以代理类, 类的本质也是构造函数和原型（对象）组成的，完全可以对其进行代理。
 
 有这么一个需求，需要拦截对属性的访问，以及计算原型上函数的执行时间, 可以对属性设置 `get` 拦截，对原型函数设置 `apply` 拦截。
@@ -380,7 +295,7 @@ myClass.say();
 myClass.name;
 ```
 
-## 4.2 等不及可选链：深层取值（get）
+## 3.2 等不及可选链：深层取值（get）
 平时取数据的时候，经常会遇到深层数据结构，如果不做任何处理，很容易造成 JS 报错。
 
 为了避免这个问题，也许你会用多个 && 进行处理
@@ -427,7 +342,7 @@ get(obj).person.name(); // undefined
 get(obj).person.name.xxx.yyy.zzz(); // Cannot read property 'xxx' of undefined
 ```
 
-## 4.3 管道
+## 3.3 管道
 ```js
 const pipe = (value) => {
     const stack = [];
