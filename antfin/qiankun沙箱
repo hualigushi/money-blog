@@ -1,0 +1,9 @@
+qiankun性能优化-运行时沙箱
+
+问题：由于沙箱开启，会导致代码中所有对全局属性的访问都会执行拦截器方法且执行频率非常高，并且由于with作用域的缘故会新增Symbol.unscopables的访问
+
+解决方案：由于乾坤的沙箱使用with语法的特性，我们可以通过Symbol.unscopables进行属性访问的逃逸，在unscopables白名单中的属性是可以直接逃离沙箱的拦截，
+
+直接访问到真实的window上，对于此场景下访问量较大的并且存在window上的原生属性
+
+https://github.com/umijs/qiankun/pull/1845/commits/e582be11612cdafad887192399209556c6d4232f#diff-dd52862b58b825e5ed9b757c37cc74037b62757668accbaa37682621c8a1ab6fR57
