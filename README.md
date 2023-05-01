@@ -2,31 +2,9 @@
 
 
 
-
-
-`awesome-typescript-loader`
-
-```
-{
-  "compilerOptions": {
-  	 "incremental": true 
-  },
-   "exclude": [
-     "node_modules"
-     ""
-   ]
-}
-```
-
- 
-
-
-
-
-
 第二届缤纷·滨江前端技术沙龙  https://live.dxy.cn/front/live/DC202009070077280#/
 
- 第三届缤纷·滨江前端技术沙 https://www.yuque.com/binfe/pase7s/ynvlor
+第三届缤纷·滨江前端技术沙 https://www.yuque.com/binfe/pase7s/ynvlor
 
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hualigushi)](https://github.com/anuraghazra/github-readme-stats)
 
