@@ -25,6 +25,10 @@
     "build",
     "dist"
   ],
-  "include": ["src/*.ts"]
+  "include": ["src/*.ts"],
+  "typeRoots": [
+    "src/typings"
+  ],
+  "include": ["src"]
 }
 ```
