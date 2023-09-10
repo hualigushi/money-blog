@@ -1,8 +1,83 @@
-`Object.keys`在内部会根据属性名`key`的类型进行不同的排序逻辑。分三种情况：
+在一些现代的浏览器中，keys 输出顺序是可以预测的！
 
-1. 如果属性名的类型是`Number`，那么`Object.keys`返回值是按照`key`从小到大排序
-2. 如果属性名的类型是`String`，那么`Object.keys`返回值是按照属性被创建的时间升序排序。
-3. 如果属性名的类型是`Symbol`，那么逻辑同`String`相同
+## Key 都为自然数：
+
+注意这里的自然数是指正整数或 0，如果是其他类的 Number —— 浮点数或者负数 —— 都会走到下一组类型里，像`NaN`或者`Infinity`这种也自然归到下一个类型里，但是像科学记数法这个会稍微特殊一点，感兴趣的同学可以自己试一下。
+
+总结来说，就是当前的 key 如果是自然数就按照自然数的大小进行升序排序。
+
+```js
+const objWithIndices = {
+  23: 23,
+  '1': 1,
+  1000: 1000
+};
+
+console.log(Reflect.ownKeys(objWithIndices)); // ["1", "23", "1000"]
+console.log(Object.keys(objWithIndices)); // ["1", "23", "1000"]
+console.log(Object.getOwnPropertyNames(objWithIndices)); // ["1", "23", "1000"]
+```
+
+包括在 `for-in` 循环的遍历中，keys 也是按照这个顺序执行的。
+
+## Key 都为 String：
+
+如果 key 是不为自然数的 String（Number 也会转为 String）处理，则按照加入的时间顺序进行排序。
+
+```js
+const objWithStrings = {
+  "002": "002",
+  c: 'c',
+  b: "b",
+  "001": "001",
+}
+
+console.log(Reflect.ownKeys(objWithStrings)); // ["002", "c", "b", "001"]
+console.log(Object.keys(objWithStrings));// ["002", "c", "b", "001"]
+console.log(Object.getOwnPropertyNames(objWithStrings));// ["002", "c", "b", "001"]
+```
+
+## Key 都为symbol
+
+```js
+const objWithSymbols = {
+  [Symbol("first")]: "first",
+  [Symbol("second")]: "second",
+  [Symbol("last")]: "last",
+}
+
+console.log(Reflect.ownKeys(objWithSymbols));// [Symbol(first), Symbol(second), Symbol(last)]
+console.log(Object.keys(objWithSymbols));// [Symbol(first), Symbol(second), Symbol(last)]
+console.log(Object.getOwnPropertyNames(objWithSymbols));// [Symbol(first), Symbol(second), Symbol(last)]
+```
+
+如果 Key 都为 Symbol，顺序和 String 一样，也是按照添加的顺序进行排序的。
+
+## 如果是以上类型的相互结合
+
+```js
+const objWithStrings = {
+  "002": "002",
+  [Symbol("first")]: "first",
+  c: "c",
+  b: "b",
+  "100": "100",
+  "001": "001",
+  [Symbol("second")]: "second",
+}
+
+console.log(Reflect.ownKeys(objWithStrings));
+// ["100", "002", "c", "b", "001", Symbol(first), Symbol(second)]
+```
+
+结果是先按照自然数升序进行排序，然后按照非数字的 String 的加入时间排序，然后按照 Symbol 的时间顺序进行排序，也就是说他们会先按照上述的分类进行拆分，先按照自然数、非自然数、Symbol 的顺序进行排序，然后根据上述三种类型下内部的顺序进行排序。
+
+## Recap
+
+1. 在 ES6 之前 Object 的键值对是无序的；
+2. 在 ES6 之后 Object 的键值对按照自然数、非自然数和 Symbol 进行排序，自然数是按照大小升序进行排序，其他两种都是按照插入的时间顺序进行排序。
+
+###  
 
 
 
@@ -54,19 +129,25 @@
 
 接下来我们试试数字的效果：
 
-![Object.keys(123)](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a44c76c27b~tplv-t2oaga2asx-watermark.awebp)图2 `Object.keys(123)`
+![Object.keys(123)](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a44c76c27b~tplv-t2oaga2asx-watermark.awebp)
+
+图2 `Object.keys(123)`
 
 如图2所示，返回空数组。
 
 为什么会返回空数组？请看图3：
 
-![new Number(123)](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a44950161a~tplv-t2oaga2asx-watermark.awebp)图3 `new Number(123)`
+![new Number(123)](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a44950161a~tplv-t2oaga2asx-watermark.awebp)
+
+图3 `new Number(123)`
 
 如图3所示，返回的对象没有任何可提取的属性，所以返回空数组也是正常的。
 
 然后我们再试一下String的效果：
 
-![Object.keys('我是Berwin')](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a443348edc~tplv-t2oaga2asx-watermark.awebp)图4 `Object.keys('我是Berwin')`
+![Object.keys('我是Berwin')](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/7/26/164d49a443348edc~tplv-t2oaga2asx-watermark.awebp)
+
+图4 `Object.keys('我是Berwin')`
 
 图4我们会发现返回了一些字符串类型的数字，这是因为String对象有可提取的属性，看如图5：
 
@@ -124,7 +205,9 @@ Object.keys({
 // ["1", "3", "5", "a", "c", "b"]
 ```
 
-属性的顺序规则中虽然规定了`Symbol`的顺序，但其实`Object.keys`最终会将`Symbol`类型的属性过滤出去。（原因是顺序规则不只是给`Object.keys`一个API使用，它是一个通用的规则）
+属性的顺序规则中虽然规定了`Symbol`的顺序，但其实`Object.keys`最终会将`Symbol`类型的属性过滤出去。
+
+（原因是顺序规则不只是给`Object.keys`一个API使用，它是一个通用的规则）
 
 
 

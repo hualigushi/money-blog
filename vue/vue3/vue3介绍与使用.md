@@ -29,7 +29,7 @@
 ![](https://upload-images.jianshu.io/upload_images/3407939-249cf02b63d3ca09?imageMogr2/auto-orient/strip|imageView2/2/w/688/format/webp)
 
 index.html,在里面引入css和js文件并创建了一个Vue应用所需的挂载点元素
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,7 +57,7 @@ index.html,在里面引入css和js文件并创建了一个Vue应用所需的挂�
 ```
 
 main.js
-```
+```js
 const { createApp, createComponent } = Vue
 
 // 计数器组件
@@ -110,7 +110,7 @@ app.mount(App, container)
 createComponent()函数不是必须的，完全可以去掉，它的存在是为了使用TypeScript编写代码时，利用TypeScript的类型推断机制在开发工具里（如VSCode）实现更好的参数自动提示功能。
 
 写成下面这样也是完全可以工作的：
-```
+```js
 const App = {
     components: { Counter },
     template: `
@@ -122,7 +122,7 @@ const App = {
 }
 ```
 main.css
-```
+```css
 .container {
     border: 1px solid #cccccc;
     border-radius: 5px;
@@ -154,13 +154,17 @@ main.css
 
 ## 使用Composition API
 
-当前，我们使用所谓的 Options API 构建组件。为了向 Vue 组件添加逻辑，我们填充（可选）属性，例如 `data`、`methods`、`computed`等。这种方法的最大缺点是其本身并不是有效的 JavaScript 代码。你需要确切地知道模板中可以访问哪些属性以及 `this` 关键字的行为。在后台，Vue 编译器需要将此属性转换为工作代码。因此我们无法从自动建议或类型检查中受益。
+当前，我们使用所谓的 Options API 构建组件。为了向 Vue 组件添加逻辑，我们填充（可选）属性，例如 `data`、`methods`、`computed`等。
+
+这种方法的最大缺点是其本身并不是有效的 JavaScript 代码。你需要确切地知道模板中可以访问哪些属性以及 `this` 关键字的行为。
+
+在后台，Vue 编译器需要将此属性转换为工作代码。因此我们无法从自动建议或类型检查中受益。
 
 
 
 组件 API 旨在通过将组件属性中当前可用的机制公开为 JavaScript 函数来解决这个问题。 Vue 核心团队将组件 API 描述为 *“一组基于函数的附加 API，可以灵活地组合组件逻辑。”* 用组件 API 编写的代码更具有可读性，并且其背后没有任何魔力，因此更易于阅读和学习。
 
-```
+```js
 const { createApp, ref } = Vue
 
 // 计数器组件
@@ -193,7 +197,7 @@ const Counter = {
 setup方法，它是Vue3.0中新增的组件入口，专为使用Composition API而设计，调用时机是在组件生命周期的 beforeCreate 和 created 之间（所以在 setup 里面是访问不了 this 对象的，即它里面的this并不是指向当前组件，这点需要注意也尽量避免使用）。
 
 原先在 data 里的响应式对象属性 count 在这里成为了一个使用 ref 函数创建的响应式常量；而用于递增和重置这个 count 值的函数内部，不再需要通过 this 引用任何东西（也不推荐使用），这为我们进行进一步的重构提供了机会。我们可以把对 count 操作的业务逻辑独立提取出来
-```
+```js
 // 计数器组件
 const Counter = {
     template: `

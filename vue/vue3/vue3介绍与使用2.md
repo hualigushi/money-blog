@@ -38,7 +38,7 @@
 
 index.js内容:
 
-```
+```js
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Home from '../components/home'
 
@@ -57,7 +57,7 @@ export default createRouter({
 
 main.js:
 
-```
+```js
 import { createApp } from 'vue';
 import App from './App.vue'
 import router from './router';
