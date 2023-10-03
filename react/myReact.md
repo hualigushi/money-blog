@@ -223,3 +223,80 @@ const [param, setParam] = useUrlQueryParam(["name", "personId"]);
 
 
 
+# 10 React.Children.toArray
+
+```jsx
+import { Children } from 'react'
+
+function Wrap (props) {
+  // 用 Children.toArray 来处理 props.children
+  if (Children.toArray(props.children).length) {
+    return (
+     <div>
+        <p>当前内容为：</p>
+        <div>{props.children}</div>
+      </div>
+    )
+  } else {
+    return (
+     <div>nothing</div>
+    )
+  }
+}
+
+function App () {
+  return (
+   <Wrap>
+     { // 返回空数组
+        [].map(item => <span>{item}</span>)
+      }
+    </Wrap>
+  )
+}
+```
+
+此时页面展示的是：
+
+![图片](https://mmbiz.qpic.cn/mmbiz_png/lgHVurTfTcwH08e8Eibr8WqQn8oG2Cx98oEGnAesiczEHX2afcGknvibgoPRehowic6wStqF8XDXEkXL1Me777IyvQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
+
+为什么会这样呢？打个断点进去看了一下 `React.Children.toArray` 大致都做了什么处理，这里简单总结一下：将 `children` 传过来的每个元素都放到一个数组中再返回，并会过滤掉空数组、Boolean、undefined
+
+所以我们刚才的例子中，空数组直接被过滤掉了。我们再来验证一下 `React.Children.toArray` 的强大，举个例子🌰
+
+```jsx
+function App () {
+  return (
+   <Wrap>
+      {
+        false && <span>作者：零一</span>
+      }
+      {true}
+     { // 返回空数组
+        [].map(item => <span>{item}</span>)
+      }
+      {
+        {}?.name
+      }
+    </Wrap>
+  )
+}
+```
+
+这种情况，`<Wrap/>` 组件接收到的 `children` 值应为：
+
+```js
+[
+  false,
+  true,
+  [],
+  undefined,
+]
+```
+
+那么页面展示的是什么呢？
+
+![图片](https://mmbiz.qpic.cn/mmbiz_png/lgHVurTfTcwH08e8Eibr8WqQn8oG2Cx98oEGnAesiczEHX2afcGknvibgoPRehowic6wStqF8XDXEkXL1Me777IyvQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
+
+是的，还是`nothing`，因为这四种情况的值全都被 `React.Children.toArray` 给过滤掉了，最终返回的值为 `[]` ，这也十分符合我们开发时的预期
+
+所以如果你真的需要把 `children` 作为条件判断的依据的话，我建议是用这个方法！
