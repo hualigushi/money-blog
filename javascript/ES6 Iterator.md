@@ -10,7 +10,7 @@ Iterator 是一种接口，目的是为不同的数据结构提供统一的数�
 value表示具体的返回值，done 是布尔类型的，表示集合是否遍历完成或者是否后续还有可用数据，没有可用数据则返回 true，否则返回 false。
 
 另外内部会维护一个指针，用来指向当前集合的位置，每调用一次 next 方法，指针都会向后移动一个位置(可以想象成数组的索引)。
-```
+```js
 function getIterator(list) {
       var i = 0;
       return {
@@ -31,7 +31,7 @@ function getIterator(list) {
   console.log(it.next()); // "{ value: undefined, done: true }"
   console.log(it.next()); // "{ value: undefined, done: true }"
   console.log(it.next()); // "{ value: undefined, done: true }"
-  ```
+```
   - getIterator方法返回一个对象 - 可迭代对象
 
   - 对象具有一个next 方法，next 方法内部通过闭包来保存指针 i 的值，每次调用 next 方法 i 的值都会+1.
@@ -39,16 +39,16 @@ function getIterator(list) {
   - 然后根据 i 的值从数组内取出数据作为 value，然后通过索引判断得到 done的值。
 
   - 当 i=3的时候，超过数组的最大索引，无可用数据返回，此时done 为true，遍历完成。
-  
+
   # 可迭代对象
   ES6里规定，只要在对象的属性上部署了Iterator接口，具体形式为给对象添加Symbol.iterator属性，此属性指向一个迭代器方法，这个迭代器会返回一个特殊的对象 - 迭代器对象。
 
   而部署这个属性并且实现了迭代器方法后的对象叫做可迭代对象。
 
   此时，这个对象就是可迭代的，也就是可以被 for of 遍历。
-  
+
   `Symbol.iterator` 它是一个表达式，返回Symbol对象的iterator属性，这是一个预定义好的、类型为 Symbol 的特殊值。
-  ```
+  ```js
   var iterableObj = {
     items:[100,200,300],
     [Symbol.iterator]:function(){
@@ -71,12 +71,12 @@ function getIterator(list) {
 for(var item of iterableObj){
     console.log(item); //100,200,300
 }
-```
+  ```
 
 # Iterator 原生应用场景
 字符串、数组、map，在 ES6中有些对象已经默认部署了此接口，不需要做任何处理，就可以使用 for of 来进行遍历取值。
 #### 数组
-```
+```js
 var arr=[100,200,300];
 var iteratorObj=  arr[Symbol.iterator]();//得到迭代器方法，返回迭代器对象
 
@@ -88,7 +88,7 @@ console.log(iteratorObj.next());
 ![](https://mmbiz.qpic.cn/mmbiz/vLKqut7Zx90mEScXIxCibzYpGwxhYWvHxF3SxCBrNxic9XQNrIBAZWv5O2icFZsZ8qpQIKoYAaMyWNqcKibhVHfgcQ/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 #### 字符串
-```
+```js
 var str='abc';
 var strIteratorObj = str[Symbol.iterator]();//得到迭代器
 
@@ -102,7 +102,7 @@ console.log(strIteratorObj.next());
 
 #### arguments 类数组
 对象是默认没有部署这个接口的，所以arguments这个属性没有在原型上，而在在对象自身的属性上。
-```
+```js
 function test(){
     var obj = arguments[Symbol.iterator]();
    console.log( arguments.hasOwnProperty(Symbol.iterator));
@@ -113,13 +113,16 @@ test(1,2,3);
 ```
 ![](https://mmbiz.qpic.cn/mmbiz/vLKqut7Zx90mEScXIxCibzYpGwxhYWvHxoer9kUtgibQsOxS4Q2RmRThQUdRKMaRqOB1zBpZToJpfMcmlKkfgVUA/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
+
+
 # for of 中断
+
 迭代器除了必须next 方法外，还有两个可选的方法 return和throw方法。
 
 如果 for of 循环提前退出，则会自动调用 return 方法，需要注意的是 return 方法必须有返回值，且返回值必须是 一个object。
 
 ps：以抛出异常的方式退出，会先执行 return 方法再抛出异常。
-```
+```js
 var iterableObj = {
     items:[100,200,300],
     [Symbol.iterator]:function(){
@@ -162,7 +165,7 @@ for(var item of iterableObj){
 #### 解构赋值
 
 对可迭代对象进行解构赋值的时候，会默认调用`Symbol.iterator`方法。
-```
+```js
 //字符串
 var str='12345';
 var [a,b]=str;
@@ -191,7 +194,7 @@ console.log(d,e);
 
 从一个自定义的可迭代对象进行解构赋值。
 
-```
+```js
 var iterableObj = {
     items:['红','绿','蓝'],
     [Symbol.iterator]:function(){
@@ -285,7 +288,7 @@ Array.from(arr);
 
 # 判断对象是否可迭代
 既然可迭代对象的规则必须在对象上部署Symbol.iterator属性，那么我们基本上就可以通过此属来判断对象是否为可迭代对象，然后就可以知道是否能使用 for of 取值了。
-```
+```js
 function isIterable(object) {
     return typeof object[Symbol.iterator] === "function";
 }

@@ -1,14 +1,29 @@
-# 1. Proxy 提供了哪些拦截方式？
+[TOC]
 
-Proxy 一般是用来架设在目标对象之上的一层拦截，来实现对目标对象访问和修改的控制。
 
-Proxy 是一个构造函数，使用的时候需要配合 new 操作符，直接调用会报错。
 
-Proxy 构造函数接收两个参数，第一个参数是需要拦截的目标对象，这个对象只可以是对象、数组或者函数；
+# Proxy简介
 
-第二个参数则是一个配置对象，提供了拦截方法，即使这个配置对象为空对象，返回的 Proxy 实例也不是原来的目标对象。
+> **Proxy** 对象用于创建一个对象的代理，从而实现基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等）。
 
-Proxy 支持13种拦截操作
+其基本语法如下：
+
+```js
+const p = new Proxy(target, handler);
+```
+
+参数说明：
+**target**: 即我们要代理的对象。我们都知道在JS里“万物皆对象”，因此这个target 可以是任何类型的对象，包括原生数组，函数，甚至另一个Proxy对象。
+
+同时，请注意到定义里的关键词“用于创建一个对象的代理”，因此Proxy只能代理对象，任何原始值类型都是无法代理的 。如对number, boolean类型的原始值代理都会得到 “Cannot create proxy with a non-object as target or handler”的错误：
+
+![图片](https://mmbiz.qpic.cn/mmbiz_png/Tmczbd3NL00PQ5nOg80CxJancrFqraMOh3wrT94uRCr2icQNdrDZvwgwu3QWo9d0icA6Wa36ufDh8uxicXLnjtavQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
+
+**handler：**其是一个属性全部为函数类型的对象**。**这些函数类型的属性 ，也 称之为捕获器（trap），其作用就是为了实现定义里说的“基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等）”，注意，这里的拦截其实是对代理对象p的基本操作拦截，而并不是对被代理的对象target的拦截handler对象总共有以下截图共计13个属性方法
+
+
+
+# Proxy 拦截方式？
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/VgnGRVJVoHFMTibiazjk7P11OFXrh6W9WHK1HHROw6bcRqcN0G43l6Yia8Z1nExR7UYLA48kx1uz6xkRsugeowK3A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
@@ -40,215 +55,147 @@ Proxy 支持13种拦截操作
 
 
 
-# 2. 语法
-
-## 2.1 get
-
-get 方法用来拦截对目标对象属性的读取，它接收三个参数，分别是目标对象、属性名和 Proxy 实例本身。
-基于 get 方法的特性，可以实现很多实用的功能，比如在对象里面设置私有属性（一般定义属性我们以 _ 开头表明是私有属性） ，实现禁止访问私有属性的功能。
+# 用法
 
 ```js
-const person = {
-    name: 'tom',
-    age: 20,
-    _sex: 'male'
-}
-const proxy = new Proxy(person, {
-    get(target, prop) {
-        if (prop[0] === '_') {
-            throw new Error(`${prop} is private attribute`);
-        }
-        return target[prop]
-    }
-})
-proxy.name; // 'tom'
-proxy._sex; // _sex is private attribute
+const obj = {
+  foo: 'bar',
+  fn () {
+    console.log('fn调用了');
+  }
+};
+const handler = {
+  get (target, key) {
+    console.log(`我被读取了${key}属性`);
+    return target[key];
+  },
+  set (target, key, val) {
+    console.log(`我被设置了${key}属性, val: ${val}`);
+    target[key] = val;
+  },
+  apply (target, thisArg, argumentsList) {
+    console.log('fn调用被拦截');
+    return target.call(thisArg, ...argumentsList);
+  }
+};
+const p = new Proxy(obj, handler);
+p.foo; // 输出：我被读取了foo属性
+p.foo = 'bar1'; // 输出：我被设置了foo属性, val: bar1
+p.fn(); // 输出：我被读取了fn属性 fn调用了
 ```
 
-还可以给对象中未定义的属性设置默认值。通过拦截对属性的访问，如果是 undefined，那就返回最开始设置的默认值。
-```js
-let person = {
-    name: 'tom',
-    age: 20
-}
-const defaults = (obj, initial) => {
-    return new Proxy(obj, {
-        get(target, prop) {
-            if (prop in target) {
-                return target[prop]
-            }
-            return initial
-        }
-    })
-}
-person = defaults(person, 0);
-person.name // 'tom'
-person.sex // 0
-person = defaults(person, null);
-person.sex // null
-```
+在上述代码中，并没有拦截到obj.fn()函数调用操作，而却是只是输出了“我被读取了fn属性”。
 
-## 2.2 set
+究其原因，我们可以再次从Proxy的定义里的关键词“基本操作”找到答案 。
 
-set 方法可以拦截对属性的赋值操作，一般来说接收四个参数，分别是目标对象、属性名、属性值、Proxy 实例。
-下面是一个 set 方法的用法，在对属性进行赋值的时候打印出当前状态。
-```js
-const proxy = new Proxy({}, {
-    set(target, key, value, receiver) {
-        console.log(`${key} has been set to ${value}`);
-        Reflect.set(target, key, value);
-    }
-})
-proxy.name = 'tom'; // name has been setted ygy
-```
+那么何为**基本操作**呢？在上述代码中就表明了对象属性的读取（p.foo） 、设置(p.foo='xxx')就是基本操作，与之对应的就是非基本操作，我们可以称之为**复合操作**。
 
-第四个参数 receiver 则是指当前的 Proxy 实例，在下例中指代 proxy。
-```js
-const proxy = new Proxy({}, {
-    set(target, key, value, receiver) {
-        if (key === 'self') {
-            Reflect.set(target, key, receiver);
-        } else {
-            Reflect.set(target, key, value);
-        }
-    }
-})
-proxy.self === proxy; // true
-```
+而obj.fn()就是一个典型的复合操作，它是由两个基本操作组成的分别是读取操作（obj.fn）, 和函数调用操作（取到obj.fn的值再进行调用），而我们代理的对象是obj，并不是obj.fn。因此，我们只能拦截到fn属性的读取操作。
 
-使用 Proxy 可以在填写表单的时候，拦截其中的字段进行格式校验。
+这也说明了**Proxy只能对对象的基本操作进行代理**，这点尤为重要。
 
-通常来说，大家都会用一个对象来保存验证规则，这样会更容易对规则进行扩展。
-```js
-// 验证规则
-const validators = {
-    name: {
-        validate(value) {
-            return value.length > 6;
-        },
-        message: '用户名长度不能小于六'
-    },
-    password: {
-        validate(value) {
-            return value.length > 10;
-        },
-        message: '密码长度不能小于十'
-    },
-    moblie: {
-        validate(value) {
-            return /^1(3|5|7|8|9)[0-9]{9}$/.test(value);
-        },
-        message: '手机号格式错误'
-    }
-}
-```
-
-然后编写验证方法，用 set 方法对 form 表单对象设置属性进行拦截，拦截的时候用上面的验证规则对属性值进行校验，如果校验失败，则弹窗提示。
-```js
-// 验证方法
-function validator(obj, validators) {
-    return new Proxy(obj, {
-        set(target, key, value) {
-            const validator = validators[key]
-            if (!validator) {
-                target[key] = value;
-            } else if (validator.validate(value)) {
-                target[key] = value;
-            } else {
-                alert(validator.message || "");
-            }
-        }
-    })
-}
-let form = {};
-form = validator(form, validators);
-form.name = '666'; // 用户名长度不能小于六
-form.password = '113123123123123';
-```
-
-如果这个属性已经设置为不可写，那么 set 将不会生效（但 set 方法依然会执行）。
-```js
-const person = {
-    name: 'tom'
-}
-Object.defineProperty(person, 'name', {
-    writable: false
-})
-const proxy = new Proxy(person, {  
-    set(target, key, value) {
-        console.log(666)
-        target[key] = 'jerry'
-    }
-})
-proxy.name = '';
-```
-
-## 2.3. apply
-
-`apply` 一般是用来拦截函数的调用，它接收三个参数，分别是目标对象、上下文对象（this）、参数数组。
-```js
-function test() {
-    console.log('this is a test function');
-}
-const func = new Proxy(test, {
-    apply(target, context, args) {
-        console.log('hello, world');
-        target.apply(context, args);
-    }
-})
-func();
-```
-
-通过 apply 方法可以获取到函数的执行次数，也可以打印出函数执行消耗的时间，常常可以用来做性能分析。
-```js
-function log() {}
-const func = new Proxy(log, {
-    _count: 0,
-    apply(target, context, args) {
-        target.apply(context, args);
-        console.log(`this function has been called ${++this._count} times`);
-    }
-})
-func()
-```
-
-## 2.4. construct
-
-`construct` 方法用来拦截 `new` 操作符。它接收三个参数，分别是目标对象、构造函数的参数列表、`Proxy` 对象，最后需要返回一个对象。
 
 
 ```js
-function Person(name, age) {
-    this.name = name;
-    this.age = age;
-}
-const P = new Proxy(Person, {
-    construct(target, args, newTarget) {
-        console.log('construct');
-        return new target(...args);
-    }
-})
-const p = new P('tom', 21); // 'construct'
+const handler = {
+  apply (target, thisArg, argumentsList) {
+    console.log('函数调用被拦截');
+    return target.call(thisArg, ...argumentsList);
+  }
+};
+new Proxy(() => {}, handler)();  // 输出：函数调用被拦截
 ```
 
-如果构造函数没有返回任何值或者返回了原始类型的值，那么默认返回的就是 `this`，如果返回的是一个引用类型的值，那么最终 `new` 出来的就是这个值。
-因此，你可以代理一个空函数，然后返回一个新的对象。
+表明函数的调用也是基本操作，是可以被apply拦截到的
+
+
+
+# Reflex和 Proxy
+
+首先还是要来看下Reflex在MDN里的定义：
+
+> **Reflect** 是一个内置的对象，它提供拦截 JavaScript 操作的方法。这些方法与proxy handlers 的方法相同.
+
+不难发现，Reflex对象的方法和proxy的拦截器（第二个入参handler）的方法完全一致，同样有着13个方法：
+![图片](https://mmbiz.qpic.cn/mmbiz_png/Tmczbd3NL00PQ5nOg80CxJancrFqraMOp5PIFTyUlA9ia1800Tlx3St5a3QpnZ5UVF8VIf1PBBl4B6pspUVcp9g/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
+
+那么，Reflect对象的作用是 什么呢，拿Reflect.get举例简单来说其作用之一就是提供了访问一个对象属性的默认行为，如以下代码：
+
 ```js
-function noop() {}
-const Person = new Proxy(noop, {
-    construct(target, args, newTarget) {
-        return {
-            name: args[0],
-            age: args[1]
-        }
-    }
-})
-const person = new Person('tom', 21); // { name: 'tom', age: 21 }
+const obj = {foo: 'foo'};
+obj.foo; 
+// 等同于
+Reflect.get(obj, 'foo');
 ```
 
-# 3. Proxy 可以做哪些有意思的事情？
+既然 作用一致 ，那么使用Reflect.get有何意义呢，在回答这个问题之前，我们先看下以下代码：
 
-## 3.1 骚操作：代理类
+```js
+const obj = {
+  foo: 'foo',
+  get bar () {
+    return this.foo;
+  }
+};
+const handler = {
+  get (target, key, receiver) {
+    console.log(`我被读取了${key}属性`);
+    return target[key];
+  },
+  set (target, key, val, receiver) {
+    console.log(`我被设置了${key}属性, val: ${val}`);
+    target[key] = val;
+  }
+};
+const p = new Proxy(obj, handler);
+p.bar; // 输出：我被读取了bar属性
+// Q： 为什么读取foo属性没有被拦截
+```
+
+在上述代码中我们定义了一个foo属性和bar属性，其中bar属性是一个访问器属性，通过get函数 return this.foo获取得到 的，因此按理来说我们在读取bar属性时候会触发读取foo属性，也同样会被get的trap所拦截到，但实际代码运行结果并没有拦截到foo属性。
+
+这是为什么呢，答案的关键在于bar访问器里的this指向。
+
+梳理下代码运行过程：p.bar 实际上会被handler的get捕获 返回 target['bar']，而这里的target实际上就是obj，所以这时候bar访问器里的this指向obj，this.foo，实际就是obj.foo。
+
+而obj并不是proxy对象p，所以访问其foo属性并不会被拦截到。
+
+那么如何也能触发到foo属性的拦截呢，这时候Reflect就派上用场了，有以下代码：
+
+```js
+const obj = {
+  foo: 'foo',
+  get bar () {
+    return this.foo;
+  }
+};
+const handler = {
+  get (target, key, receiver) {
+    console.log(`我被读取了${key}属性`);
+    return Reflect.get(target, key, receiver);
+  },
+  set (target, key, val, receiver) {
+    console.log(`我被设置了${key}属性, val: ${val}`);
+    return Reflect.set(target, key, val, receiver);
+  }
+};
+const p = new Proxy(obj, handler)
+p.bar; // 输出：我被读取了bar属性   我被读取了foo属性
+```
+
+如上面代码所示，我们能正确地触发了foo属性的拦截，其实现的关键在于Reflect.get的第三个参数receiver ，其作用就是改变this指向，在MDN里有以下描述：
+
+> 如果target对象中指定了getter，receiver则为getter调用时的this值。
+
+而我们这里的receiver就是p对象，this.foo 等同于 p.foo，因此访问bar属性的 时候同样可以拦截得到。
+
+也正是因为this指向的问题，所以建议在proxy对象拦截器里的属性方法都通过Reflect.*去操作。
+
+
+
+# Proxy 可以做哪些有意思的事情？
+
+## 骚操作：代理类
 使用 `construct` 可以代理类, 类的本质也是构造函数和原型（对象）组成的，完全可以对其进行代理。
 
 有这么一个需求，需要拦截对属性的访问，以及计算原型上函数的执行时间, 可以对属性设置 `get` 拦截，对原型函数设置 `apply` 拦截。
@@ -295,7 +242,10 @@ myClass.say();
 myClass.name;
 ```
 
-## 3.2 等不及可选链：深层取值（get）
+
+
+## 等不及可选链：深层取值（get）
+
 平时取数据的时候，经常会遇到深层数据结构，如果不做任何处理，很容易造成 JS 报错。
 
 为了避免这个问题，也许你会用多个 && 进行处理
@@ -342,7 +292,10 @@ get(obj).person.name(); // undefined
 get(obj).person.name.xxx.yyy.zzz(); // Cannot read property 'xxx' of undefined
 ```
 
-## 3.3 管道
+
+
+##  管道
+
 ```js
 const pipe = (value) => {
     const stack = [];

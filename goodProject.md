@@ -42,20 +42,6 @@ Tweenmax.js
 
 
 
-Lax.js 可在您滚动时创建流畅且精美的动画
-
-https://github.com/alexfoxy/lax.js
-
-
-
-Proton是一个轻量、灵活的`Javascript`粒子动画库。使用它可以轻松创建各种炫酷粒子动画效果
-
-https://github.com/drawcall/Proton
-
-
-
-
-
 
 
 

@@ -1,12 +1,22 @@
-**JS Tips - JS 技巧**
+[TOC]
+
+# qwik
+
+是一个全新的ssr框架，它致力于打造一个高效的ssr框架 https://qwik.builder.io/
+
+Qwik 是一种新型的 web 框架，它致力于 缩短 TTI。Qwik 具有 可恢复性（Resumability）。这体现在：Qwik 可以在服务端执行，可以被序列化为 HTML，被发送到 客户端。在客户端，qwikloader.js（在客户端上小于 1kb 的 JS）会静静等待用户交互。当用户开始交互，Qwik 可以从服务器停下的地方接着执行。可恢复性 还体现在：Qwik 不需要在页面启动时做 reconciliation，而是将 reconciliation 安排到用户和 需要 hydrate 的组件交互 的时候进行。Qwik 可以在服务端创建组件 并无缝将其带到客户端。这些特性能够为应用程序带来 即时启动能力（Instant-on）。
+
+# Partytown 
+
+在 Web Worker 中运行 第三方脚本 https://github.com/BuilderIO/partytown
+
+https://zhuanlan.zhihu.com/p/452678872
+
+# JS Tips - JS 技巧
 
 ------
 
-https://www.jstips.co
-
-每天一个 Javascript 小知识。
-
-
+每天一个 Javascript 小知识。https://www.jstips.co
 
 ![图片](https://mmbiz.qpic.cn/mmbiz_png/ibOEx83F8Y9ibbibzvJ2NV4cPDU6yg3CDQgIeawDibp9fGDgSib5IRq7vkMVWiconjUibx3FOwrB5mxXGTw8uEm3ounxg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
 
@@ -16,15 +26,11 @@ https://www.jstips.co
 
 ------
 
-**JSweekly - 技术周刊** 
+# JSweekly - 技术周刊
 
 ------
 
-https://javascriptweekly.com
-
-
-
-专门讲解 Javascript 的技术周刊。 
+专门讲解 Javascript 的技术周刊。https://javascriptweekly.com
 
 
 
@@ -36,7 +42,7 @@ https://javascriptweekly.com
 
 ------
 
-**CDNJS - JavaScript 资料库**
+# CDNJS - JavaScript 资料库
 
 ------
 
@@ -52,7 +58,7 @@ CDNJS 为开发者提供最新的前端 Web 开发资源，免费使用，无使
 
 ------
 
-**Beautiful Open - 开源 JS 库集合**
+# Beautiful Open - 开源 JS 库集合
 
 ------
 
@@ -68,7 +74,7 @@ https://beautifulopen.com
 
 ------
 
-**JavaScript Fun - 代码库集合**
+# JavaScript Fun - 代码库集合
 
 ------
 
