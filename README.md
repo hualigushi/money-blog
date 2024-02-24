@@ -14,6 +14,12 @@
 
 
 
+Rust高赞开源项目： https://github.com/search?q=stars%3A%3E30000&type=repositories&l=Rust 代码在1000行以内、赞数在1000个以上的部分项目： 1. https://github.com/dtolnay/rust-quiz 2. https://github.com/dtolnay/case-studies 3. https://github.com/flosse/rust-web-framework-comparison 4. https://github.com/rust-cli/human-panic 5. https://github.com/chmln/sd
+
+
+
+
+
 
 
 ### 样式隔离

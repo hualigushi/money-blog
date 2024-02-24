@@ -1,10 +1,18 @@
 [TOC]
 
+# quicklink
+
+quicklink 能在空闲时预取 viewport 内的链接来加快后续页面的加载速度
+
+介绍 https://mp.weixin.qq.com/s/G-tA5xAgEsbyzswEI-_8Bg
+
+github https://github.com/GoogleChromeLabs/quicklink/tree/main
+
 # qwik
 
 是一个全新的ssr框架，它致力于打造一个高效的ssr框架 https://qwik.builder.io/
 
-Qwik 是一种新型的 web 框架，它致力于 缩短 TTI。Qwik 具有 可恢复性（Resumability）。这体现在：Qwik 可以在服务端执行，可以被序列化为 HTML，被发送到 客户端。在客户端，qwikloader.js（在客户端上小于 1kb 的 JS）会静静等待用户交互。当用户开始交互，Qwik 可以从服务器停下的地方接着执行。可恢复性 还体现在：Qwik 不需要在页面启动时做 reconciliation，而是将 reconciliation 安排到用户和 需要 hydrate 的组件交互 的时候进行。Qwik 可以在服务端创建组件 并无缝将其带到客户端。这些特性能够为应用程序带来 即时启动能力（Instant-on）。
+Qwik 是一种新型的 web 框架，它致力于 缩短 TTI。Qwik 具有 可恢复性（Resumability）。这体现在：Qwik 可以在服务端执行，可以被序列化为 HTML，被发送到 客户端。在客户端，qwikloader.js（在客户端上小于 1kb 的 JS）会静静等待用户交互。当用户开始交互，Qwik 可以从服务器停下的地方接着执行。可恢复性 还体现在：Qwik 不需要在页面启动时做 reconciliation，而是将 reconciliation 安排到用户和 需要 hydrate 的组件交互 的时候进行。Qwik 可以在服务端创建组件 并无缝将其带到客户端。这些特性能够为应用程序带来 即时启动能力（Instant-on。
 
 # Partytown 
 

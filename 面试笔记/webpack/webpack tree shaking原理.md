@@ -5,6 +5,8 @@ tree shaking只能在静态modules下工作。
 
 ECMAScript 6 模块加载是静态的,因此整个依赖树可以被静态地推导出解析语法树。
 
+
+
 ES6 module 特点：
 
 - 只能作为模块顶层的语句出现,不能出现在 function 里面或是 if 里面
