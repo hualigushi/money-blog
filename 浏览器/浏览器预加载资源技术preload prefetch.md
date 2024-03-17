@@ -1,4 +1,5 @@
 # preload
+
 声明式的资源获取请求，可以指明哪些资源是在页面加载完成后即刻需要的
 
 `<link rel="preload" href="fonts/cicle_fina-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">`
