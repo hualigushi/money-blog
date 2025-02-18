@@ -68,7 +68,9 @@ if('scheduler in window && 'postTask' in window.scheduler){
 2. 使用 `postTask`
 ```javascript
 // 默认优先级
-scheduler.postTask(() => console.log('Hello, postTask'));
+if('scheduler' in window && 'postTask' in window.scheduler){
+    scheduler.postTask(() => console.log('Hello, postTask'));
+}
 ```
 
 你也可以指定优先级与执行延迟：
