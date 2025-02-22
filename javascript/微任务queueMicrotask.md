@@ -1,4 +1,4 @@
-```
+```js
 setTimeout(() => {
     console.log('setTimeout');
 }, 0);
@@ -27,7 +27,7 @@ queueMicrotask(() => {
 
 你可以执行下面的代码来体验这个现象：
 
-```
+```js
 function infiniteEnqueue(fn) {
     queueMicrotask(() => infiniteEnqueue(fn))
 }

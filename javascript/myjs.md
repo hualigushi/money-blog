@@ -539,3 +539,21 @@ images.keys().reduce((cachePromise, path) => cachePromise.then(() => {
 }), Promise.resolve());
 ```
 
+
+
+# 22 一行代码生成随机字符串
+
+```js
+const str = Math.random().toString(36).substr(2, 10);
+console.log(str);   // 'w5jetivt7e'
+```
+
+先是 `Math.random()` 生成 `[0, 1)` 的数，也就是 `0.123312`、`0.982931`之类的，
+
+然后调用 `number` 的 toString方法将其转换成36进制的，
+
+按照MDN的说法，36进制的转换应该是包含了字母 `a~z` 和 数字`0~9`的，
+
+因为这样生成的是 `0.89kjna21sa` 类似这样的，
+
+所以要截取一下小数部分，即从索引 `2` 开始截取10个字符就是我们想要的随机字符串了

@@ -72,6 +72,12 @@ https://github.com/Tencent/tdesign-react-starter
 
 
 
+前后端全栈项目
+
+https://github.com/fastapi/full-stack-fastapi-template
+
+
+
 # Node
 
 fs-extra 文件操作库

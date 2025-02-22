@@ -179,7 +179,7 @@ const abortedAS = AbortSignal.abort({
 
 同样的，大家看到 `timeout` 应该很容易想到是创造一个多少**毫秒**后会被终止的 `signal` 对象。代码如下：
 
-```
+```js
 // ... 省略部分代码
 const timeoutAS = AbortSignal.timeout(10);
 todoRequest(1, { signal: timeoutAS }).then(() => {

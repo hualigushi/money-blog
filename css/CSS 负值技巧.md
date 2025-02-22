@@ -1,5 +1,5 @@
 ## 使用负值 outline-offset 实现加号
-```
+```css
 <div></div>
 
 div {
@@ -17,12 +17,23 @@ div {
  - outline 边框本身的宽度不能太小
 
  - outline-offset 负值 x 的取值范围为: -(容器宽度的一半 + outline宽度的一半) < x < -(容器宽度的一半 + outline宽度)
- 
+
  ## css单侧投影
  ![](https://mmbiz.qpic.cn/mmbiz/2FMs2KmmepgiaDIj1kRwmHvDaVmiclw3fnS8RgOTQLlFvvBeQXia7ND7LquTU83moOv7icQTKNx3omQcR9PXDoVUBw/640?wx_fmt=other&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
- 
+
+
+
+
+
+
+
+
+
+
+
  ## 使用 scale(-1) 实现翻转
- ```<p class="scale">CSS Nagative Scale(-1)</p>
+
+ ```css
 
 .scale {
     transform: scale(1);
@@ -37,6 +48,6 @@ div {
         transform: scale(-1);
     }
 }
-```
+ ```
 
 ![](https://mmbiz.qpic.cn/mmbiz_gif/2FMs2KmmepgiaDIj1kRwmHvDaVmiclw3fn1WnltSVrvhgcqkUmKlGTNZC3VEwEA2tyNFY3ulvsQhGBOsTZLt3ogA/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1)

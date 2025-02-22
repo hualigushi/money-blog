@@ -4,7 +4,7 @@
 
 该CSS属性作用是让元素内容和这个元素的背景以及下面的元素发生“混合”
 
-```
+```css
 mix-blend-mode: normal;          //正常
 mix-blend-mode: multiply;        //正片叠底
 mix-blend-mode: screen;          //滤色

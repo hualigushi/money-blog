@@ -1,3 +1,5 @@
+[TOC]
+
 # Web 动画原则及技巧浅析
 
 在 Web 动画方面，有一套非常经典的原则 -- [Twelve basic principles of animation](https://en.wikipedia.org/wiki/Twelve_basic_principles_of_animation)，也就是关于动画的 12 个基本原则（也称之为迪士尼动画原则），网上对它的解读延伸的文章也非常之多：
@@ -298,7 +300,7 @@ hover 的时候有一个关上动画，使用多块 div 模拟了百叶窗的落
 
 通过一个遮罩 hover 放大，再到点击全屏的变化，一下子就将用户的注意力给吸引了过来。
 
-## Web 动画的一些常见误区
+# Web 动画的一些常见误区
 
 当然，上述的一些技巧源自于**迪士尼动画原则**，我们可以将其中的一些思想贯穿于我们的 Web 动画的设计之中。
 
@@ -373,22 +375,4 @@ emm，简单一点来说就是单纯的为了炫技而存在的动画。这种�
 最后一条，就是动画虽好，但是打磨一个精品动画是非常耗时的，尤其是在现在非常多的产品业务都是处于一种敏捷开发迭代之下。
 
 一个好的 Web 动画从构思到落地，绝非前端一个人的工作，需要产品、设计、前端等等相关人员公共努力， 不断修改才能最终呈现比较好的效果。所以在项目初期，一定需要考虑好性价比，是否真的值得为了一个 Web 动画花费几天时间呢？当然这是一个非常见仁见智的问题。
-
-## 参考文章
-
-- 原理图来源 -- [Understand Disney's 12 principles of animation](https://www.creativebloq.com/advice/understand-the-12-principles-of-animation)
-- [Animation Principles for the Web](https://cssanimation.rocks/principles/)
-- [[译文\]网页动画的十二原则](https://cssanimation.rocks/cn/principles/)
-- [Twelve basic principles of animation](https://en.wikipedia.org/wiki/Twelve_basic_principles_of_animation)
-- [功能性动画设计：优秀的转场效果](http://www.woshipm.com/pd/379898.html)
-
-## 最后
-
-想使用 Web 技术绘制生动有趣的动画并非易事，尤其在现在国内的大环境下，鲜有人会去研究动画原则，并运用于实践生产之中。但是它本身确实是个非常有意思有技术的事情。希望本文能给大伙对 Web 动画的认知带来一些提升和帮助，在后续的工作中多少运用一些。
-
-好了，本文到此结束，希望对你有帮助 :)
-
-想 Get 到最有意思的 CSS 资讯，千万不要错过我的公众号 -- **iCSS前端趣闻** 😄
-
-更多精彩 CSS 技术文章汇总在我的 [Github -- iCSS](https://github.com/chokcoco/iCSS) ，持续更新，欢迎点个 star 订阅收藏。
 

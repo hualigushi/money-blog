@@ -21,7 +21,7 @@
 
 可惜效果不如人意，文字也跟着倾斜了，这时候很容易想到，借助一层dom结构，再把内部文字倾斜回来。
 
-```
+```css
 <div class="parallelograms">
     <div>二十首情诗与绝望的歌</div>
 </div>
@@ -51,7 +51,7 @@
 
 思路：我们可以把伪元素作为第一种方法中的辅助结构层，把所有样式(背景、边框等)应用到伪元素上，然后再对伪元素进行变形，得到我们的平行四边形形状，而正式内容不受影响，然后把伪元素定位`z-index`设为-1，便可漏出正文的内容。
 
-```
+```css
  .parallelograms{
     margin: 50px auto;
     max-width: 200px;
@@ -92,7 +92,7 @@
 
 
 
-```
+```css
 <div class="diamond">
     <img src="https://avatars1.githubusercontent.com/u/8121621?v=4" alt="..." />
 </div>
@@ -128,7 +128,7 @@
 
 
 
-```
+```css
 .diamond {
     margin:30px auto;
     width: 100px;
@@ -148,7 +148,7 @@
 
 在上节中我们使用过伪元素的技巧，同样可以用在这里，代码如下：
 
-```
+```css
  .diamond{
     margin:30px auto;
     width: 100px;
@@ -182,7 +182,7 @@
 
 
 
-```
+```css
 .diamond{
     /*......*/
     clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);

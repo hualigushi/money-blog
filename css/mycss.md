@@ -213,3 +213,162 @@ tip：也可以用此方法来改变placeholder默认颜色
 
 图片是否会随着页面滚动而滚动
 
+
+
+# 18 虚线效果
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/R1mJgWWSMA3oCVBoskibbAuTXGVgWRe6yMZqIkW0E0qc7gfrgy7UKvzFFzAeYffKicMKtTWlMXNkXDTCft5iavdyg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+```css
+.dotted-line{    
+	border: 1px dashed transparent;    
+  background: linear-gradient(white,white) padding-box, repeating-linear-gradient(-45deg,#ccc 0, #ccc .25em,white 0,white .75em);
+}
+
+```
+
+css自带的border-style属性 dotted/ dashed . 效果展示出来太密了，并不符合UI设计
+
+> 具体的虚线的颜色和间距都可以通过repeating-linear-gradient生成的条纹背景去调整。
+
+
+
+# 19 时间轴效果
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/R1mJgWWSMA3oCVBoskibbAuTXGVgWRe6yYx8AFJs3Djia8O92md45gQgszDuqqeL1VUNV0lar4FXRBxbRfA1xRMQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+html结构
+
+```htmlh t
+<div class="timeline-content">  
+	<div v-for='(item, index) in timeLine' :key='index' class="time-line">    
+	<div :class="`state-${item.state} state-icon`"></div>    
+	<div class="timeline-title">{{item.title}}</div></div>
+</div>
+```
+
+css样式
+
+```css
+/** 时间轴 */
+.timeline-content{  
+  display: flex;  
+  .time-line{    
+    padding: 10px 10px 10px 20px;    
+    position: relative;    
+    &::before{      
+      content: '';      
+      height: 1px;      
+      width: calc(100% - 34px);      
+      background: #EBEBEB;      
+      position: absolute;      
+      left: 24px;      
+      top: 0;    
+    }  
+  }  
+  .state-icon{    
+    width: 20px;    
+    height: 20px;    
+    position: absolute;    
+    top: -12px;    
+    left: 0;  
+  }  
+  .state-1{    
+    background: url('https://static.daojia.com/assets/project/tosimple-pic/fen-zu-7-copy-6bei-fen_1589266208621.png') no-repeat;    
+    background-size: cover;  
+  }  
+  .state-2{    
+    background: url('https://static.daojia.com/assets/project/tosimple-pic/12_1589266226040.png') no-repeat;    
+    background-size: cover;  
+  }  
+  .state-3{    
+    background: url('https://static.daojia.com/assets/project/tosimple-pic/fen-zu-7-copy-3_1589266140087.png') no-repeat;    
+    background-size: cover;  
+  }
+}
+```
+
+> calc()函数 用来计算css属性的值。
+
+```
+/** 属性：calc（expression）*/宽度：calc（100％ - 34px）;
+```
+
+
+
+# 20 卡券效果
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/R1mJgWWSMA3oCVBoskibbAuTXGVgWRe6y6DQ6rZ88ibibbrV0Q9koKtZpicEjUtUHB6r4JOXPiawI9Bmia8ia0tfHxfuQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+```css
+.coupon{  
+	width: 300px;  
+  height: 100px;  
+  position: relative;  
+  background: radial-gradient(circle at right bottom, transparent 10px, #ffffff 0) top right /50% 51px no-repeat,    radial-gradient(circle at left bottom, transparent 10px, #ffffff 0) top left / 50% 51px no-repeat,    radial-gradient(circle at right top, transparent 10px, #ffffff 0) bottom right / 50% 51px no-repeat,    radial-gradient(circle at left top, transparent 10px, #ffffff 0) bottom left / 50% 51px no-repeat;  
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,.2));
+}
+```
+
+# 21 阴影效果
+
+![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/R1mJgWWSMA3oCVBoskibbAuTXGVgWRe6yy21ibc447pMgTJFod3XSdKeouyDhdtkzTlIHCWxVu2ic7iafRYeebmntA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+```css
+// 三角形阴影
+.shadow-triangle{    
+  width: 0;    
+  height: 0;    
+  border-style: solid;    
+  border-width: 0 50px 50px 50px;    
+  border-color: transparent transparent rgb(245, 129, 127) transparent;    
+  filter:drop-shadow(10px 0px 10px  rgba(238, 125, 55,0.5));
+}
+// 缺圆投影
+.circle-square{    
+  width:100px;    
+  height:50px;    
+  line-height: 50px;    
+  background: radial-gradient(circle at bottom right, transparent 20px, rgb(245, 129, 127) 15px);     		filter: drop-shadow(2px 2px 2px rgba(238, 132, 66, 0.9));
+}
+// 气泡阴影
+.tip {    
+  width: 100px;    
+  height: 30px;    
+  line-height: 30px;    
+  border: 1px solid rgb(245, 129, 127);    
+  border-radius: 4px;    
+  position: relative;    
+  background-color: #fff;    
+  filter: drop-shadow(0px 2px 4px rgba(245, 129, 127, 0.9));    
+  &::before {      
+    content: "";      
+    width: 0;      
+    height: 0;      
+    border-style: solid;      
+    border-width: 0 10px 10px 10px;      
+    border-color: transparent transparent #fff transparent;      
+    position: absolute;      
+    top: -10px;      
+    left: 0;      
+    right: 0;      
+    margin: auto;      
+    z-index: 2;    
+  }    
+  &::after {      
+    content: "";      
+    width: 0;      
+    height: 0;      
+    border-style: solid;      
+    border-width: 0 10px 10px 10px;      
+    border-color: transparent transparent rgb(245, 129, 127) transparent;      
+    position: absolute;      
+    top: -11px;      
+    left: 0;      
+    right: 0;      
+    margin: auto;      
+    z-index: 1;    
+  }
+}
+```
+
