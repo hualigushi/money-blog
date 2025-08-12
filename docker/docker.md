@@ -97,3 +97,168 @@ docker exec -it 容器id /bin/sh
 ```
 # 14. docker build -t name .
 在当前目录构建镜像
+
+# 15 umi 项目
+---
+
+### 1. 项目构建准备
+在项目根目录执行：
+```bash
+npm run build
+```
+构建产物会生成在 `dist` 目录下（Umi 4 默认输出路径）
+
+---
+
+### 2. 创建 Nginx 配置文件
+在项目根目录创建 `nginx.conf`：
+```nginx
+server {
+    listen       80;
+    server_name  localhost;
+    
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+        # 单页应用路由支持
+        try_files $uri $uri/ /index.html; 
+    }
+
+    # 可选：API代理（如需后端接口）
+    # location /api {
+    #    proxy_pass http://your-backend;
+    # }
+}
+```
+
+---
+
+### 3. 创建 Dockerfile
+在项目根目录创建 `Dockerfile`：
+```dockerfile
+# 阶段1：构建环境
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# 阶段2：生产环境
+FROM nginx:alpine
+# 复制构建产物
+COPY --from=builder /app/dist /usr/share/nginx/html
+# 复制Nginx配置
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# 暴露端口
+EXPOSE 80
+```
+
+---
+
+### 4. 创建 .dockerignore
+在项目根目录创建 `.dockerignore`：
+```
+node_modules
+.git
+.DS_Store
+dist
+```
+
+---
+
+### 5. 构建 Docker 镜像
+在项目根目录执行：
+```bash
+docker build -t umi4-app .
+```
+
+---
+
+### 6. 运行 Docker 容器
+```bash
+docker run -d -p 8080:80 --name umi-container umi4-app
+```
+- `-p 8080:80`：将容器 80 端口映射到 Mac 的 8080 端口
+- `-d`：后台运行
+- `--name`：容器名称
+
+---
+
+### 7. 访问应用
+打开浏览器访问：  
+[http://localhost:8080](http://localhost:8080)
+
+---
+
+### 8. 常用管理命令
+```bash
+# 停止容器
+docker stop umi-container
+
+# 启动容器
+docker start umi-container
+
+# 查看运行中的容器
+docker ps
+
+# 查看容器日志
+docker logs umi-container
+
+# 删除容器
+docker rm umi-container
+
+# 删除镜像
+docker rmi umi4-app
+```
+
+---
+
+### 9. 热更新开发模式（可选）
+如需在开发时实时更新，创建 `docker-compose.yml`：
+```yaml
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/app/src  # 挂载源码目录
+      - ./public:/app/public
+    command: >
+      sh -c "npm install && npm run start"  # 开发模式命令
+```
+
+启动开发环境：
+```bash
+docker-compose up
+```
+
+---
+
+### 常见问题解决
+
+1. **路由404问题**  
+   确保 nginx.conf 中包含 `try_files $uri $uri/ /index.html;`
+
+2. **静态资源加载失败**  
+   检查 Umi 配置中 `publicPath` 是否设置为 `./`（`config/config.ts`）：
+   ```ts
+   export default {
+     publicPath: './',
+   }
+   ```
+
+3. **端口冲突**  
+   修改运行命令的端口映射：`-p 3000:80`
+
+4. **Docker 权限问题**  
+   在 Docker Desktop 设置中开启文件共享：
+   - 打开 Docker Desktop
+   - Settings → Resources → File Sharing
+   - 添加项目所在目录
+
+---
+
+通过以上步骤，你的 Umi 4 应用已成功部署在 Mac 的 Docker+Nginx 环境中。生产部署时建议使用更轻量的基础镜像（如 `nginx:alpine`）并配置 HTTPS 支持。
