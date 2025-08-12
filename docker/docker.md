@@ -1,4 +1,4 @@
-# 1. docker pull
+ # 1. docker pull
 拉取镜像
 ```
 docker pull docker.io/library/nginx:lastest
@@ -60,6 +60,11 @@ docker run -d --restart alaways 容器name
 # 6. docker ps 
  查看正在运行的容器
 
+ ```
+docker ps -a
+查看所有容器
+```
+
  # 7. docker rm 容器id
  删除容器
 
@@ -68,3 +73,27 @@ docker run -d --restart alaways 容器name
 
  # 9. docker stop 容器name/id
  停止容器
+
+ # 10. docker inspect 容器id
+ 查看容器所有信息，可以让 ai 分析
+
+ # 11. docker create 容器name/id
+ 只创建容器，不启动
+
+ # 12. docker logs 容器name/id
+ 查看容器日志
+
+ ```
+docker log -f 容器name/id
+滚动查看日志
+```
+
+# 13. docker exec 容器name/id ps -ef
+查看容器里的进程情况
+
+```
+docker exec -it 容器id /bin/sh
+进入正在运行的容器内部，获得一个交互式的命令行环境
+```
+# 14. docker build -t name .
+在当前目录构建镜像
