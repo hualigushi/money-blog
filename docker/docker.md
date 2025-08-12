@@ -262,3 +262,11 @@ docker-compose up
 ---
 
 通过以上步骤，你的 Umi 4 应用已成功部署在 Mac 的 Docker+Nginx 环境中。生产部署时建议使用更轻量的基础镜像（如 `nginx:alpine`）并配置 HTTPS 支持。
+
+# 16. docker compose
+```
+docker compose up -d
+docker compose down
+docker compose srart
+docker compose stop
+```
