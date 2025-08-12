@@ -1,4 +1,4 @@
- # 1. docker pull
+  # 1. docker pull
 ```
 docker pull docker.io/library/nginx:lastest
 
@@ -30,6 +30,18 @@ docker run -p 80:80
 ```
 <img width="1770" height="858" alt="image" src="https://github.com/user-attachments/assets/d7113c56-546d-42b3-af04-29985f0b970c" />
 
+```
+docker run -v  宿主机目录：容器内目录
+```
+<img width="1618" height="1058" alt="image" src="https://github.com/user-attachments/assets/aa8e4346-9b21-4948-aed8-ea23cf9534dd" />
+
+```
+docker run -e 环境参数
+```
+<img width="1168" height="292" alt="image" src="https://github.com/user-attachments/assets/6eb8909c-2639-4f93-8dd6-75928a8be286" />
 
 # 6. docker ps 
  查看正在运行的容器
+
+ # 7. docker rm 容器id
+ 删除容器
