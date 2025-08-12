@@ -1,4 +1,4 @@
-# 1. docker pull
+ # 1. docker pull
 ```
 docker pull docker.io/library/nginx:lastest
 
@@ -9,3 +9,14 @@ lastest   tag:标签（版本号）
 // 简化命令
 docker pull nginx // 从 Docker 官方仓库的官方命名空间里下载最新的 Nginx Docker 镜像
 ```
+
+# 2. docker 镜像
+`https://docker.xuanyuan.me/`
+
+# 3. docker images
+列出所有下载过的 Docker 镜像
+
+# 4. docker rmi 镜像name/id
+
+# 5. docker run 
+使用镜像创建并运行容器
