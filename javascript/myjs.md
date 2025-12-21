@@ -557,3 +557,49 @@ console.log(str);   // 'w5jetivt7e'
 因为这样生成的是 `0.89kjna21sa` 类似这样的，
 
 所以要截取一下小数部分，即从索引 `2` 开始截取10个字符就是我们想要的随机字符串了
+
+
+
+# 23 取整 `|0`
+
+对一个数字 `|0`可以取整，负数也同样适用， `num|0`
+
+```js
+1.3 | 0         // 1
+
+-1.9 | 0        // -1
+```
+
+# 24 判断奇偶数 `&1`
+
+对一个数字 `&1`可以判断奇偶数，负数也同样适用， `num&1`
+
+```js
+const num=3;
+!!(num & 1)                    // true
+!!(num % 2)                    // true
+```
+
+# 25 精确到指定位数的小数
+
+将数字四舍五入到指定的小数位数。使用 `Math.round()` 和模板字面量将数字四舍五入为指定的小数位数。
+
+ 省略第二个参数 `decimals` ，数字将被四舍五入到一个整数。
+
+```js
+const round = (n, decimals = 0) => Number(`${Math.round(`${n}e${decimals}`)}e-${decimals}`)
+round(1.345, 2)                 // 1.35
+round(1.345, 1)                 // 1.3
+```
+
+# 26 数字补0操作
+
+有时候比如显示时间的时候有时候会需要把一位数字显示成两位，这时候就需要补0操作，可以使用 `slice`和string的 `padStart`方法
+
+```js
+const addZero1 = (num, len = 2) => (`0${num}`).slice(-len)
+const addZero2 = (num, len = 2) => (`${num}`).padStart( len   , '0')
+
+addZero1(3) // 03
+addZero2(32,4)  // 0032
+```

@@ -12,7 +12,7 @@ Intersection Observer API 允许你配置一个回调函数，每当目标(targe
 
 阈值为1.0意味着目标元素完全出现在root选项指定的元素中可见时，回调函数将会被执行。
 
-```
+```js
 var options = {
     root: document.querySelector('#scrollArea'), 
     rootMargin: '0px', 
@@ -53,7 +53,7 @@ root元素的外边距。类似于css中的 margin 属性，比如 "10px 20px 30
 
 4. **trackVisibility**
  一个布尔值，指示当前观察器是否将跟踪目标可见性的更改，默认为 false ，注意，此处的可见性并非指目标元素和根元素是否相交，而是指视图上是否可见，
- 
+
  如果此值设置为 false 或不设置，那么回调函数参数中 IntersectionObserverEntry 的 isVisible 属性将永远返回 false 。
 
 

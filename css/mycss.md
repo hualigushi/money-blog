@@ -372,3 +372,21 @@ css样式
 }
 ```
 
+# 22 自定义文本选中样式
+
+```css
+<div class="element">
+    正在加载正在加载正在加载在加载正在加载
+</div>
+<!-- 注意只能修改这两个属性 字体颜色 选中背景颜色-->
+.element::selection {
+  color: green;
+  background-color: red;
+}
+.element::-moz-selection {
+  color: green;
+  background-color: red;
+}
+```
+
+![](https://mmbiz.qpic.cn/mmbiz_gif/FxMSjYXe2ickvgThSE0at7geEkeYDDT3OEORoFkd7xwY7XHEpuLrQCTW0b8Tn5pZfhqiano1Psm8YSWWic6iaxI06A/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1)
