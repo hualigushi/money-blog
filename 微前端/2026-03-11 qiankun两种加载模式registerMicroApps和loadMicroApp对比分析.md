@@ -139,7 +139,7 @@ const currentApp = computed(() => {
 
 **解决方案：**
 
-+   子应用使用 `[createMemoryHistory](https://zhida.zhihu.com/search?content_id=269014470&content_type=Article&match_order=1&q=createMemoryHistory&zhida_source=entity)`（推荐）
++   子应用使用 `createMemoryHistory`（推荐）
 +   或者在子应用卸载时销毁路由监听
 
 ### 3.3 完整示例
