@@ -1,0 +1,240 @@
+如果你经常翻构建后的代码，基本都会看到这样一行：
+
+```
+js 体验AI代码助手 代码解读复制代码Object.defineProperty(exports, "__esModule", { value: true });
+```
+
+![image.png](https://p3-xtjj-sign.byteimg.com/tos-cn-i-73owjymdk6/53fc5bf4fa1f47a1a1d5c5afabe79fcd~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgc3Vubnlf:q75.awebp?rk3s=f64ab15b&x-expires=1778528390&x-signature=oSlmB%2B45OOyCrfeYQnYp8DHbvTs%3D)
+
+很多人第一次看到都会疑惑：
+
++   这是干嘛的？
++   能删吗？
++   不加会怎么样？
++   和 default 导出有什么关系？
+
+这篇文章专门把这个现象讲清楚。
+
+* * *
+
+## 太长不看版
+
+```
+js 体验AI代码助手 代码解读复制代码Object.defineProperty(exports, "__esModule", { value: true });
+```
+
+本质就是：
+
+> 标记“这个 CommonJS 文件是从 ES Module 转译来的”，用于默认导出语义的互操作。
+
+它不是功能代码，不是业务逻辑。
+
+它只是模块系统演化过程中的一个兼容标志。
+
+## 一、为什么会出现 `__esModule`？
+
+根本原因只有一个：
+
+> ES Module 和 CommonJS 的语义不一样。
+
+我们简单对比一下。
+
+### ES Module
+
+```javascript
+javascript 体验AI代码助手 代码解读复制代码export default function foo() {}
+```
+
+### CommonJS
+
+```javascript
+java 体验AI代码助手 代码解读复制代码module.exports = function foo() {}
+```
+
+两者看起来都叫“默认导出”，但内部机制完全不同。
+
+当构建工具（TypeScript / Babel / Webpack / Rspack 等）把 ESM 转成 CJS 时，语义必须“模拟”出来。
+
+于是就变成：
+
+```
+java 体验AI代码助手 代码解读复制代码Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = foo;
+```
+
+关键问题来了：
+
+> 如何区分“普通 CJS 模块”和“从 ESM 转过来的 CJS 模块”？
+
+这就是 `__esModule` 存在的意义。
+
+* * *
+
+## 二、`__esModule` 到底做了什么？
+
+它只是一个标记。
+
+```
+ini 体验AI代码助手 代码解读复制代码exports.__esModule = true
+```
+
+之所以用 `Object.defineProperty`，是为了：
+
++   不可枚举
++   更符合 Babel 的标准输出
++   避免污染遍历结果
+
+本质就是：
+
+> 告诉别人：这个模块原本是 ES Module。
+
+仅此而已。
+
+* * *
+
+## 三、真正的核心：默认导出的互操作问题
+
+来看一个经典场景。
+
+### 1️⃣ 原始 ESM
+
+```javascript
+js 体验AI代码助手 代码解读复制代码export default function foo() {}
+```
+
+### 2️⃣ 被编译成 CJS
+
+```
+js 体验AI代码助手 代码解读复制代码exports.default = foo;
+```
+
+### 3️⃣ 用 CommonJS 引入
+
+```javascript
+js 体验AI代码助手 代码解读复制代码const foo = require('./foo');
+```
+
+得到的其实是：
+
+```javascript
+sql 体验AI代码助手 代码解读复制代码{
+  default: [Function: foo]
+}
+```
+
+这就有问题了。
+
+我们希望的是：
+
+```
+js 体验AI代码助手 代码解读复制代码foo() // 直接调用
+```
+
+而不是：
+
+```
+js 体验AI代码助手 代码解读复制代码foo.default()
+```
+
+于是构建工具会生成一个 helper：
+
+```javascript
+js 体验AI代码助手 代码解读复制代码function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+```
+
+逻辑是：
+
++   如果模块带有 `__esModule` 标记 → 说明是 ESM 转的 → 直接用 `default`
++   如果没有 → 说明是普通 CJS → 包一层 `{ default: obj }`
+
+这就是整个互操作的关键。
+
+* * *
+
+## 四、为什么不能只判断 `default` 属性？
+
+因为普通 CJS 也可能写：
+
+```
+js 体验AI代码助手 代码解读复制代码module.exports = {
+  default: something
+}
+```
+
+这时你没法区分：
+
++   是 ESM 编译产物
++   还是普通对象刚好有个 default 字段
+
+所以必须有一个“官方标记”。
+
+`__esModule` 就成了事实标准。
+
+* * *
+
+## 五、什么时候会生成它？
+
+只要发生：
+
+> ESM → CJS 转译
+
+基本都会生成。
+
+常见场景：
+
++   TypeScript 编译为 `module: commonjs`
++   Babel preset-env 输出 CJS
++   Webpack / Rspack 输出 target 为 node + CJS
++   老 Node 项目混用 import / require
+
+如果你使用：
+
+```
+json 体验AI代码助手 代码解读复制代码{
+  "type": "module"
+}
+```
+
+并且输出原生 ESM
+
+那就不会有 `__esModule`。
+
+它只存在于“模块系统过渡时代”。
+
+* * *
+
+## 注意：它不是 JS 语言特性
+
+非常重要的一点：
+
+> `__esModule` 不是语言规范的一部分。
+
+它是：
+
++   Babel 约定
++   构建器约定
++   社区事实标准
+
+是一种“工程层解决方案”。
+
+换句话说：
+
+它属于模块系统演化历史的一部分。
+
+**从更高层看：模块系统的过渡遗产**
+
+JavaScript 的模块系统经历了三代：
+
+1.  无模块（全局变量时代）
+2.  CommonJS（Node 时代）
+3.  ES Module（标准化）
+
+但 Node 生态已经建立在 CJS 上。
+
+所以必须有一个桥接层。
+
+`__esModule` 就是这座桥的一块砖。
+
+它存在的原因不是设计优雅，而是历史兼容。
