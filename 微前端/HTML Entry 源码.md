@@ -1,4 +1,41 @@
 HTML Entry是由 `import-html-entry` 库实现的，通过 `http` 请求加载指定地址的首屏内容即 `html` 页面，然后解析这个 `html` 模版得到 `template`, ` scripts` , `entry`, `styles`
+
+  
+简单来说，`import-html-entry` 负责做三件事：
+
+  
+**下载远程 HTML 文件**  
+
++   使用 `fetch(url)` 请求远程 HTML。
++   解析 HTML 中的 `<script>` 与 `<link>` 标签。
+
+**提取资源并缓存**  
+
++   提取脚本与样式资源 URL。
++   通过自定义逻辑加载（并缓存）外部脚本与样式内容。
++   将 `<link>` 替换为内联 `<style>`，提升加载性能。
+
+**执行脚本**  
+
++   通过 `eval` 在隔离作用域中执行 JS（防止污染主应用的 window）。
++   支持 `proxy` 代理对象（qiankun 沙箱核心）。
++   支持同步、异步脚本的加载与执行顺序。
+
+核心源码
+
+  
+它的 源码中包含这些关键函数：  
+
+| 函数名 | 作用 |
+| --- | --- |
+| importHTML(url, opts) | 主入口，加载远程 HTML |
+| processTpl | 解析 HTML 模板，提取 script/link |
+| \_getExternalScripts | 加载并缓存 JS |
+| \_getExternalStyleSheets | 加载并缓存 CSS |
+| \_execScripts | 按顺序执行脚本 |
+| getExecutableScript | 包装脚本为沙箱可执行代码 |
+| evalCode | 实际执行脚本（带缓存） |
+
 ```json
 {
   template: 经过处理的脚本，link、script 标签都被注释掉了,
